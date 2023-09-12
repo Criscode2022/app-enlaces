@@ -73,7 +73,8 @@ where users.name_user LIKE 'Juan';
 select post_url, post_title, post_description, name_user, posts.created_at, post_likes
 from posts 
 join users on posts.id_user = users.id_user
-where posts.post_description LIKE '%gato%';
+where post_description LIKE '%gato%'  or post_title LIKE '%gato%';
+
 
 
 
