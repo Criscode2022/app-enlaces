@@ -7,7 +7,6 @@ Esta aplicación consiste en una red social que permite compartir y reaccionar a
 
 ## Funcionamiento
 
-
 ### Usuarios registrados
 
 Los usuarios registrados pueden visualizar todos los enlaces, dar “likes”, publicar nuevos y editar su perfil.
