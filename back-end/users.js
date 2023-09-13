@@ -28,7 +28,7 @@ router.post('/register', async function (req, res) {
   }
   const { username, password } = value;
   try {
-    const connection = await pool
+    await pool
       .query('INSERT INTO users (name_user, password_user) VALUES (?, ?)', [
         username,
         password,
