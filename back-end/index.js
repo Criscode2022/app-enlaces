@@ -3,20 +3,11 @@ const express = require('express');
 const app = express();
 const dotenv = require('dotenv');
 const mysql = require('mysql2');
+const { getLinksController} = require('/controllers/getLinksController');
 
 const PORT = 3000; // El puerto 3000 es el puerto por defecto de Express
 
 dotenv.config(); // Configuración de dotenv
-
-// Creación del pool de conexiones a la base de datos
-const pool = mysql.createPool({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASS,
-  port: process.env.DB_PORT,
-  database: 'enlaces',
-  connectionLimit: 100
-});
 
 app.get('/', (req, res) => {
   res.send('This server is now live!');
