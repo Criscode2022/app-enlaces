@@ -8,9 +8,12 @@ const getAllLinks = async () => {
    const [result] = await connection.query(`
       SELECT * FROM posts ORDER BY created_at DESC
     `);
-
     return result;
   } finally {
     if (connection) connection.release();
   }
+};
+
+module.exports = {
+  getAllLinks
 };
