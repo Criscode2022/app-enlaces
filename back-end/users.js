@@ -39,4 +39,42 @@ router.post('/register', async function (req, res) {
   return res.json({ username });
 });
 
+router.post('/login', async function (req, res, next) {
+  const { value, error } = registerSchema.validate(req.body);
+  if (error) {
+    return res.status(400).send(error);
+  }
+  if (req.session.user) {
+    return res.status(400).send('Already logged in as ' + req.session.user);
+  }
+  const { username, password } = value;
+  try {
+    // query() returns [rows, columns]. We only want the first (and only) row, so that's:
+    //     const user = result[0][0];
+    //  or just:
+    //      const [[user]] = result;
+    const [[user]] = await pool
+      .query(
+        'SELECT id_user, name_user, password_user FROM users WHERE name_user = ? AND password_user = ?',
+        [username, password]
+      );
+
+    if (!user) {
+      return res.status(400).send('Invalid user or password');
+    }
+
+    req.session.regenerate(function (err) {
+      if (err) next(err);
+
+      req.session.user = user.id_user;
+      req.session.save(function (err) {
+        if (err) return next(err);
+        res.json({ username });
+      });
+    });
+  } catch (ex) {
+    return res.status(500).send(ex.message);
+  }
+});
+
 module.exports = router;
