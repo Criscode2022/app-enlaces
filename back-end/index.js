@@ -36,6 +36,7 @@ app.get('/users', (req, res) => {
   });
 });
 
+//Middleware que gestiona el endpoint '/links' 
 app.get('/links', getLinksController);
 
 app.listen(PORT, () => {
