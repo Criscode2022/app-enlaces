@@ -1,30 +1,16 @@
 "use strict";
+
+require('dotenv').config();
+
 // Importaciones usando CommonJS
-const express = require("express");
+const express = require('express');
 const app = express();
-const { createPool } = require('./db/db.js'); // Importa createPool
 
-
-app.get("/", (req, res) => {
-  res.send("El servidor está activo!");
+app.get('/', (req, res) => {
+  res.send('This server is now live!');
 }); // Ruta para mostrar un mensaje en la raíz del servidor
 
-app.get('/users', async (req, res) => {
-  try {
-    const pool = await createPool();
-    const connection = await pool.getConnection();
-
-    // Consulta a la base de datos
-    const [rows, fields] = await connection.query('SELECT * FROM users');
-    connection.release(); // Devolver la conexión al pool
-
-    console.log('Resultados de la consulta:', rows);
-    res.json(rows);
-  } catch (error) {
-    console.error('Error obteniendo o consultando la conexión a la base de datos:', error);
-    return res.status(500).send('Error obteniendo o consultando la conexión a la base de datos');
-  }
-});
+app.use('/users', require('./users'));
 
 //Middleware de errores, devuelve una respuesta de error adecuada y maneja la situación de manera controlada.
 app.use((error, req, res, next) => {
