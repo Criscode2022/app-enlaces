@@ -49,9 +49,9 @@ app.get("/users", (req, res) => {
 
 app.use((error, req, res, next) => {
   console.error(error);
-  res.status(error.httpStatus || 500).send({
+  res.status(404).send({
     status: "error",
-    message: error.message,
+    message: "Not found",
   });
 });
 
