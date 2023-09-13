@@ -4,6 +4,7 @@ require('dotenv').config();
 
 // Importaciones usando CommonJS
 const express = require('express');
+const session = require('express-session');
 const app = express();
 
 app.get('/', (req, res) => {
@@ -12,6 +13,14 @@ app.get('/', (req, res) => {
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
+app.use(
+  session({
+    secret: process.env.SESSION_COOKIE_SECRET,
+    resave: false,
+    saveUninitialized: false,
+  })
+);
 
 app.use('/users', require('./users'));
 
