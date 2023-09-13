@@ -77,4 +77,19 @@ router.post('/login', async function (req, res, next) {
   }
 });
 
+router.get('/logout', function (req, res, next) {
+  if (!req.session.user) {
+    return res.status(400).send('Not logged in');
+  }
+  req.session.user = null;
+  req.session.save(function (err) {
+    if (err) next(err);
+
+    req.session.regenerate(function (err) {
+      if (err) next(err);
+      res.json('OK');
+    });
+  });
+});
+
 module.exports = router;
