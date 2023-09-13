@@ -3,10 +3,11 @@ require('dotenv').config(); // Configuración de dotenv
 
 const { getLinksController } = require('./controllers/getLinksController');
 const express = require('express');
+const PORT = 3000; // El puerto 3000 es el puerto por defecto de Express
+
+//Creamos el servidor y le aplicamos el middleware de parseo de las requests:
 const app = express();
 app.use(express.json());
-
-const PORT = 3000; // El puerto 3000 es el puerto por defecto de Express
 
 app.get('/', (req, res) => {
   res.send('This server is now live!');
