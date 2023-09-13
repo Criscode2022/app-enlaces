@@ -3,7 +3,7 @@ const express = require('express');
 const app = express();
 const dotenv = require('dotenv');
 const mysql = require('mysql2');
-const { getLinksController} = require('/controllers/getLinksController');
+const { getLinksController } = require('/controllers/getLinksController');
 
 const PORT = 3000; // El puerto 3000 es el puerto por defecto de Express
 
