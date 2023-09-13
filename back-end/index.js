@@ -10,6 +10,9 @@ app.get('/', (req, res) => {
   res.send('This server is now live!');
 }); // Ruta para mostrar un mensaje en la raíz del servidor
 
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
 app.use('/users', require('./users'));
 
 //Middleware de errores, devuelve una respuesta de error adecuada y maneja la situación de manera controlada.
