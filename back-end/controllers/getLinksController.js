@@ -1,4 +1,4 @@
-//Este controller gestiona el endpoint '/links':
+//Este controller gestiona el endpoint '/links' con método GET:
 const { getAllLinks } = require('../db/getAllLinks');
 
 const getLinksController = async (req, res, next) => {
