@@ -1,13 +1,12 @@
 // Importaciones usando CommonJS
+require('dotenv').config(); // Configuración de dotenv
+
+const { getLinksController } = require('./controllers/getLinksController');
 const express = require('express');
 const app = express();
-const dotenv = require('dotenv');
-const mysql = require('mysql2');
-const { getLinksController } = require('/controllers/getLinksController');
+app.use(express.json());
 
 const PORT = 3000; // El puerto 3000 es el puerto por defecto de Express
-
-dotenv.config(); // Configuración de dotenv
 
 app.get('/', (req, res) => {
   res.send('This server is now live!');
