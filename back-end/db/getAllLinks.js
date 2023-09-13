@@ -1,6 +1,6 @@
 const { getConnection } = require('./db');
 
-//Con esta función obtenemos el listado de enlaces publicados, en orden de fecha de publicación, junto con la info del usuario:
+//Con esta función obtenemos el listado de enlaces publicados junto con la info del usuario:
 
 const getAllLinks = async () => {
   let connection;
