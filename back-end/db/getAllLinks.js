@@ -1,5 +1,7 @@
 const { getConnection } = require('./db');
 
+//Con esta función obtenemos el listado de enlaces publicados, en orden de fecha de publicación:
+
 const getAllLinks = async () => {
   let connection;
   try {
@@ -10,6 +12,7 @@ const getAllLinks = async () => {
     `);
     return result;
   } finally {
+    //Comprobamos siempre que la conexión quede cerrada:
     if (connection) connection.release();
   }
 };
