@@ -45,6 +45,8 @@ app.get('/users', (req, res) => {
   });
 });
 
+app.get('/links', getLinksController);
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 }); // El servidor escucha en el puerto 3000
