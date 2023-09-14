@@ -1,48 +1,29 @@
+"use strict";
 // Importaciones usando CommonJS
 const express = require("express");
 const app = express();
-const dotenv = require("dotenv");
-const mysql = require("mysql2");
+const { createPool } = require('./db/db.js'); // Importa createPool
 
-dotenv.config(); // Configuración de dotenv
-
-// Creación del pool de conexiones a la base de datos
-const pool = mysql.createPool({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASS,
-  port: process.env.DB_PORT,
-  database: "enlaces",
-  connectionLimit: 100,
-});
 
 app.get("/", (req, res) => {
-  res.send("This server is now live!");
+  res.send("El servidor está activo!");
 }); // Ruta para mostrar un mensaje en la raíz del servidor
 
-app.get("/users", (req, res) => {
-  // Obtener una conexión del pool
-  pool.getConnection((err, connection) => {
-    if (err) {
-      console.error("Error obteniendo conexión a la base de datos:", err);
-      return res
-        .status(500)
-        .send("Error obteniendo conexión a la base de datos");
-    }
+app.get('/users', async (req, res) => {
+  try {
+    const pool = await createPool();
+    const connection = await pool.getConnection();
 
     // Consulta a la base de datos
-    connection.query("SELECT * FROM users", (error, results, fields) => {
-      connection.release(); // Devolver la conexión al pool
+    const [rows, fields] = await connection.query('SELECT * FROM users');
+    connection.release(); // Devolver la conexión al pool
 
-      if (error) {
-        console.error("Error ejecutando la consulta:", error);
-        return res.status(500).send("Error ejecutando la consulta");
-      }
-
-      console.log("Resultados de la consulta:", results);
-      res.json(results);
-    });
-  });
+    console.log('Resultados de la consulta:', rows);
+    res.json(rows);
+  } catch (error) {
+    console.error('Error obteniendo o consultando la conexión a la base de datos:', error);
+    return res.status(500).send('Error obteniendo o consultando la conexión a la base de datos');
+  }
 });
 
 app.use((error, req, res, next) => {
