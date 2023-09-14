@@ -47,6 +47,7 @@ app.get("/users", (req, res) => {
   });
 });
 
+//Middleware de errores, devuelve una respuesta de error adecuada y maneja la situación de manera controlada.
 app.use((error, req, res, next) => {
   console.error(error);
   res.status(error.httpStatus || 500).send({
