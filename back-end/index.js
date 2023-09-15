@@ -1,31 +1,35 @@
 "use strict";
+
+require("dotenv").config();
+const getLinksController = require("./controllers/getLinksController");
+const getBiography = require("./controllers/getBiography");
+const updateBiography = require("./controllers/updateBiography");
 // Importaciones usando CommonJS
 const express = require("express");
 const app = express();
-const { createPool } = require('./db/db.js'); // Importa createPool
-
 
 app.get("/", (req, res) => {
-  res.send("El servidor está activo!");
+  res.send("This server is now live!");
 }); // Ruta para mostrar un mensaje en la raíz del servidor
 
-app.get('/users', async (req, res) => {
-  try {
-    const pool = await createPool();
-    const connection = await pool.getConnection();
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
-    // Consulta a la base de datos
-    const [rows, fields] = await connection.query('SELECT * FROM users');
-    connection.release(); // Devolver la conexión al pool
+app.use("/links", getLinksController);
+app.use("/biography", getBiography);
+app.use("/changes", updateBiography);
 
-    console.log('Resultados de la consulta:', rows);
-    res.json(rows);
-  } catch (error) {
-    console.error('Error obteniendo o consultando la conexión a la base de datos:', error);
-    return res.status(500).send('Error obteniendo o consultando la conexión a la base de datos');
-  }
-});
+/*app.use("/users", (req, res, next) => {
+  const [results] = pool.query("SELECT * FROM users");
+  res.send({
+    ok: true,
+    data: results,
+    error: null,
+    message: null,
+  });
+}); */
 
+//Middleware de errores, devuelve una respuesta de error adecuada y maneja la situación de manera controlada.
 app.use((error, req, res, next) => {
   console.error(error);
   res.status(error.httpStatus || 500).send({

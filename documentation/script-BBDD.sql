@@ -9,6 +9,7 @@ CREATE TABLE users (
   name_user varchar(50) NOT NULL UNIQUE,
   password_user varchar(20) NOT NULL,
   avatar_user BLOB,
+  biography_user varchar(200),
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
