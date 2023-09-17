@@ -8,6 +8,7 @@ CREATE TABLE users (
   id_user INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   name_user varchar(50) NOT NULL UNIQUE,
   password_user varchar(20) NOT NULL,
+  biography_user tinytext,
   avatar_user BLOB,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
@@ -27,11 +28,11 @@ CREATE TABLE posts (
 
 -- Inserts --
 
-INSERT INTO users (name_user, password_user) values ('Juan', '1234');
-INSERT INTO users (name_user, password_user) values ('Ana', '1fdf234');
-INSERT INTO users (name_user, password_user) values ('Carlos', 'gdfgdfvb');
-INSERT INTO users (name_user, password_user) values ('Marta', 'sfdsfsdf');
-INSERT INTO users (name_user, password_user) values ('Julio', 'fsdfdsfsd564');
+INSERT INTO users (name_user, password_user, biography_user) values ('Juan', '1234', 'Estudiante de Informática');
+INSERT INTO users (name_user, password_user, biography_user) values ('Ana', '1fdf234', 'Guitarrista profesional');
+INSERT INTO users (name_user, password_user, biography_user) values ('Carlos', 'gdfgdfvb', 'Jugador de baloncesto');
+INSERT INTO users (name_user, password_user, biography_user) values ('Marta', 'sfdsfsdf', 'Profesora universitaria');
+INSERT INTO users (name_user, password_user, biography_user) values ('Julio', 'fsdfdsfsd564', 'Camarero de restaurante');
 
 INSERT INTO posts (post_url, post_title, id_user, post_description) values ('Google.com', 'Google', 1, 'Enlace de Google');
 INSERT INTO posts (post_url, post_title, id_user, post_description) values ('Twiter.com', 'Twitter', 3, 'Enlace de Twitter');
@@ -75,7 +76,7 @@ from posts
 join users on posts.id_user = users.id_user
 where post_description LIKE '%gato%'  or post_title LIKE '%gato%';
 
-
+select * from users;
 
 
 
