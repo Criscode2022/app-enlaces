@@ -14,6 +14,9 @@ app.get('/', (req, res) => {
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+//Endpoint para acceder a todos los enlances publicados:
+app.use('/posts', require('./controllers/postsController'));
+
 app.use(
   session({
     secret: process.env.SESSION_COOKIE_SECRET,
@@ -22,7 +25,7 @@ app.use(
   })
 );
 
-app.use('/users', require('./users'));
+app.use('/users', require('./controllers/usersController'));
 
 //Middleware de errores, devuelve una respuesta de error adecuada y maneja la situación de manera controlada.
 app.use((error, req, res, next) => {
