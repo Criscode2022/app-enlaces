@@ -92,4 +92,35 @@ router.get('/logout', function (req, res, next) {
   });
 });
 
+router.delete('/delete/:userId', async (req, res) => {
+  const userIdToDelete = req.params.userId;
+  const authenticatedUserId = req.session.user;
+
+  if (!authenticatedUserId) {
+    return res.status(401).json({ message: 'No estás autenticado' });
+  }
+
+  try {
+    // Consulta para verificar si el usuario a eliminar existe y si es el mismo que el usuario autenticado
+    const [[user]] = await pool.query('SELECT id_user FROM users WHERE id_user = ?', [userIdToDelete]);
+
+    if (!user) {
+      return res.status(404).json({ message: 'Usuario no encontrado' });
+    }
+
+    if (user.id_user !== authenticatedUserId) {
+      return res.status(403).json({ message: 'No tienes permiso para eliminar este usuario' });
+    }
+
+    // Elimina el usuario de la base de datos
+    await pool.query('DELETE FROM users WHERE id_user = ?', [userIdToDelete]);
+
+    return res.json({ message: 'Usuario eliminado correctamente' });
+  } catch (error) {
+    console.error('Error al eliminar el usuario:', error);
+    return res.status(500).send('Error al eliminar el usuario');
+  }
+});
+
+
 module.exports = router;
