@@ -1,11 +1,13 @@
 "use strict";
 
-require("dotenv").config();
-
 // Importaciones usando CommonJS
+
+require("dotenv").config();
 const express = require("express");
 const session = require("express-session");
 const app = express();
+const { getPostsController, likePostController } = require('./controllers/postsController');
+
 
 app.get("/", (req, res) => {
   res.send("This server is now live!");
@@ -14,8 +16,14 @@ app.get("/", (req, res) => {
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+
+//Endpoint para dar like a un enlace:
+
+app.patch('/posts/like/:postId', likePostController);
+
 //Endpoint para acceder a todos los enlances publicados:
-app.use("/posts", require("./controllers/postsController"));
+
+app.use("/posts", getPostsController);
 
 app.use(
   session({
