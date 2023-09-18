@@ -13,9 +13,8 @@ async function getPostsController(req, res, next) {
       ok: true,
       data: results,
       error: null,
-      message: null
+      message: null,
     });
-
   } catch (error) {
     next(error);
   }
@@ -26,7 +25,9 @@ async function likePostController(req, res) {
 
   try {
     // Verifica si el post al que se le dará like existe
-    const [[post]] = await pool.query('SELECT * FROM posts WHERE id_post = ?', [postId]);
+    const [[post]] = await pool.query('SELECT * FROM posts WHERE id_post = ?', [
+      postId,
+    ]);
 
     if (!post) {
       return res.status(404).json({ message: 'Post no encontrado' });
@@ -36,12 +37,21 @@ async function likePostController(req, res) {
     const updatedLikes = post.post_likes + 1;
 
     // Actualiza la propiedad de likes en la base de datos
-    await pool.query('UPDATE posts SET post_likes = ? WHERE id_post = ?', [updatedLikes, postId]);
+    await pool.query('UPDATE posts SET post_likes = ? WHERE id_post = ?', [
+      updatedLikes,
+      postId,
+    ]);
 
     // Recupera nuevamente el post actualizado con los likes
-    const [[updatedPost]] = await pool.query('SELECT * FROM posts WHERE id_post = ?', [postId]);
+    const [[updatedPost]] = await pool.query(
+      'SELECT * FROM posts WHERE id_post = ?',
+      [postId]
+    );
 
-    return res.json({ message: 'Like agregado correctamente', updatedLikes: updatedPost.post_likes });
+    return res.json({
+      message: 'Like agregado correctamente',
+      updatedLikes: updatedPost.post_likes,
+    });
   } catch (error) {
     console.error('Error al agregar like al post:', error);
     return res.status(500).send('Error al agregar like al post');
