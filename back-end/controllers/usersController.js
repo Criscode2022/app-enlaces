@@ -10,8 +10,13 @@ router.get('/', async (req, res) => {
     console.log('Resultados de la consulta:', rows);
     res.json(rows);
   } catch (error) {
-    console.error('Error obteniendo o consultando la conexión a la base de datos:', error);
-    return res.status(500).send('Error obteniendo o consultando la conexión a la base de datos');
+    console.error(
+      'Error obteniendo o consultando la conexión a la base de datos:',
+      error
+    );
+    return res
+      .status(500)
+      .send('Error obteniendo o consultando la conexión a la base de datos');
   }
 });
 
@@ -28,11 +33,10 @@ router.post('/register', async function (req, res) {
   }
   const { username, password } = value;
   try {
-    await pool
-      .query('INSERT INTO users (name_user, password_user) VALUES (?, ?)', [
-        username,
-        password,
-      ]);
+    await pool.query(
+      'INSERT INTO users (name_user, password_user) VALUES (?, ?)',
+      [username, password]
+    );
   } catch (ex) {
     return res.status(500).send(ex);
   }
@@ -53,11 +57,10 @@ router.post('/login', async function (req, res, next) {
     //     const user = result[0][0];
     //  or just:
     //      const [[user]] = result;
-    const [[user]] = await pool
-      .query(
-        'SELECT id_user, name_user, password_user FROM users WHERE name_user = ? AND password_user = ?',
-        [username, password]
-      );
+    const [[user]] = await pool.query(
+      'SELECT id_user, name_user, password_user FROM users WHERE name_user = ? AND password_user = ?',
+      [username, password]
+    );
 
     if (!user) {
       return res.status(400).send('Invalid user or password');

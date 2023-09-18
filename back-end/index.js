@@ -1,29 +1,29 @@
-"use strict";
+'use strict';
 
 // Importaciones usando CommonJS
 
-require("dotenv").config();
-const express = require("express");
-const session = require("express-session");
+require('dotenv').config();
+const express = require('express');
+const session = require('express-session');
 const app = express();
-const { getPostsController, likePostController } = require('./controllers/postsController');
+const {
+  getPostsController,
+  likePostController,
+} = require('./controllers/postsController');
 
-
-app.get("/", (req, res) => {
-  res.send("This server is now live!");
+app.get('/', (req, res) => {
+  res.send('This server is now live!');
 }); // Ruta para mostrar un mensaje en la raíz del servidor
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-
 
 //Endpoint para dar like a un enlace:
 
 app.patch('/posts/like/:postId', likePostController);
 
 //Endpoint para acceder a todos los enlances publicados:
-
-app.use("/posts", getPostsController);
+app.use('/posts', getPostsController);
 
 app.use(
   session({
@@ -33,14 +33,14 @@ app.use(
   })
 );
 
-app.use("/users", require("./controllers/usersController"));
-app.use("/update", require("./controllers/updatesUsers"));
+app.use('/users', require('./controllers/usersController'));
+app.use('/update', require('./controllers/updatesUsers'));
 
 //Middleware de errores, devuelve una respuesta de error adecuada y maneja la situación de manera controlada.
 app.use((error, req, res, next) => {
   console.error(error);
   res.status(error.httpStatus || 500).send({
-    status: "error",
+    status: 'error',
     message: error.message,
   });
 });
