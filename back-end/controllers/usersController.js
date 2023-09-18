@@ -77,7 +77,7 @@ router.post('/login', async function (req, res, next) {
   }
 });
 
-router.get('/logout', function (req, res, next) {
+function logout(req, res, next) {
   if (!req.session.user) {
     return res.status(400).send('Not logged in');
   }
@@ -90,37 +90,24 @@ router.get('/logout', function (req, res, next) {
       res.json('OK');
     });
   });
-});
+}
 
-router.delete('/delete/:userId', async (req, res) => {
-  const userIdToDelete = req.params.userId;
-  const authenticatedUserId = req.session.user;
+router.get('/logout', logout);
 
-  if (!authenticatedUserId) {
+router.post('/unregister', async (req, res, next) => {
+  const id = req.session.user;
+  if (!id) {
     return res.status(401).json({ message: 'No estás autenticado' });
   }
 
   try {
-    // Consulta para verificar si el usuario a eliminar existe y si es el mismo que el usuario autenticado
-    const [[user]] = await pool.query('SELECT id_user FROM users WHERE id_user = ?', [userIdToDelete]);
-
-    if (!user) {
-      return res.status(404).json({ message: 'Usuario no encontrado' });
-    }
-
-    if (user.id_user !== authenticatedUserId) {
-      return res.status(403).json({ message: 'No tienes permiso para eliminar este usuario' });
-    }
-
     // Elimina el usuario de la base de datos
-    await pool.query('DELETE FROM users WHERE id_user = ?', [userIdToDelete]);
-
-    return res.json({ message: 'Usuario eliminado correctamente' });
+    await pool.query('DELETE FROM users WHERE id_user = ?', [id]);
+    return logout(req, res, next);
   } catch (error) {
     console.error('Error al eliminar el usuario:', error);
     return res.status(500).send('Error al eliminar el usuario');
   }
 });
-
 
 module.exports = router;
