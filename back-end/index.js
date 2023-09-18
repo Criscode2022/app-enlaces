@@ -26,10 +26,7 @@ app.use(
 );
 
 app.use("/users", require("./controllers/usersController"));
-app.use("/update-biography", require("./controllers/updatesUsers"));
-app.use("/update-avatar", require("./controllers/updatesUsers"));
-app.use("/change-name", require("./controllers/updatesUsers"));
-app.use("/change-password", require("./controllers/updatesUsers"));
+app.use("/update", require("./controllers/updatesUsers"));
 
 //Middleware de errores, devuelve una respuesta de error adecuada y maneja la situación de manera controlada.
 app.use((error, req, res, next) => {

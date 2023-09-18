@@ -63,8 +63,8 @@ router.put("/update-avatar", async (req, res) => {
 
 // Define un esquema de validación para el cambio de nombre.
 const changeNameSchema = Joi.object({
-  newUsername: Joi.string().alphanum().min(3).max(30).required(),
-  userId: Joi.number().integer().positive().required(),
+  newUsername: Joi.string().min(3).max(30).required(),
+  id_user: Joi.number().integer().positive().required(),
 });
 
 // Ruta para cambiar el nombre del usuario.
@@ -76,12 +76,12 @@ router.put("/change-name", async (req, res) => {
       .json({ status: "error", message: error.details[0].message });
   }
 
-  const { newUsername, userId } = value;
+  const { newUsername, id_user } = value;
 
   try {
     // Consulta para actualizar el nombre de usuario.
     const sql = "UPDATE users SET name_user = ? WHERE id_user = ?";
-    const [results] = await pool.query(sql, [newUsername, userId]);
+    const [results] = await pool.query(sql, [newUsername, id_user]);
 
     if (results.affectedRows === 0) {
       return res
@@ -107,7 +107,7 @@ const changePasswordSchema = Joi.object({
   newPassword: Joi.string()
     .pattern(new RegExp("^[a-zA-Z0-9]{3,20}$"))
     .required(),
-  userId: Joi.number().integer().positive().required(),
+  id_user: Joi.number().integer().positive().required(),
 });
 
 // Ruta para cambiar la contraseña del usuario.
@@ -119,12 +119,12 @@ router.put("/change-password", async (req, res) => {
       .json({ status: "error", message: error.details[0].message });
   }
 
-  const { newPassword, userId } = value;
+  const { newPassword, id_user } = value;
 
   try {
     // Consulta para actualizar la contraseña del usuario.
     const sql = "UPDATE users SET password_user = ? WHERE id_user = ?";
-    const [results] = await pool.query(sql, [newPassword, userId]);
+    const [results] = await pool.query(sql, [newPassword, id_user]);
 
     if (results.affectedRows === 0) {
       return res
