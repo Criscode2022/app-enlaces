@@ -1,6 +1,7 @@
 const pool = require('../db/db');
 
 async function getPostsController (req, res, next) {
+    const connection = await pool.getConnection();
     try {
         const [results] = await pool.query(`
         SELECT post_url, post_title, post_description, name_user, posts.created_at, post_likes
@@ -18,6 +19,8 @@ async function getPostsController (req, res, next) {
 
     } catch (error) {
         next(error);
+    } finally {
+        if (connection) connection.release();
     }
 }
 
