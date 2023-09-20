@@ -4,7 +4,6 @@
 
 require('dotenv').config();
 const express = require('express');
-const session = require('express-session');
 const app = express();
 const {
   getPostsController,
@@ -24,14 +23,6 @@ app.patch('/posts/like/:postId', likePostController);
 
 //Endpoint para acceder a todos los enlances publicados:
 app.use('/posts', getPostsController);
-
-app.use(
-  session({
-    secret: process.env.SESSION_COOKIE_SECRET,
-    resave: false,
-    saveUninitialized: false,
-  })
-);
 
 app.use('/users', require('./controllers/usersController'));
 app.use('/update', require('./controllers/updatesUsers'));
