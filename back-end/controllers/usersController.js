@@ -43,74 +43,74 @@ router.post('/register', async function (req, res) {
   return res.json({ username });
 });
 
-router.post('/login', async function (req, res, next) {
-  const { value, error } = registerSchema.validate(req.body);
-  if (error) {
-    return res.status(400).send(error);
-  }
-  if (req.session.user) {
-    return res.status(400).send('Already logged in as ' + req.session.user);
-  }
-  const { username, password } = value;
-  try {
-    // query() returns [rows, columns]. We only want the first (and only) row, so that's:
-    //     const user = result[0][0];
-    //  or just:
-    //      const [[user]] = result;
-    const [[user]] = await pool.query(
-      'SELECT id_user, name_user, password_user FROM users WHERE name_user = ? AND password_user = ?',
-      [username, password]
-    );
+// router.post('/login', async function (req, res, next) {
+//   const { value, error } = registerSchema.validate(req.body);
+//   if (error) {
+//     return res.status(400).send(error);
+//   }
+//   if (req.session.user) {
+//     return res.status(400).send('Already logged in as ' + req.session.user);
+//   }
+//   const { username, password } = value;
+//   try {
+//     // query() returns [rows, columns]. We only want the first (and only) row, so that's:
+//     //     const user = result[0][0];
+//     //  or just:
+//     //      const [[user]] = result;
+//     const [[user]] = await pool.query(
+//       'SELECT id_user, name_user, password_user FROM users WHERE name_user = ? AND password_user = ?',
+//       [username, password]
+//     );
 
-    if (!user) {
-      return res.status(400).send('Invalid user or password');
-    }
+//     if (!user) {
+//       return res.status(400).send('Invalid user or password');
+//     }
 
-    req.session.regenerate(function (err) {
-      if (err) next(err);
+//     req.session.regenerate(function (err) {
+//       if (err) next(err);
 
-      req.session.user = user.id_user;
-      req.session.save(function (err) {
-        if (err) return next(err);
-        res.json({ username });
-      });
-    });
-  } catch (ex) {
-    return res.status(500).send(ex.message);
-  }
-});
+//       req.session.user = user.id_user;
+//       req.session.save(function (err) {
+//         if (err) return next(err);
+//         res.json({ username });
+//       });
+//     });
+//   } catch (ex) {
+//     return res.status(500).send(ex.message);
+//   }
+// });
 
-function logout(req, res, next) {
-  if (!req.session.user) {
-    return res.status(400).send('Not logged in');
-  }
-  req.session.user = null;
-  req.session.save(function (err) {
-    if (err) next(err);
+// function logout(req, res, next) {
+//   if (!req.session.user) {
+//     return res.status(400).send('Not logged in');
+//   }
+//   req.session.user = null;
+//   req.session.save(function (err) {
+//     if (err) next(err);
 
-    req.session.regenerate(function (err) {
-      if (err) next(err);
-      res.json('OK');
-    });
-  });
-}
+//     req.session.regenerate(function (err) {
+//       if (err) next(err);
+//       res.json('OK');
+//     });
+//   });
+// }
 
-router.get('/logout', logout);
+// router.get('/logout', logout);
 
-router.post('/unregister', async (req, res, next) => {
-  const id = req.session.user;
-  if (!id) {
-    return res.status(401).json({ message: 'No estás autenticado' });
-  }
+// router.post('/unregister', async (req, res, next) => {
+//   const id = req.session.user;
+//   if (!id) {
+//     return res.status(401).json({ message: 'No estás autenticado' });
+//   }
 
-  try {
-    // Elimina el usuario de la base de datos
-    await pool.query('DELETE FROM users WHERE id_user = ?', [id]);
-    return logout(req, res, next);
-  } catch (error) {
-    console.error('Error al eliminar el usuario:', error);
-    return res.status(500).send('Error al eliminar el usuario');
-  }
-});
+//   try {
+//     // Elimina el usuario de la base de datos
+//     await pool.query('DELETE FROM users WHERE id_user = ?', [id]);
+//     return logout(req, res, next);
+//   } catch (error) {
+//     console.error('Error al eliminar el usuario:', error);
+//     return res.status(500).send('Error al eliminar el usuario');
+//   }
+// });
 
 module.exports = router;
