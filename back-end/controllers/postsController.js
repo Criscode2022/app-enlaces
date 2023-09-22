@@ -30,6 +30,7 @@ async function getPostsController (req, res, next) {
 
 async function likePostController(req, res) {
   const { postId } = req.body;
+  const connection = await pool.getConnection();
 
   try {
     // Verificar el JWT y extraer el ID de usuario
@@ -53,7 +54,9 @@ async function likePostController(req, res) {
   } catch (error) {
     console.error('Error al agregar el like:', error);
     return res.status(500).json({ mensaje: 'Error al agregar el like' });
-  }
+  } finally {
+        if (connection) connection.release();
+    }
 }
 
 
