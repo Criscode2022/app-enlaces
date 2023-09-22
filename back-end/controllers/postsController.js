@@ -28,7 +28,7 @@ async function getPostsController (req, res, next) {
 
 
 
-async function getPostsController(req, res) {
+async function likePostController(req, res) {
   const { postId } = req.body;
 
   try {
