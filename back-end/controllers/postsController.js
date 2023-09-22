@@ -1,4 +1,5 @@
 const pool = require('../db/db');
+const jwt = require('jsonwebtoken');
 
 async function getPostsController (req, res, next) {
     const connection = await pool.getConnection();
@@ -25,42 +26,35 @@ async function getPostsController (req, res, next) {
 
 }
 
-async function likePostController(req, res) {
-  const postId = req.params.postId;
+
+
+async function getPostsController(req, res) {
+  const { postId } = req.body;
 
   try {
-    // Verifica si el post al que se le dará like existe
-    const [[post]] = await pool.query('SELECT * FROM posts WHERE id_post = ?', [
-      postId,
-    ]);
-
-    if (!post) {
-      return res.status(404).json({ message: 'Post no encontrado' });
+    // Verificar el JWT y extraer el ID de usuario
+    const token = req.header('Authorization');
+    if (!token) {
+      return res.status(401).json({ mensaje: 'No autorizado' });
     }
 
-    // Incrementa el contador de likes del post
-    const updatedLikes = post.post_likes + 1;
+    jwt.verify(token, 'tu-clave-secreta', async (err, usuario) => {
+      if (err) {
+        return res.status(403).json({ mensaje: 'Prohibido' });
+      }
 
-    // Actualiza la propiedad de likes en la base de datos
-    await pool.query('UPDATE posts SET post_likes = ? WHERE id_post = ?', [
-      updatedLikes,
-      postId,
-    ]);
+      const idUsuario = usuario.id;
 
-    // Recupera nuevamente el post actualizado con los likes
-    const [[updatedPost]] = await pool.query(
-      'SELECT * FROM posts WHERE id_post = ?',
-      [postId]
-    );
+      // Insertar el "like" en la base de datos
+      await pool.query('INSERT INTO likes (id_user, id_post) VALUES (?, ?)', [idUsuario, postId]);
 
-    return res.json({
-      message: 'Like agregado correctamente',
-      updatedLikes: updatedPost.post_likes,
+      return res.status(201).json({ mensaje: 'Like agregado exitosamente' });
     });
   } catch (error) {
-    console.error('Error al agregar like al post:', error);
-    return res.status(500).send('Error al agregar like al post');
+    console.error('Error al agregar el like:', error);
+    return res.status(500).json({ mensaje: 'Error al agregar el like' });
   }
 }
+
 
 module.exports = { getPostsController, likePostController };
