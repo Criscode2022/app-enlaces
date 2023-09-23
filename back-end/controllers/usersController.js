@@ -80,18 +80,19 @@ router.post('/login', async function (req, res, next) {
   }
 });
 
-router.post(
-  '/verify',
-  expressjwt({ secret: process.env.JWT_SECRET, algorithms: ['HS256'] }),
-  async (req, res) => {
-    return res.send('Logged in as user: ' + req.auth.user);
-  }
-);
+const isLoggedIn = expressjwt({
+  secret: process.env.JWT_SECRET,
+  algorithms: ['HS256'],
+});
+
+router.post('/verify', isLoggedIn, async (req, res) => {
+  return res.send('Logged in as user: ' + req.auth.user);
+});
 
 // Note that there is no /logout endpoint, because by definition
 // we don't store any data once we return a valid JWT token.
 
-router.post('/unregister', async (req, res) => {
+router.post('/unregister', isLoggedIn, async (req, res) => {
   const id = req.auth.user;
   if (!id) {
     return res.status(401).json({ message: 'No estás autenticado' });
