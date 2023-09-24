@@ -9,9 +9,14 @@ La aplicación no contempla usuarios anónimos: todos deben registrarse para pod
 La primera tarea fue implementar la estructura del servidor y la conexión a la base de datos como punto de partida. Posteriormente, se fueron añadiendo los middlewares correspondientes (parseo de body de las peticiones, gestión de errores, etc), así como la gestión de los distintos endpoints de la aplicación con los controllers de las peticiones.
 
 ## Lista de endpoints:
-- /welcome : Página inicial de bienvenida para todos los usuarios, tanto registrados como no.
-- /register : Página del formulario de registro para poder acceder a la plataforma.
-- /login : Página de inicio de sesión de los usuarios registrados.
-- /profile : Página para cambiar los datos del usuario.
-- /links : Página que muestra el listado de enlaces publicados.
-- /post : Pop-up que permite al usuario publicar su propio enlace de interés.
+- GET / : Página inicial del servidor.
+- GET /users : Muestra el listado de usuarios registrados.
+- GET /posts : Mostrar el listado de enlaces publicados.
+- GET /users/logout : Cerrar sesión de usuario.
+- POST /posts/like/:postId : Dar like a una publicación.
+- POST /users/register : Registrar nuevo usuario.
+- POST /users/login : Iniciar sesión de usuario.
+- PUT /update/update-biography : Actualizar biografía de usuario.
+- PUT /update/update-avatar : Actualizar imagen de perfil.
+- PUT /update/change-name : Cambiar nombre de usuario.
+- PUT /update/change-password: Cambiar contraseña de usuario.

@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const pool = require('../db/db');
 const Joi = require('joi');
+const jwt = require('jsonwebtoken');
+const { expressjwt } = require('express-jwt');
 
 router.get('/', async (req, res) => {
   try {
@@ -48,9 +50,6 @@ router.post('/login', async function (req, res, next) {
   if (error) {
     return res.status(400).send(error);
   }
-  if (req.session.user) {
-    return res.status(400).send('Already logged in as ' + req.session.user);
-  }
   const { username, password } = value;
   try {
     // query() returns [rows, columns]. We only want the first (and only) row, so that's:
@@ -66,39 +65,37 @@ router.post('/login', async function (req, res, next) {
       return res.status(400).send('Invalid user or password');
     }
 
-    req.session.regenerate(function (err) {
-      if (err) next(err);
+    // create token
+    const token = jwt.sign(
+      {
+        user: user.id_user,
+      },
+      process.env.JWT_SECRET
+    );
 
-      req.session.user = user.id_user;
-      req.session.save(function (err) {
-        if (err) return next(err);
-        res.json({ username });
-      });
-    });
+    res.header('auth-token', token);
+    return res.json({ token });
   } catch (ex) {
     return res.status(500).send(ex.message);
   }
 });
 
-function logout(req, res, next) {
-  if (!req.session.user) {
-    return res.status(400).send('Not logged in');
-  }
-  req.session.user = null;
-  req.session.save(function (err) {
-    if (err) next(err);
+// Authentication middleware. This takes care of verifying the JWT token and
+// storing the token data (user id) in req.auth.
+const isAuthenticated = expressjwt({
+  secret: process.env.JWT_SECRET,
+  algorithms: ['HS256'],
+});
 
-    req.session.regenerate(function (err) {
-      if (err) next(err);
-      res.json('OK');
-    });
-  });
-}
+router.post('/verify', isAuthenticated, async (req, res) => {
+  return res.send('Logged in as user: ' + req.auth.user);
+});
 
-router.get('/logout', logout);
+// Note that there is no /logout endpoint, because by definition
+// we don't store any data once we return a valid JWT token.
 
-router.post('/unregister', async (req, res, next) => {
-  const id = req.session.user;
+router.post('/unregister', isAuthenticated, async (req, res) => {
+  const id = req.auth.user;
   if (!id) {
     return res.status(401).json({ message: 'No estás autenticado' });
   }
@@ -106,7 +103,7 @@ router.post('/unregister', async (req, res, next) => {
   try {
     // Elimina el usuario de la base de datos
     await pool.query('DELETE FROM users WHERE id_user = ?', [id]);
-    return logout(req, res, next);
+    return res.send('Successfully unregistered');
   } catch (error) {
     console.error('Error al eliminar el usuario:', error);
     return res.status(500).send('Error al eliminar el usuario');
