@@ -16,6 +16,9 @@ const cors = require('cors');
 app.use(cors());
 
 
+//Middleware para subir archivos
+app.use("/upload", uploadRoute);
+
 
 app.get('/', (req, res) => {
   res.send('This server is now live!');
