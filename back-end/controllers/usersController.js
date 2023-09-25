@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 const { expressjwt } = require('express-jwt');
 
 router.get('/', async (req, res) => {
+  const connection = await pool.getConnection();
   try {
     // Consulta a la base de datos
     const [rows, fields] = await pool.query('SELECT * FROM users');
@@ -19,6 +20,8 @@ router.get('/', async (req, res) => {
     return res
       .status(500)
       .send('Error obteniendo o consultando la conexión a la base de datos');
+  } finally {
+    if (connection) connection.release();
   }
 });
 
@@ -30,6 +33,7 @@ const registerSchema = Joi.object({
 
 router.post('/register', async function (req, res) {
   const { value, error } = registerSchema.validate(req.body);
+  const connection = await pool.getConnection();
   if (error) {
     return res.status(400).send(error);
   }
@@ -41,12 +45,15 @@ router.post('/register', async function (req, res) {
     );
   } catch (ex) {
     return res.status(500).send(ex);
+  } finally {
+    if (connection) connection.release();
   }
   return res.json({ username });
 });
 
 router.post('/login', async function (req, res, next) {
   const { value, error } = registerSchema.validate(req.body);
+  const connection = await pool.getConnection();
   if (error) {
     return res.status(400).send(error);
   }
@@ -77,6 +84,8 @@ router.post('/login', async function (req, res, next) {
     return res.json({ token });
   } catch (ex) {
     return res.status(500).send(ex.message);
+  } finally {
+    if (connection) connection.release();
   }
 });
 
@@ -96,6 +105,7 @@ router.post('/verify', isAuthenticated, async (req, res) => {
 
 router.post('/unregister', isAuthenticated, async (req, res) => {
   const id = req.auth.user;
+  const connection = await pool.getConnection();
   if (!id) {
     return res.status(401).json({ message: 'No estás autenticado' });
   }
@@ -107,12 +117,15 @@ router.post('/unregister', isAuthenticated, async (req, res) => {
   } catch (error) {
     console.error('Error al eliminar el usuario:', error);
     return res.status(500).send('Error al eliminar el usuario');
+  } finally {
+    if (connection) connection.release();
   }
 });
 
 router.put('/follow/:userFollow', isAuthenticated, async (req, res) => {
   const id = req.auth.user;
   const { userFollow } = req.params;
+  const connection = await pool.getConnection();
 
   try {
     // Verificar el JWT y extraer el ID de usuario
@@ -138,6 +151,8 @@ router.put('/follow/:userFollow', isAuthenticated, async (req, res) => {
   } catch (error) {
     console.error('Error al seguir al usuario:', error);
     return res.status(500).json({ error: 'Error al seguir al usuario' });
+  } finally {
+    if (connection) connection.release();
   }
 });
 

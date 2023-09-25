@@ -12,6 +12,7 @@ const biographySchema = Joi.object({
 // Ruta para actualizar la biografía del usuario.
 router.put('/update-biography', async (req, res) => {
   const { error } = biographySchema.validate(req.body);
+  const connection = await pool.getConnection();
 
   if (error) {
     return res
@@ -30,6 +31,8 @@ router.put('/update-biography', async (req, res) => {
     res
       .status(500)
       .json({ status: 'error', message: 'Error updating biography' });
+  } finally {
+    if (connection) connection.release();
   }
 });
 
@@ -42,6 +45,7 @@ const avatarSchema = Joi.object({
 // Ruta para actualizar el avatar del usuario.
 router.put('/update-avatar', async (req, res) => {
   const { error } = avatarSchema.validate(req.body);
+  const connection = await pool.getConnection();
 
   if (error) {
     return res
@@ -58,6 +62,8 @@ router.put('/update-avatar', async (req, res) => {
   } catch (error) {
     console.error('Error updating avatar:', error);
     res.status(500).json({ status: 'error', message: 'Error updating avatar' });
+  } finally {
+    if (connection) connection.release();
   }
 });
 
@@ -70,6 +76,7 @@ const changeNameSchema = Joi.object({
 // Ruta para cambiar el nombre del usuario.
 router.put('/change-name', async (req, res) => {
   const { value, error } = changeNameSchema.validate(req.body);
+  const connection = await pool.getConnection();
   if (error) {
     return res
       .status(400)
@@ -99,6 +106,8 @@ router.put('/change-name', async (req, res) => {
       status: 'error',
       message: 'Error al cambiar el nombre de usuario',
     });
+  } finally {
+    if (connection) connection.release();
   }
 });
 
@@ -113,6 +122,7 @@ const changePasswordSchema = Joi.object({
 // Ruta para cambiar la contraseña del usuario.
 router.put('/change-password', async (req, res) => {
   const { value, error } = changePasswordSchema.validate(req.body);
+  const connection = await pool.getConnection();
   if (error) {
     return res
       .status(400)
@@ -141,6 +151,8 @@ router.put('/change-password', async (req, res) => {
     res
       .status(500)
       .json({ status: 'error', message: 'Error al cambiar la contraseña' });
+  } finally {
+    if (connection) connection.release();
   }
 });
 
