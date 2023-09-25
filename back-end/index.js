@@ -6,6 +6,7 @@ require("dotenv").config();
 const express = require("express");
 const session = require("express-session");
 const app = express();
+const uploadRoute = require("./uploads/uploads");
 
 app.get("/", (req, res) => {
   res.send("This server is now live!");
@@ -13,6 +14,9 @@ app.get("/", (req, res) => {
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
+//Middleware para subir archivos
+app.use("/upload", uploadRoute);
 
 //Endpoint para acceder a todos los enlances publicados:
 app.use("/posts", require("./controllers/postsController"));
