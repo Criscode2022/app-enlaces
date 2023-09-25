@@ -110,4 +110,35 @@ router.post('/unregister', isAuthenticated, async (req, res) => {
   }
 });
 
+router.put('/follow/:userFollow', isAuthenticated, async (req, res) => {
+  const id = req.auth.user;
+  const { userFollow } = req.params;
+
+  try {
+    // Verificar el JWT y extraer el ID de usuario
+    const token = req.header('Authorization');
+
+    // Consulta para verificar si el usuario ya está siguiendo al usuario deseado
+    const checkQuery = 'SELECT following_user FROM users WHERE id_user = ?';
+    const [checkResults] = await pool.query(checkQuery, [id]);
+
+    const followingUserList = checkResults[0].following_user || '';
+    const followingUserArray = followingUserList.split(',').map(userId => parseInt(userId));
+
+    if (followingUserArray.includes(parseInt(userFollow))) {
+      return res.status(400).json({ error: 'Ya sigues a este usuario' });
+    }
+
+    // Consulta para actualizar la lista de usuarios seguidos
+    const updateQuery = `UPDATE users SET following_user = CONCAT_WS(',', IFNULL(following_user, ''), ?) WHERE id_user = ?`;
+
+    await pool.query(updateQuery, [userFollow, id]);
+
+    return res.status(200).json({ message: 'Usuario seguido con éxito: ' + userFollow, siguiendo: checkResults[0].following_user + ',' + userFollow });
+  } catch (error) {
+    console.error('Error al seguir al usuario:', error);
+    return res.status(500).json({ error: 'Error al seguir al usuario' });
+  }
+});
+
 module.exports = router;

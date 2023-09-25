@@ -11,6 +11,9 @@ const {
 } = require('./controllers/postsController');
 const { expressjwt } = require('express-jwt');
 const jwt = require('jsonwebtoken');
+const cors = require('cors');
+
+app.use(cors());
 
 
 
