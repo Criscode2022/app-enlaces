@@ -112,5 +112,69 @@ router.post('/register', async function (req, res) {
 //     return res.status(500).send('Error al eliminar el usuario');
 //   }
 // });
+const express = require('express');
+
+const pool = require('../db/db');
+const Joi = require('joi');
+
+// Función para verificar si el usuario está autenticado
+function isLoggedIn(req, res, next) {
+  if (!req.session.user) {
+    next(new Error("Not logged-in"));
+  } else {
+    next();
+  }
+}
+
+// Ruta protegida que requiere autenticación
+router.get('/', isLoggedIn, async (req, res) => {
+  try {
+    // Consulta a la base de datos
+    const [rows, fields] = await pool.query('SELECT * FROM users');
+    // Resto del código
+  } catch (error) {
+    // Manejo de errores
+  }
+});
+
+// Otras rutas y controladores
+
+// Exportar el router y la función de verificación de autenticación
+module.exports = {
+  router,
+  isLoggedIn,
+};
+
 
 module.exports = router;
+const express = require('express');
+const pool = require('../db/db');
+const Joi = require('joi');
+
+// Función para verificar si el usuario está autenticado
+function isLoggedIn(req, res, next) {
+  if (!req.session.user) {
+    next(new Error("Not logged-in"));
+  } else {
+    next();
+  }
+}
+
+// Ruta protegida que requiere autenticación
+router.get('/', isLoggedIn, async (req, res) => {
+  try {
+    // Consulta a la base de datos
+    const [rows, fields] = await pool.query('SELECT * FROM users');
+    // Resto del código
+  } catch (error) {
+    // Manejo de errores
+  }
+});
+
+// Otras rutas y controladores
+
+// Exportar el router y la función de verificación de autenticación
+module.exports = {
+  router,
+  isLoggedIn,
+};
