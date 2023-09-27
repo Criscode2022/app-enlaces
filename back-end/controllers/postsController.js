@@ -1,6 +1,7 @@
 const pool = require('../db/db');
 const jwt = require('jsonwebtoken');
 
+
 async function getPostsController (req, res, next) {
     const connection = await pool.getConnection();
     try {
@@ -11,21 +12,18 @@ async function getPostsController (req, res, next) {
         ON posts.id_user = users.id_user      
         `);
 
-        res.send({
-            ok: true,
-            data: results,
-            error: null,
-            message: null
-        });
-
-    } catch (error) {
-        next(error);
-    } finally {
-        if (connection) connection.release();
-    }
-
+    res.send({
+      ok: true,
+      data: results,
+      error: null,
+      message: null,
+    });
+  } catch (error) {
+    next(error);
+  } finally {
+    if (connection) connection.release();
+  }
 }
-
 
 
 async function likePostController(req, res) {
@@ -51,6 +49,52 @@ async function likePostController(req, res) {
         if (connection) connection.release();
     }
 }
+const express = require('express');
+const router = express.Router();
+const pool = require('../db/db');
+const Joi = require('joi');
 
+// Función para verificar si el usuario está autenticado
+function isLoggedIn(req, res, next) {
+  if (!req.session.user) {
+    next(new Error("Not logged-in"));
+  } else {
+    next();
+  }
+}
+
+// Controlador para la ruta protegida que requiere autenticación
+async function crearEnlace(req, res) {
+  try {
+    // Validar los datos del enlace (por ejemplo, URL, título, descripción, etc.)
+    const schema = Joi.object({
+      url: Joi.string().uri().required(),
+      titulo: Joi.string().required(),
+      descripcion: Joi.string().required(),
+    });
+    
+    const { error } = schema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ error: error.details[0].message });
+    }
+
+    // Crear el enlace en la base de datos
+    const { url, titulo, descripcion } = req.body;
+    const query = 'INSERT INTO enlaces (url, titulo, descripcion) VALUES (?, ?, ?)';
+    await pool.query(query, [url, titulo, descripcion]);
+
+    // Respuesta exitosa
+    res.status(201).json({ message: 'Enlace creado con éxito' });
+  } catch (error) {
+    // Manejo de errores
+    console.error(error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+}
+
+// Asociar el controlador a la ruta protegida
+router.post('/crear-enlace', isLoggedIn, crearEnlace);
+
+// Otras rutas y controladores
 
 module.exports = { getPostsController, likePostController };

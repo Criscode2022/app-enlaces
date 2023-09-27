@@ -58,3 +58,24 @@ app.use((error, req, res, next) => {
 app.listen(process.env.SERVER_PORT, () => {
   console.log(`Server is running on port ${process.env.SERVER_PORT}`);
 });
+const express = require('express');
+
+// Middleware y configuraciones
+
+// Ruta de ejemplo que devuelve un error 404
+app.use((req, res, next) => {
+  res.status(404).send('404 Not Found');
+});
+
+// Middleware de errores, maneja la situación de manera controlada
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Internal Server Error');
+});
+
+// Puerto en el que se ejecutará el servidor
+const port = process.env.PORT || 3000;
+
+app.listen(port, () => {
+  console.log(`Servidor en ejecución en el puerto ${port}`);
+});
