@@ -1,5 +1,8 @@
 const pool = require('../db/db');
 const jwt = require('jsonwebtoken');
+const express = require('express');
+const router = express.Router();
+const Joi = require('joi');
 
 
 async function getPostsController (req, res, next) {
@@ -49,10 +52,7 @@ async function likePostController(req, res) {
         if (connection) connection.release();
     }
 }
-const express = require('express');
-const router = express.Router();
-const pool = require('../db/db');
-const Joi = require('joi');
+
 
 // Función para verificar si el usuario está autenticado
 function isLoggedIn(req, res, next) {
