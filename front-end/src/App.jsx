@@ -14,7 +14,6 @@ function App() {
   return (
     <>
       <Header />
-      <Tabs></Tabs>
       <main>
         <Routes>
           <Route path='/' element={<Home />} />

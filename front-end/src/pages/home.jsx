@@ -1,6 +1,11 @@
+import React from 'react';
+import Tabs from '../layout/Tabs';
+
 const Home = () => {
-    return (
+    return (<>
+        <Tabs></Tabs>
         <h2>Home</h2>
+        </>
     );
 };
 
