@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import './App.css';
 import { Route, Routes } from 'react-router-dom';
-import HeaderPrueba from './layout/prueba';
+import Header from './layout/Header';
+import Tabs from './layout/Tabs';
 import About from './pages/about';
 import Login from './pages/login';
 import Home from './pages/home';
@@ -12,9 +13,9 @@ function App() {
 
   return (
     <>
-      <HeaderPrueba />
+      <Header />
+      <Tabs></Tabs>
       <main>
-        <h2>LINKED LIFE</h2>
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/about' element={<About />} />
