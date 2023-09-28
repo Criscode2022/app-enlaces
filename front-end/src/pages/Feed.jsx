@@ -1,11 +1,13 @@
 import React from 'react'
-import ListofPosts from '../components/ListofPosts'
-
+import Tabs from '../layout/Tabs';
+import ListofPosts from '../components/ListofPosts';
 
 const Feed = () => {
-  return (
-    <><ListofPosts></ListofPosts>  </>
+  return (<>
+    <Tabs></Tabs>
 
+<ListofPosts></ListofPosts>
+      </>
   )
 }
 
