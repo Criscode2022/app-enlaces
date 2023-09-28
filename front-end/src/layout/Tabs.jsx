@@ -4,6 +4,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import ListofPosts from '../components/ListofPosts';
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -54,7 +55,7 @@ export default function BasicTabs() {
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        Todos los posts
+        <ListofPosts></ListofPosts>
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
 Posts de la gente que sigues

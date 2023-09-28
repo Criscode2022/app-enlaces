@@ -21,13 +21,13 @@ const ListofPosts = () => {
   }, []);
 
   return (
-    <div>
-      <h1>ListofPosts</h1>
+    <div style={{ width: '100%', display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap' }}>
       {postsData.map((post) => (
-        <Post key={post.id} title={post.post_title} content={post.post_description} url={post.post_url} imageUrl={post.post_url} />
+        <Post key={post.id} title={post.post_title} content={post.post_description} url={post.post_url}/>
       ))}
     </div>
   );
 }
 
 export default ListofPosts;
+
