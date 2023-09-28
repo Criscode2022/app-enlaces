@@ -17,7 +17,7 @@ app.use(cors());
 
 
 //Middleware para subir archivos
-app.use("/upload", uploadRoute);
+// app.use("/upload", uploadRoute);
 
 
 app.get('/', (req, res) => {
@@ -58,7 +58,6 @@ app.use((error, req, res, next) => {
 app.listen(process.env.SERVER_PORT, () => {
   console.log(`Server is running on port ${process.env.SERVER_PORT}`);
 });
-const express = require('express');
 
 // Middleware y configuraciones
 

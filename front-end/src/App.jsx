@@ -8,6 +8,7 @@ import Login from './pages/login';
 import Home from './pages/home';
 import Error404 from './pages/error404';
 import Avatar from './pages/avatar';
+import Feed from './pages/Feed';
 
 function App() {
 
@@ -21,6 +22,7 @@ function App() {
           <Route path='/login' element={<Login />} />
           <Route path='/avatar' element={<Avatar />} />
           <Route path='/*' element={<Error404 />} />
+          <Route path='/feed' element={<Feed />} />
         </Routes>
       </main>
     </>
