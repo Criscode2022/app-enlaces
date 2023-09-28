@@ -63,6 +63,7 @@ app.use((error, req, res, next) => {
   });
 });
 
+
 // Middleware y configuraciones
 
 // Ruta de ejemplo que devuelve un error 404

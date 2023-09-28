@@ -30,4 +30,3 @@ const ListofPosts = () => {
 }
 
 export default ListofPosts;
-
