@@ -44,19 +44,13 @@ app.use('/posts', getPostsController);
 app.use('/users', require('./controllers/usersController'));
 app.use('/update', require('./controllers/updatesUsers'));
 
-
-
-//Middleware de errores, devuelve una respuesta de error adecuada y maneja la situación de manera controlada.
+// Middleware de errores, devuelve una respuesta de error adecuada y maneja la situación de manera controlada.
 app.use((error, req, res, next) => {
   console.error(error);
   res.status(error.httpStatus || 500).send({
     status: 'error',
     message: error.message,
   });
-});
-
-app.listen(process.env.SERVER_PORT, () => {
-  console.log(`Server is running on port ${process.env.SERVER_PORT}`);
 });
 
 // Middleware y configuraciones
@@ -72,9 +66,7 @@ app.use((err, req, res, next) => {
   res.status(500).send('Internal Server Error');
 });
 
-// Puerto en el que se ejecutará el servidor
-const port = process.env.PORT || 3000;
-
-app.listen(port, () => {
-  console.log(`Servidor en ejecución en el puerto ${port}`);
+app.listen(process.env.SERVER_PORT, () => {
+  console.log(`Server is running on port ${process.env.SERVER_PORT}`);
 });
+
