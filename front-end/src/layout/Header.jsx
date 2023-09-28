@@ -43,7 +43,7 @@ const StyledHeader = styled.header`
     gap: 1.5rem;
     justify-content: center;
     list-style: none;
-    position: fixed;
+    position: absolute;
     top: 0;
     right: 0;
   }
