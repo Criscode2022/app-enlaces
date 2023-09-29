@@ -23,11 +23,17 @@ const ListofPosts = () => {
   return (
     <div style={{ width: '100%', display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap' }}>
       {postsData.map((post) => (
-        <Post key={post.id} title={post.post_title} content={post.post_description} url={post.post_url}/>
+        <Post
+        key={post.id_post}
+        postId={post.id_post}
+        title={post.post_title}
+        content={post.post_description}
+        url={post.post_url}
+      />
+      
       ))}
     </div>
   );
 }
 
 export default ListofPosts;
-

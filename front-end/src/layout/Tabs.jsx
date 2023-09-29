@@ -49,9 +49,9 @@ export default function BasicTabs() {
   return (
     <Box sx={{ width: '100%' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-          <Tab label="Todos" {...a11yProps(0)} />
-          <Tab label="Siguiendo" {...a11yProps(1)} />
+        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" >
+          <Tab sx={{ color: 'white' }} label="Todos" {...a11yProps(0)} />
+          <Tab sx={{ color: 'white' }} label="Siguiendo" {...a11yProps(1)} />
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
