@@ -5,6 +5,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Badge from '@mui/material/Badge';
+import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 
 const Post = (props) => {
   const { imageUrl, title, content, url, postId } = props;
@@ -30,6 +31,8 @@ const Post = (props) => {
         console.error('Error al obtener el contador de likes:', error);
       });
   }, [postId]);
+
+  
 
   const incrementLikes = () => {
     // Realizar una solicitud a la API para agregar un like
@@ -69,8 +72,8 @@ const Post = (props) => {
           Visitar
         </Button>
         <Badge badgeContent={likes} color="primary">
-          <Button variant="outlined" onClick={incrementLikes}>
-            Like
+          <Button variant="outlined" onClick={incrementLikes} style={{color:'red'}}>
+            <FavoriteBorderOutlinedIcon></FavoriteBorderOutlinedIcon>
           </Button>
         </Badge>
       </CardContent>
