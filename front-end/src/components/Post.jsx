@@ -6,16 +6,20 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Badge from '@mui/material/Badge';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 
 const Post = (props) => {
-  const { imageUrl, title, content, url, postId } = props;
+  const { imageUrl, title, content, url, postId, userId, isAuthenticated } = props;
   const [likes, setLikes] = useState(0); // Estado para el contador de likes
+  const [userLiked, setUserLiked] = useState(false); // Estado para saber si el usuario dio like
 
   useEffect(() => {
-    console.log(postId)
-    console.log(title)
-    // Realizar una solicitud a la API para obtener el contador de likes
-    fetch(`http://localhost:3000/posts/${postId}/likeCount`)
+    // Realizar una solicitud a la API para obtener el contador de likes y verificar si el usuario dio like
+    fetch(`http://localhost:3000/posts/${postId}/likeCount`, {
+      headers: {
+        'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjo2LCJpYXQiOjE2OTYwMDcwMjJ9.SyJgCX_IJTCFui7tfizP1AWH8qUt9QHxIZX7KGWru94`, // Reemplaza 'yourAccessToken' con el token JWT válido
+      },
+    })
       .then((response) => {
         if (response.status === 200) {
           return response.json();
@@ -30,31 +34,59 @@ const Post = (props) => {
       .catch((error) => {
         console.error('Error al obtener el contador de likes:', error);
       });
-  }, [postId]);
 
-  
+    // Verificar si el usuario ya ha dado like al post
+    if (isAuthenticated) {
+      fetch(`http://localhost:3000/posts/${postId}/userLiked`, {
+        headers: {
+          'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjo2LCJpYXQiOjE2OTYwMDcwMjJ9.SyJgCX_IJTCFui7tfizP1AWH8qUt9QHxIZX7KGWru94`, // Reemplaza 'yourAccessToken' con el token JWT válido
+        },
+      })
+        .then((response) => {
+          if (response.status === 200) {
+            return response.json();
+          } else {
+            throw new Error('No se pudo verificar si el usuario dio like');
+          }
+        })
+        .then((data) => {
+          // Actualizar el estado de userLiked
+          setUserLiked(data.userLiked);
+        })
+        .catch((error) => {
+          console.error('Error al verificar si el usuario dio like:', error);
+        });
+    }
+  }, [postId, isAuthenticated]);
 
-  const incrementLikes = () => {
-    // Realizar una solicitud a la API para agregar un like
-    fetch(`http://localhost:3000/posts/like/${postId}`, {
-      method: 'POST',
+  const toggleLike = () => {
+    // Realizar una solicitud a la API para dar o quitar like en función de userLiked
+    const endpoint = userLiked
+      ? `http://localhost:3000/posts/unlike/${postId}`
+      : `http://localhost:3000/posts/like/${postId}`;
+
+    const method = userLiked ? 'DELETE' : 'POST';
+
+    fetch(endpoint, {
+      method: method,
       headers: {
-        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjo3LCJpYXQiOjE2OTU5NzU2ODd9.OUUuBEJlj-pULQp4CSMNt_YXEpBYbDdGzuJyccz12WE', // Reemplaza 'tu_token_jwt' con el token JWT válido
+        'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjo2LCJpYXQiOjE2OTYwMDcwMjJ9.SyJgCX_IJTCFui7tfizP1AWH8qUt9QHxIZX7KGWru94`, // Reemplaza 'yourAccessToken' con el token JWT válido
       },
     })
       .then((response) => {
-        if (response.status === 201) {
+        if (response.status === 201 || response.status === 200 || response.status === 204) {
           return response.json();
         } else {
-          throw new Error('No se pudo dar like');
+          throw new Error('No se pudo dar/quitar like');
         }
       })
       .then(() => {
-        // Incrementar el contador de likes localmente
-        setLikes(likes + 1);
+        // Cambiar el estado de userLiked y actualizar el contador de likes localmente
+        setUserLiked(!userLiked);
+        setLikes(userLiked ? likes - 1 : likes + 1);
       })
       .catch((error) => {
-        console.error('Error al dar like:', error);
+        console.error('Error al dar/quitar like:', error);
       });
   };
 
@@ -72,8 +104,8 @@ const Post = (props) => {
           Visitar
         </Button>
         <Badge badgeContent={likes} color="primary">
-          <Button variant="outlined" onClick={incrementLikes} style={{color:'red'}}>
-            <FavoriteBorderOutlinedIcon></FavoriteBorderOutlinedIcon>
+          <Button variant="outlined" onClick={toggleLike} style={{ color: 'red' }}>
+            {userLiked ? <FavoriteIcon /> : <FavoriteBorderOutlinedIcon />}
           </Button>
         </Badge>
       </CardContent>
