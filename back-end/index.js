@@ -6,6 +6,7 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 const {
+  getLikeCountController,
   getPostsController,
   likePostController,
 } = require('./controllers/postsController');
@@ -34,12 +35,16 @@ const isAuthenticated = expressjwt({
   algorithms: ['HS256'],
 });
 
+// Endpoint para obtener el contador de likes de un post específico
+app.get('/posts/:postId/likeCount', getLikeCountController);
+
 //Endpoint para dar like a un enlace:
 
 app.post('/posts/like/:postId', isAuthenticated, likePostController);
 
 //Endpoint para acceder a todos los enlances publicados:
 app.use('/posts', getPostsController);
+
 
 app.use('/users', require('./controllers/usersController'));
 app.use('/update', require('./controllers/updatesUsers'));

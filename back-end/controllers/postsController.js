@@ -92,9 +92,44 @@ async function crearEnlace(req, res) {
   }
 }
 
+// Controlador para contar los likes de un enlace
+
+async function getLikeCountController(req, res) {
+  const { postId } = req.params;
+  const connection = await pool.getConnection();
+
+  try {
+    // Consulta SQL para contar los likes de un post específico
+    const query = `
+      SELECT p.id_post, p.post_title, COUNT(l.id_like) AS like_count
+      FROM posts p
+      LEFT JOIN likes l ON p.id_post = l.id_post
+      WHERE p.id_post = ?
+      GROUP BY p.id_post, p.post_title;
+    `;
+
+    // Ejecuta la consulta SQL
+    const [rows] = await connection.query(query, [postId]);
+
+    // Verifica si se encontraron resultados
+    if (rows.length === 0) {
+      return res.status(404).json({ mensaje: 'Post no encontrado' });
+    }
+
+    // Devuelve el contador de likes en la respuesta JSON
+    return res.status(200).json({ likeCount: rows[0].like_count });
+  } catch (error) {
+    console.error('Error al obtener el contador de likes:', error);
+    return res.status(500).json({ mensaje: 'Error al obtener el contador de likes' });
+  } finally {
+    if (connection) connection.release();
+  }
+}
+
+
 // Asociar el controlador a la ruta protegida
 router.post('/crear-enlace', isLoggedIn, crearEnlace);
 
 // Otras rutas y controladores
 
-module.exports = { getPostsController, likePostController };
+module.exports = { getPostsController, likePostController, getLikeCountController };
