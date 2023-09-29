@@ -7,6 +7,7 @@ const express = require('express');
 const app = express();
 const {
   getLikeCountController,
+  unlikePostController,
   getPostsController,
   likePostController,
 } = require('./controllers/postsController');
@@ -41,6 +42,10 @@ app.get('/posts/:postId/likeCount', getLikeCountController);
 //Endpoint para dar like a un enlace:
 
 app.post('/posts/like/:postId', isAuthenticated, likePostController);
+
+//Endpoint para eliminar un like de un enlace:
+
+app.delete('/posts/unlike/:postId', isAuthenticated, unlikePostController);
 
 //Endpoint para acceder a todos los enlances publicados:
 app.use('/posts', getPostsController);
