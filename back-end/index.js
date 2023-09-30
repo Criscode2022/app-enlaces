@@ -7,6 +7,7 @@ const express = require('express');
 const app = express();
 const {
   getLikeCountController,
+  getAllLikesController,
   unlikePostController,
   getPostsController,
   likePostController,
@@ -35,6 +36,9 @@ const isAuthenticated = expressjwt({
   secret: process.env.JWT_SECRET,
   algorithms: ['HS256'],
 });
+
+//Endpoint para obtener todos los likes:
+app.get('/posts/likes', getAllLikesController);
 
 // Endpoint para obtener el contador de likes de un post específico
 app.get('/posts/:postId/likeCount', getLikeCountController);
