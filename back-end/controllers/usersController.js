@@ -68,7 +68,7 @@ router.post('/login', async function (req, res, next) {
     );
 
     if (!user) {
-      return res.status(400).send('Invalid user or password');
+      return res.status(400).json({ error: 'Invalid user or password' });
     }
 
     // create token
@@ -82,7 +82,7 @@ router.post('/login', async function (req, res, next) {
     res.header('auth-token', token);
     return res.json({ token });
   } catch (ex) {
-    return res.status(500).send(ex.message);
+    return res.status(500).json({ error: ex.message });
   }
 });
 
