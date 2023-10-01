@@ -53,7 +53,6 @@ router.post('/register', async function (req, res) {
 
 router.post('/login', async function (req, res, next) {
   const { value, error } = registerSchema.validate(req.body);
-  const connection = await pool.getConnection();
   if (error) {
     return res.status(400).send(error);
   }
@@ -84,8 +83,6 @@ router.post('/login', async function (req, res, next) {
     return res.json({ token });
   } catch (ex) {
     return res.status(500).send(ex.message);
-  } finally {
-    if (connection) connection.release();
   }
 });
 
