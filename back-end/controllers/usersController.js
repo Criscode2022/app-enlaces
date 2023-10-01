@@ -33,9 +33,8 @@ const registerSchema = Joi.object({
 
 router.post('/register', async function (req, res) {
   const { value, error } = registerSchema.validate(req.body);
-  const connection = await pool.getConnection();
   if (error) {
-    return res.status(400).send(error);
+    return res.status(400).json({ error });
   }
   const { username, password } = value;
   try {
@@ -44,9 +43,7 @@ router.post('/register', async function (req, res) {
       [username, password]
     );
   } catch (ex) {
-    return res.status(500).send(ex);
-  } finally {
-    if (connection) connection.release();
+    return res.status(500).json({ error: ex.message });
   }
   return res.json({ username });
 });
@@ -54,7 +51,7 @@ router.post('/register', async function (req, res) {
 router.post('/login', async function (req, res, next) {
   const { value, error } = registerSchema.validate(req.body);
   if (error) {
-    return res.status(400).send(error);
+    return res.status(400).json({ error });
   }
   const { username, password } = value;
   try {
