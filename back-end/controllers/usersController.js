@@ -33,9 +33,8 @@ const registerSchema = Joi.object({
 
 router.post('/register', async function (req, res) {
   const { value, error } = registerSchema.validate(req.body);
-  const connection = await pool.getConnection();
   if (error) {
-    return res.status(400).send(error);
+    return res.status(400).json({ error });
   }
   const { username, password } = value;
   try {
@@ -44,18 +43,15 @@ router.post('/register', async function (req, res) {
       [username, password]
     );
   } catch (ex) {
-    return res.status(500).send(ex);
-  } finally {
-    if (connection) connection.release();
+    return res.status(500).json({ error: ex.message });
   }
   return res.json({ username });
 });
 
 router.post('/login', async function (req, res, next) {
   const { value, error } = registerSchema.validate(req.body);
-  const connection = await pool.getConnection();
   if (error) {
-    return res.status(400).send(error);
+    return res.status(400).json({ error });
   }
   const { username, password } = value;
   try {
@@ -69,7 +65,7 @@ router.post('/login', async function (req, res, next) {
     );
 
     if (!user) {
-      return res.status(400).send('Invalid user or password');
+      return res.status(400).json({ error: 'Invalid user or password' });
     }
 
     // create token
@@ -83,9 +79,7 @@ router.post('/login', async function (req, res, next) {
     res.header('auth-token', token);
     return res.json({ token });
   } catch (ex) {
-    return res.status(500).send(ex.message);
-  } finally {
-    if (connection) connection.release();
+    return res.status(500).json({ error: ex.message });
   }
 });
 
