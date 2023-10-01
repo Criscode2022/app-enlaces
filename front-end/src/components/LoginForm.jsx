@@ -17,7 +17,15 @@ function handleSubmit(type) {
     });
     const json = await response.json();
     if (json.error || json.errno) {
-      alert(json.error || json.message);
+      // FIXME: Ideally the back-end would be more consistent.
+      if (typeof json.error === "string")
+        alert(json.error);
+      else if (typeof json.message === "string")
+        alert(json.message);
+      else if (json.error.details)
+        alert(json.error.details[0].message);
+      else
+        alert(`Unknown error: ${JSON.stringify(json.error || json.errno)}`);
       return;
     }
     if (type == "login") {
