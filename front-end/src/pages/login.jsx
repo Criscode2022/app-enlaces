@@ -1,15 +1,14 @@
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+
 const Login = () => {
     return (
       <>
         <h2>Login</h2>
         <form>
-          <label>
-            Usuario <input type="text" name="user" />
-          </label>
-          <label>
-            Contraseña <input type="password" name="password" />
-          </label>
-          <button type="submit">Enviar</button>
+          <TextField required={true} label="Usuario" name="username" />
+          <TextField required={true} label="Contraseña" type="password" name="password" />
+          <Button type="submit">Enviar</Button>
         </form>
       </>
     );
