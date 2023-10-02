@@ -150,4 +150,28 @@ router.put('/follow/:userFollow', isAuthenticated, async (req, res) => {
   }
 });
 
+// Ruta para verificar si un usuario está siguiendo a otro
+router.get('/isFollowing/:userIdToCheck', isAuthenticated, async (req, res) => {
+  const userId = req.auth.user; // ID del usuario autenticado
+  const { userIdToCheck } = req.params;
+
+  try {
+    // Consulta para obtener la lista de usuarios seguidos por el usuario autenticado
+    const query = 'SELECT following_user FROM users WHERE id_user = ?';
+    const [results] = await pool.query(query, [userId]);
+
+    const followingUserList = results[0].following_user || '';
+    const followingUserArray = followingUserList.split(',').map(userId => parseInt(userId));
+
+    // Verificar si el usuario está siguiendo al usuario que se está comprobando
+    const isFollowing = followingUserArray.includes(parseInt(userIdToCheck));
+
+    return res.status(200).json({ isFollowing });
+  } catch (error) {
+    console.error('Error al verificar el seguimiento del usuario:', error);
+    return res.status(500).json({ error: 'Error al verificar el seguimiento del usuario' });
+  }
+});
+
+
 module.exports = router;
