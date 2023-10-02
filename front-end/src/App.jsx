@@ -11,12 +11,21 @@ import AvatarPage from './pages/AvatarPage';
 import FeedPage from './pages/FeedPage';
 
 function App() {
-
   return (
     <>
       <Header />
       <main>
         <Routes>
+
+    <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/avatar" element={<Avatar />} />
+          <Route path="/linkform" element={<ShareLink />} />
+          <Route path="/*" element={<Error404 />} />
+          <Route path="/feed" element={<Feed />} />
+            
           <Route path='/' element={<HomePage />} />
           <Route path='/about' element={<AboutPage />} />
           <Route path='/login' element={<LoginPage />} />
@@ -27,7 +36,7 @@ function App() {
         </Routes>
       </main>
     </>
-  )
+  );
 }
 
 export default App;

@@ -1,8 +1,8 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import styled from 'styled-components';
-import Logo from '../assets/Logo.png';
-import PersonIcon from '@mui/icons-material/Person';
+import React from "react";
+import { Link } from "react-router-dom";
+import styled from "styled-components";
+import Logo from "../assets/Logo.png";
+import PersonIcon from "@mui/icons-material/Person";
 
 const Header = () => {
   return (
@@ -13,10 +13,20 @@ const Header = () => {
         </h1>
       </Link>
 
-      <Link to="/login"> <button>Login</button></Link>
-      <Link to="/register"> <button>Register</button></Link>
-      <Link to="/feed"><button>Feed</button> </Link>
-
+      <Link to="/login">
+        {" "}
+        <button>Login</button>
+      </Link>
+      <Link to="/register">
+        {" "}
+        <button>Register</button>
+      </Link>
+      <Link to="/feed">
+        <button>Feed</button>{" "}
+      </Link>
+      <Link to="/linkform">
+        <button>Share Link</button>
+      </Link>
 
       <nav>
         <ul>
@@ -82,4 +92,3 @@ const CustomPersonIcon = styled(PersonIcon)`
 `;
 
 export default Header;
-
