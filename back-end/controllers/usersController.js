@@ -150,6 +150,46 @@ router.put('/follow/:userFollow', isAuthenticated, async (req, res) => {
   }
 });
 
+//Ruta para dejar de seguir a un usuario:
+router.put('/unfollow/:userUnfollow', isAuthenticated, async (req, res) => {
+  const id = req.auth.user;
+  const { userUnfollow } = req.params;
+  const connection = await pool.getConnection();
+
+  try {
+    // Verificar el JWT y extraer el ID de usuario
+    const token = req.header('Authorization');
+
+    // Consulta para verificar si el usuario ya está siguiendo al usuario deseado
+    const checkQuery = 'SELECT following_user FROM users WHERE id_user = ?';
+    const [checkResults] = await pool.query(checkQuery, [id]);
+
+    const followingUserList = checkResults[0].following_user || '';
+    const followingUserArray = followingUserList.split(',').map(userId => parseInt(userId));
+
+    if (!followingUserArray.includes(parseInt(userUnfollow))) {
+      return res.status(400).json({ error: 'No sigues a este usuario' });
+    }
+
+    // Consulta para actualizar la lista de usuarios seguidos
+    const updatedFollowingUserList = followingUserArray
+      .filter(userId => userId !== parseInt(userUnfollow))
+      .join(',');
+
+    const updateQuery = 'UPDATE users SET following_user = ? WHERE id_user = ?';
+
+    await pool.query(updateQuery, [updatedFollowingUserList, id]);
+
+    return res.status(200).json({ message: 'Usuario dejado de seguir con éxito: ' + userUnfollow, siguiendo: updatedFollowingUserList });
+  } catch (error) {
+    console.error('Error al dejar de seguir al usuario:', error);
+    return res.status(500).json({ error: 'Error al dejar de seguir al usuario' });
+  } finally {
+    if (connection) connection.release();
+  }
+});
+
+
 // Ruta para verificar si un usuario está siguiendo a otro
 router.get('/isFollowing/:userIdToCheck', isAuthenticated, async (req, res) => {
   const userId = req.auth.user; // ID del usuario autenticado
