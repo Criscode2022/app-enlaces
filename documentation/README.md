@@ -19,5 +19,5 @@ Lo siguiente fue crear la estructura inicial de carpetas de React para la parte 
 - POST /users/login : Iniciar sesión de usuario.
 - POST /users/unregister : Eliminar usuario de la base de datos.
 - POST /users/verify : Verificar usuario autenticado.
-- PUT /users/follor/:userFollow : Seguir a otro usuario.
+- PUT /users/follow/:userFollow : Seguir a otro usuario.
 - PUT /update/ : Actualizar nombre de usuario, biografía, contraseña o avatar.
