@@ -16,13 +16,46 @@ const Post = (props) => {
   const [authenticatedUserId, setAuthenticatedUserId] = useState(null); // ID del usuario autenticado
   const [isFollowing, setIsFollowing] = useState(false); // Estado para saber si el usuario está siguiendo a la persona
 
+  
+
   useEffect(() => {
+    // Consulta para verificar si el usuario está siguiendo al usuario deseado
+    const checkFollowing = () => {
+      // Realizar una solicitud GET a la API para verificar si el usuario sigue a la persona
+      const endpoint = `http://localhost:3000/users/isFollowing/${userId}`;
+    
+      // Obtener el token del localStorage
+      const token = localStorage.getItem('login-token');
+    
+      fetch(endpoint, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      })
+        .then((response) => {
+          if (response.status === 200) {
+            return response.json();
+          } else {
+            throw new Error('Error al verificar el seguimiento del usuario');
+          }
+        })
+        .then((data) => {
+          // Actualiza el estado isFollowing en función de la respuesta de la API
+          setIsFollowing(data.isFollowing);
+          console.log('Is Following:', data.isFollowing);
+        })
+        .catch((error) => {
+          console.error('Error al verificar el seguimiento del usuario:', error);
+        });
+    };
+    
     // Obtener el token del localStorage
     const token = localStorage.getItem('login-token');
-
+    
     // Llama a la función checkFollowing para obtener el estado inicial de seguimiento
-    checkFollowing(userId, setIsFollowing, token);
-
+    checkFollowing();
+    
     // Decodificar el token para obtener el ID del usuario autenticado
     try {
       const decodedToken = jwt_decode(token);
@@ -31,7 +64,7 @@ const Post = (props) => {
     } catch (error) {
       console.error('Error al decodificar el token:', error);
     }
-
+    
     fetch(`http://localhost:3000/posts/likes`, {
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -49,16 +82,16 @@ const Post = (props) => {
         const userLikedPost = data.likes.some((like) => {
           return like.id_user === authenticatedUserId && like.id_post === postId;
         });
-
+    
         // Actualizar el estado de userLiked
         setUserLiked(userLikedPost);
-        console.log('Likes  API Data:', data);
+        console.log('Likes API Data:', data);
         console.log('User Liked Post:', userLikedPost);
       })
       .catch((error) => {
         console.error('Error al obtener la lista de likes:', error);
       });
-
+    
     fetch(`http://localhost:3000/posts/${postId}/likeCount`, {
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -116,37 +149,6 @@ const Post = (props) => {
       });
   };
 
-  // Consulta para verificar si el usuario está siguiendo al usuario deseado
-  const checkFollowing = () => {
-    // Realizar una solicitud GET a la API para verificar si el usuario sigue a la persona
-    const endpoint = `http://localhost:3000/users/isFollowing/${userId}`;
-  
-    // Obtener el token del localStorage
-    const token = localStorage.getItem('login-token');
-  
-    fetch(endpoint, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-      },
-    })
-      .then((response) => {
-        if (response.status === 200) {
-          return response.json();
-        } else {
-          throw new Error('Error al verificar el seguimiento del usuario');
-        }
-      })
-      .then((data) => {
-        // Actualiza el estado isFollowing en función de la respuesta de la API
-        setIsFollowing(data.isFollowing);
-        console.log('Is Following:', data.isFollowing);
-      })
-      .catch((error) => {
-        console.error('Error al verificar el seguimiento del usuario:', error);
-      });
-  };
-
   const handleFollow = () => {
     // Realizar una solicitud a la API para seguir o dejar de seguir al usuario
     const endpoint = `http://localhost:3000/users/follow/${userId}`;
@@ -189,25 +191,24 @@ const Post = (props) => {
           </Button>
         </Typography>
       </div>
-  <CardMedia component="img" height="140" image={imageUrl} alt="Post Image" />
-  <CardContent>
-    <Typography gutterBottom variant="h5" component="div">
-      {title}
-    </Typography>
-    <Typography variant="body2" color="text.secondary">
-      {content}
-    </Typography>
-    <Button variant="contained" href={url} target="_blank" fullWidth>
-      Visitar
-    </Button>
-    <Badge badgeContent={likes} color="primary">
-      <Button variant="outlined" onClick={toggleLike} style={{ color: 'red' }}>
-        {userLiked ? <FavoriteIcon /> : <FavoriteBorderOutlinedIcon />}
-      </Button>
-    </Badge>
-  </CardContent>
-</Card>
-
+      <CardMedia component="img" height="140" image={imageUrl} alt="Post Image" />
+      <CardContent>
+        <Typography gutterBottom variant="h5" component="div">
+          {title}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          {content}
+        </Typography>
+        <Button variant="contained" href={url} target="_blank" fullWidth>
+          Visitar
+        </Button>
+        <Badge badgeContent={likes} color="primary">
+          <Button variant="outlined" onClick={toggleLike} style={{ color: 'red' }}>
+            {userLiked ? <FavoriteIcon /> : <FavoriteBorderOutlinedIcon />}
+          </Button>
+        </Badge>
+      </CardContent>
+    </Card>
   );
 };
 
