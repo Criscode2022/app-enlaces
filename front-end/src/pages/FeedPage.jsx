@@ -2,11 +2,11 @@ import React from 'react'
 import ListofPosts from '../components/ListofPosts'
 
 
-const Feed = () => {
+const FeedPage = () => {
   return (
     <><ListofPosts></ListofPosts>  </>
 
   )
 }
 
-export default Feed
+export default FeedPage;
