@@ -12,6 +12,12 @@ const Header = () => {
           <img src={Logo} alt="Logo" />
         </h1>
       </Link>
+
+      <Link to="/login"> <button>Login</button></Link>
+      <Link to="/register"> <button>Register</button></Link>
+      <Link to="/feed"><button>Feed</button> </Link>
+
+
       <nav>
         <ul>
           <li>
@@ -19,6 +25,7 @@ const Header = () => {
               <CustomPersonIcon className="large-icon" />
             </Icon>
           </li>
+          <li></li>
         </ul>
       </nav>
     </StyledHeader>

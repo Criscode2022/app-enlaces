@@ -16,14 +16,14 @@ const Post = (props) => {
   const [authenticatedUserId, setAuthenticatedUserId] = useState(null); // ID del usuario autenticado
 
   useEffect(() => {
-    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjo2LCJpYXQiOjE2OTYwODMyNDN9.BMr99atdn0QcoFu-FkPAF10OxOSyNLPQWCzzPERBV7E';
+    // Obtener el token del localStorage
+    const token = localStorage.getItem('login-token');
 
     // Decodificar el token para obtener el ID del usuario autenticado
     try {
       const decodedToken = jwt_decode(token);
-      const userId = decodedToken.user; // Suponiendo que el ID está en el token
+      const userId = decodedToken.user; 
       setAuthenticatedUserId(userId);
-      console.log('Authenticated User ID:', userId);
     } catch (error) {
       console.error('Error al decodificar el token:', error);
     }
@@ -85,7 +85,8 @@ const Post = (props) => {
 
     const method = userLiked ? 'DELETE' : 'POST';
 
-    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjo2LCJpYXQiOjE2OTYwODMyNDN9.BMr99atdn0QcoFu-FkPAF10OxOSyNLPQWCzzPERBV7E';
+    // Obtener el token del localStorage
+    const token = localStorage.getItem('login-token');
 
     fetch(endpoint, {
       method: method,
@@ -138,3 +139,4 @@ const Post = (props) => {
 };
 
 export default Post;
+
