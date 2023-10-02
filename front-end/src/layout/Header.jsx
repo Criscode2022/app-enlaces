@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Logo from "../assets/Logo.png";
 import PersonIcon from "@mui/icons-material/Person";
+import Button from "@mui/material/Button";
 
 const Header = () => {
   return (
@@ -13,19 +14,18 @@ const Header = () => {
         </h1>
       </Link>
 
+
       <Link to="/login">
-        {" "}
-        <button>Login</button>
+        <Button variant="contained">Login</Button>
       </Link>
       <Link to="/register">
-        {" "}
-        <button>Register</button>
+        <Button variant="contained">Register</Button>
       </Link>
       <Link to="/feed">
-        <button>Feed</button>{" "}
+        <Button variant="contained">Feed</Button>
       </Link>
       <Link to="/linkform">
-        <button>Share Link</button>
+        <Button variant="contained">Share Link</Button>
       </Link>
 
       <nav>
@@ -63,6 +63,10 @@ const StyledHeader = styled.header`
     position: fixed;
     top: 0;
     right: 0;
+  }
+
+  button {
+    margin: 20px;
   }
 
   a {

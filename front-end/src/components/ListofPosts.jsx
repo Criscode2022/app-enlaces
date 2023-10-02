@@ -22,7 +22,7 @@ const ListofPosts = () => {
 
   return (
     <div>
-      <h1>ListofPosts</h1>
+      <h2>Enlaces</h2>
       {postsData.map((post) => (
         <Post key={post.id_post} title={post.post_title} content={post.post_description} url={post.post_url} imageUrl={post.post_url} postId={post.id_post} userId={post.id_user} />
       ))}

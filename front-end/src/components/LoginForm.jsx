@@ -42,7 +42,7 @@ const LoginForm = ({ type = "login" }) => {
     <form onSubmit={handleSubmit(type)}>
       <TextField required={true} label="Usuario" name="username" />
       <TextField required={true} label="Contraseña" type="password" name="password" />
-      <Button type="submit">Enviar</Button>
+      <Button variant="contained" type="submit">Enviar</Button>
     </form>
   );
 };

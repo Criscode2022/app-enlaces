@@ -5,3 +5,24 @@
 body {
   margin: 0;
 }
+
+form {
+
+  background-color: white;
+  display:flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+  margin: 20px;
+  width: 40%;
+  border-radius: 15px;
+  border: solid 1px black;
+  box-shadow: 0 0 10px black;
+
+}
+
+h2 {
+  margin: 20px;
+}
+
+

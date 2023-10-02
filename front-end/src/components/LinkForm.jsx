@@ -86,7 +86,7 @@ function LinkForm() {
           value={username}
           onChange={handleUsernameChange}
         />
-        <Button type="submit">Crear Enlace</Button>
+        <Button variant="contained" type="submit">Crear Enlace</Button>
       </form>
     </div>
   );

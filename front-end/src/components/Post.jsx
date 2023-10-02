@@ -116,7 +116,7 @@ const Post = (props) => {
   console.log('Authenticated User ID:', authenticatedUserId);
 
   return (
-    <Card sx={{ maxWidth: 345, margin: '20px', padding: '50px' }}>
+    <Card sx={{ maxWidth: 345, margin: '20px', padding: '50px', boxShadow:'0 0 10px black' }}>
       <CardMedia component="img" height="140" image={imageUrl} alt="Post Image" />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
