@@ -9,7 +9,7 @@ async function getPostsController (req, res, next) {
     const connection = await pool.getConnection();
     try {
         const [results] = await pool.query(`
-        SELECT post_url, post_title, post_description, name_user, posts.created_at
+        SELECT post_url, post_title, post_description, name_user, posts.created_at, id_post, users.id_user
         FROM posts 
         JOIN users 
         ON posts.id_user = users.id_user      
