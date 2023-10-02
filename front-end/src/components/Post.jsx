@@ -14,6 +14,7 @@ const Post = (props) => {
   const [likes, setLikes] = useState(0); // Estado para el contador de likes
   const [userLiked, setUserLiked] = useState(false); // Estado para saber si el usuario dio like
   const [authenticatedUserId, setAuthenticatedUserId] = useState(null); // ID del usuario autenticado
+  const [isFollowing, setIsFollowing] = useState(false); // Estado para saber si el usuario está siguiendo a la persona
 
   useEffect(() => {
     // Consulta para verificar si el usuario está siguiendo al usuario deseado
@@ -82,7 +83,7 @@ const Post = (props) => {
     
         // Actualizar el estado de userLiked
         setUserLiked(userLikedPost);
-        console.log('Likes  API Data:', data);
+        console.log('Likes API Data:', data);
         console.log('User Liked Post:', userLikedPost);
       })
       .catch((error) => {
@@ -210,4 +211,3 @@ const Post = (props) => {
 };
 
 export default Post;
-
