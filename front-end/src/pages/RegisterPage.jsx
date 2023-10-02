@@ -1,6 +1,6 @@
 import LoginForm from '../components/LoginForm'
 
-const Register = () => {
+const RegisterPage = () => {
   return (
     <>
       <h2>Register</h2>
@@ -9,4 +9,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default RegisterPage;

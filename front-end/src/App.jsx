@@ -1,18 +1,14 @@
-// eslint-disable-next-line no-unused-vars
-import { useState } from "react";
-import "./App.css";
-import { Route, Routes } from "react-router-dom";
-import Header from "./layout/Header";
-// eslint-disable-next-line no-unused-vars
-import Tabs from "./layout/Tabs";
-import About from "./pages/about";
-import Login from "./pages/login";
-import Register from "./pages/register";
-import Home from "./pages/home";
-import Error404 from "./pages/error404";
-import Avatar from "./pages/avatar";
-import Feed from "./pages/Feed";
-import ShareLink from "./pages/ShareLink";
+import './App.css';
+import { Route, Routes } from 'react-router-dom';
+import Header from './layout/Header';
+import Tabs from './layout/Tabs';
+import AboutPage from './pages/AboutPage';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
+import HomePage from './pages/HomePage';
+import Error404Page from './pages/Error404Page';
+import AvatarPage from './pages/AvatarPage';
+import FeedPage from './pages/FeedPage';
 
 function App() {
   return (
@@ -20,7 +16,8 @@ function App() {
       <Header />
       <main>
         <Routes>
-          <Route path="/" element={<Home />} />
+
+    <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
@@ -28,6 +25,14 @@ function App() {
           <Route path="/linkform" element={<ShareLink />} />
           <Route path="/*" element={<Error404 />} />
           <Route path="/feed" element={<Feed />} />
+            
+          <Route path='/' element={<HomePage />} />
+          <Route path='/about' element={<AboutPage />} />
+          <Route path='/login' element={<LoginPage />} />
+          <Route path='/register' element={<RegisterPage />} />
+          <Route path='/avatar' element={<AvatarPage />} />
+          <Route path='/*' element={<Error404Page />} />
+          <Route path='/feed' element={<FeedPage />} />
         </Routes>
       </main>
     </>

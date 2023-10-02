@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 
-const Error404 = () => {
+const Error404Page = () => {
     const [counter, setCounter] = React.useState(3);
     const navigate = useNavigate();
 
@@ -31,4 +31,4 @@ const Error404 = () => {
     );
 }
 
-export default Error404;
+export default Error404Page;
