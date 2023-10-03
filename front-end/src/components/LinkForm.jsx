@@ -35,7 +35,7 @@ function LinkForm({ id_user }) {
         throw new Error("No se pudo crear el enlace");
       }
 
-      const responseData = await response.json();
+      //const responseData = await response.json();
       // Manejar la respuesta del servidor aquí, si es necesario.
 
       setSuccessMessage("Enlace creado exitosamente");
