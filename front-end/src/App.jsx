@@ -25,14 +25,6 @@ function App() {
           <Route path="/linkform" element={<ShareLink />} />
           <Route path="/*" element={<Error404Page/>} />
           <Route path="/feed" element={<FeedPage />} />
-            
-          <Route path='/' element={<HomePage />} />
-          <Route path='/about' element={<AboutPage />} />
-          <Route path='/login' element={<LoginPage />} />
-          <Route path='/register' element={<RegisterPage />} />
-          <Route path='/avatar' element={<AvatarPage />} />
-          <Route path='/*' element={<Error404Page />} />
-          <Route path='/feed' element={<FeedPage />} />
         </Routes>
       </main>
     </>
