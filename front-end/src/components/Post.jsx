@@ -110,7 +110,7 @@ const Post = (props) => {
       .catch((error) => {
         console.error('Error al obtener el contador de likes:', error);
       });
-  }, [postId, authenticatedUserId, userId]);
+  }, [postId, authenticatedUserId, userId, isFollowing]);
 
   const toggleLike = () => {
     // Realizar una solicitud a la API para dar o quitar like en función de userLiked
@@ -149,13 +149,13 @@ const Post = (props) => {
 
   const handleFollow = () => {
     // Realizar una solicitud a la API para seguir o dejar de seguir al usuario
-    const endpoint = `http://localhost:3000/users/follow/${userId}`;
+    const endpoint = `http://localhost:3000/users/${isFollowing ? 'unfollow' : 'follow'}/${userId}`;
 
     // Obtener el token del localStorage
     const token = localStorage.getItem('login-token');
 
     fetch(endpoint, {
-      method: isFollowing ? 'DELETE' : 'PUT', // Cambia el método en función de si el usuario ya está siguiendo
+      method: 'PUT', 
       headers: {
         'Authorization': `Bearer ${token}`,
       },
@@ -166,15 +166,17 @@ const Post = (props) => {
           // Actualiza el estado de isFollowing en función del resultado
           setIsFollowing(!isFollowing);
         } else if (response.status === 400) {
-          console.log('Ya sigues a este usuario.');
+          console.log(isFollowing ? 'No sigues a este usuario.' : 'Ya sigues a este usuario.');
         } else {
-          throw new Error('No se pudo seguir al usuario');
+          throw new Error('No se pudo realizar la operación de seguimiento/dejar de seguir al usuario');
         }
       })
       .catch((error) => {
-        console.error('Error al seguir al usuario:', error);
+        console.error('Error al seguir/dejar de seguir al usuario:', error);
       });
   };
+
+  
 
   console.log('Post ID:', postId);
   console.log('Authenticated User ID:', authenticatedUserId);

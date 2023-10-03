@@ -14,6 +14,7 @@ const Header = () => {
         </h1>
       </Link>
 
+      <nav>
 
       <Link to="/login">
         <Button variant="contained">Login</Button>
@@ -27,17 +28,19 @@ const Header = () => {
       <Link to="/linkform">
         <Button variant="contained">Share Link</Button>
       </Link>
+      </nav>
 
-      <nav>
         <ul>
+
+
+
+
           <li>
             <Icon>
               <CustomPersonIcon className="large-icon" />
             </Icon>
           </li>
-          <li></li>
         </ul>
-      </nav>
     </StyledHeader>
   );
 };
@@ -60,7 +63,7 @@ const StyledHeader = styled.header`
     gap: 1.5rem;
     justify-content: center;
     list-style: none;
-    position: fixed;
+    position: absolute;
     top: 0;
     right: 0;
   }
@@ -76,6 +79,18 @@ const StyledHeader = styled.header`
 
   a.active {
     font-weight: bold;
+  }
+
+  nav {
+
+    display:flex;
+    justify-content: space-around;
+    width: 60%;
+    max-width: 100%;
+    margin-left:30%;
+
+
+
   }
 
   h1 {
