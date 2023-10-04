@@ -6,8 +6,6 @@ import PersonIcon from "@mui/icons-material/Person";
 import Button from "@mui/material/Button";
 import LogoutButton from './../components/LogoutForm';
 
-const [autenticado, setAutenticado] = useState(false);
-
 const Header = () => {
   return (
     <StyledHeader>
@@ -116,4 +114,4 @@ const CustomPersonIcon = styled(PersonIcon)`
   }
 `;
 
-export default { Header, autenticado };
+export default Header;
