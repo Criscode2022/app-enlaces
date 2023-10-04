@@ -13,7 +13,6 @@ async function getPostsController(req, res, next) {
       JOIN users
       ON posts.id_user = users.id_user
     `);
-
     res.send({
       ok: true,
       data: results,
