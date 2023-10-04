@@ -4,6 +4,9 @@ import styled from "styled-components";
 import Logo from "../assets/Logo.png";
 import PersonIcon from "@mui/icons-material/Person";
 import Button from "@mui/material/Button";
+import LogoutButton from './../components/LogoutForm';
+
+const [autenticado, setAutenticado] = useState(false);
 
 const Header = () => {
   return (
@@ -16,31 +19,34 @@ const Header = () => {
 
       <nav>
 
-      <Link to="/login">
-        <Button variant="contained">Iniciar sesión</Button>
-      </Link>
-      <Link to="/register">
-        <Button variant="contained">Registrarse</Button>
-      </Link>
-      <Link to="/feed">
-        <Button variant="contained">Feed</Button>
-      </Link>
-      <Link to="/linkform">
-        <Button variant="contained">Crear enlace</Button>
-      </Link>
+        <Link to="/login">
+          <Button variant="contained">Iniciar sesión</Button>
+        </Link>
+        <Link to="/register">
+          <Button variant="contained">Registrarse</Button>
+        </Link>
+        <Link to="/feed">
+          <Button variant="contained">Feed</Button>
+        </Link>
+        <Link to="/linkform">
+          <Button variant="contained">Crear enlace</Button>
+        </Link>
+
+        <LogoutButton></LogoutButton>
+
       </nav>
 
-        <ul>
+      <ul>
 
 
 
 
-          <li>
-            <Icon>
-              <CustomPersonIcon className="large-icon" />
-            </Icon>
-          </li>
-        </ul>
+        <li>
+          <Icon>
+            <CustomPersonIcon className="large-icon" />
+          </Icon>
+        </li>
+      </ul>
     </StyledHeader>
   );
 };
@@ -110,4 +116,4 @@ const CustomPersonIcon = styled(PersonIcon)`
   }
 `;
 
-export default Header;
+export default { Header, autenticado };
