@@ -58,7 +58,7 @@ function LinkForm() {
   }
 
   return (
-    <div>
+    <div className="container">
       {successMessage && <p className="success-message">{successMessage}</p>}
       {errorMessage && <p className="error-message">{errorMessage}</p>}
       <form onSubmit={handleSubmit}>

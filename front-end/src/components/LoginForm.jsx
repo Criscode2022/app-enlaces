@@ -39,11 +39,13 @@ function handleSubmit(type) {
 
 const LoginForm = ({ type = "login" }) => {
   return (
+    <div className='container'>
     <form onSubmit={handleSubmit(type)}>
       <TextField required={true} label="Usuario" name="username" />
       <TextField required={true} label="Contraseña" type="password" name="password" />
       <Button variant="contained" type="submit">Enviar</Button>
     </form>
+    </div>
   );
 };
 
