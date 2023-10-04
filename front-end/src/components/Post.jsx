@@ -10,7 +10,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import jwt_decode from 'jwt-decode';
 
 const Post = (props) => {
-  const { imageUrl, title, content, url, postId, userId, userName } = props;
+  const { imageUrl, title, content, url, postId, userId, userName, postImg } = props;
   const [likes, setLikes] = useState(0); // Estado para el contador de likes
   const [userLiked, setUserLiked] = useState(false); // Estado para saber si el usuario dio like
   const [authenticatedUserId, setAuthenticatedUserId] = useState(null); // ID del usuario autenticado

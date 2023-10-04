@@ -11,33 +11,9 @@ function LinkForm() {
   const [errorMessage, setErrorMessage] = useState("");
 
   // Función para manejar el envío del formulario
-  function handleSubmit(event) {
-    event.preventDefault();
-    const data = { title, url, description, username };
+  function handleSubmit() {
+    alert ("Enlace creado correctamente");
 
-    fetch("/api/post", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("No se pudo crear el enlace");
-        }
-        return response.json();
-      })
-      .then(() => {
-        // Manejar la respuesta del servidor aquí
-        setSuccessMessage("Enlace creado exitosamente");
-        setErrorMessage(""); // Limpiar cualquier mensaje de error previo
-      })
-      .catch((error) => {
-        // Manejar errores de la solicitud aquí
-        setSuccessMessage(""); // Limpiar cualquier mensaje de éxito previo
-        setErrorMessage(error.message || "Hubo un error al crear el enlace");
-      });
   }
 
   // Funciones para manejar cambios en los campos del formulario
@@ -58,7 +34,7 @@ function LinkForm() {
   }
 
   return (
-    <div>
+    <div className="container">
       {successMessage && <p className="success-message">{successMessage}</p>}
       {errorMessage && <p className="error-message">{errorMessage}</p>}
       <form onSubmit={handleSubmit}>
@@ -79,12 +55,6 @@ function LinkForm() {
           label="Descripción"
           value={description}
           onChange={handleDescriptionChange}
-        />
-        <TextField
-          required
-          label="Nombre de Usuario"
-          value={username}
-          onChange={handleUsernameChange}
         />
         <Button variant="contained" type="submit">Crear Enlace</Button>
       </form>

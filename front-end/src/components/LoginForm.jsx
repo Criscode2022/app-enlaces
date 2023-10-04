@@ -1,7 +1,8 @@
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import { useNavigate } from 'react-router-dom';
 
-function handleSubmit(type) {
+function handleSubmit(type, navigate) {
   return async function (e) {
     e.preventDefault();
     const data = new FormData(e.target);
@@ -30,7 +31,7 @@ function handleSubmit(type) {
     }
     if (type == "login") {
       window.localStorage.setItem("login-token", json.token);
-      alert("Successfully logged in");
+      navigate('/feed');
     } else {
       alert("Successfully registered");
     }
@@ -38,8 +39,9 @@ function handleSubmit(type) {
 }
 
 const LoginForm = ({ type = "login" }) => {
+  const navigate = useNavigate();
   return (
-    <form onSubmit={handleSubmit(type)}>
+    <form onSubmit={handleSubmit(type, navigate)}>
       <TextField required={true} label="Usuario" name="username" />
       <TextField required={true} label="Contraseña" type="password" name="password" />
       <Button variant="contained" type="submit">Enviar</Button>

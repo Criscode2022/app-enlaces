@@ -17,16 +17,16 @@ const Header = () => {
       <nav>
 
       <Link to="/login">
-        <Button variant="contained">Login</Button>
+        <Button variant="contained">Iniciar sesión</Button>
       </Link>
       <Link to="/register">
-        <Button variant="contained">Register</Button>
+        <Button variant="contained">Registrarse</Button>
       </Link>
       <Link to="/feed">
         <Button variant="contained">Feed</Button>
       </Link>
       <Link to="/linkform">
-        <Button variant="contained">Share Link</Button>
+        <Button variant="contained">Crear enlace</Button>
       </Link>
       </nav>
 

@@ -33,3 +33,14 @@ h2 {
 
 }
 
+.container {
+
+  display: flex;
+  justify-content: center;
+}
+
+h2 {
+
+  text-align: center;
+  margin: 20px;
+}
