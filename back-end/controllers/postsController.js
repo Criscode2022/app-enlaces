@@ -1,19 +1,20 @@
 const pool = require('../db/db');
-const jwt = require('jsonwebtoken');
 const express = require('express');
-const router = express.Router();
 const Joi = require('joi');
+const isAuthenticated = require('./usersController').isAuthenticated;
 
+const router = express.Router();
 
-async function getPostsController (req, res, next) {
-    const connection = await pool.getConnection();
-    try {
-        const [results] = await pool.query(`
-        SELECT post_url, post_title, post_description, name_user, posts.created_at, id_post, users.id_user
-        FROM posts 
-        JOIN users 
-        ON posts.id_user = users.id_user      
-        `);
+//Endpoint para acceder a todos los enlances publicados:
+
+async function getPostsController(req, res, next) {
+  try {
+    const [results] = await pool.query(`
+      SELECT post_url, post_title, post_description, name_user, posts.created_at, id_post, users.id_user
+      FROM posts
+      JOIN users
+      ON posts.id_user = users.id_user
+    `);
 
     res.send({
       ok: true,
@@ -23,74 +24,47 @@ async function getPostsController (req, res, next) {
     });
   } catch (error) {
     next(error);
-  } finally {
-    if (connection) connection.release();
   }
 }
 
-
-async function likePostController(req, res) {
+async function likePostController(req, res, next) {
   const id = req.auth.user;
   const { postId } = req.params;
-  const connection = await pool.getConnection();
 
   try {
-    // Verificar el JWT y extraer el ID de usuario
-    const token = req.header('Authorization');
-    if (!token) {
-      return res.status(401).json({ mensaje: 'No autorizado' });
-    }
-      // Insertar el "like" en la base de datos
-      await pool.query('INSERT INTO likes (id_user, id_post) VALUES (?, ?)', [id, postId]);
+    // Insertar el "like" en la base de datos
+    await pool.query('INSERT INTO likes (id_user, id_post) VALUES (?, ?)', [
+      id,
+      postId,
+    ]);
 
-      return res.status(201).json({ mensaje: 'Like agregado exitosamente' });
-    
+    return res.status(201).json({ mensaje: 'Like agregado exitosamente' });
   } catch (error) {
     console.error('Error al agregar el like:', error);
-    return res.status(500).json({ mensaje: 'Error al agregar el like' });
-  } finally {
-        if (connection) connection.release();
-    }
+    return next(error);
+  }
 }
 
 //Controlador para eliminar un like de un enlace:
 
-async function unlikePostController(req, res) {
+async function unlikePostController(req, res, next) {
   const id = req.auth.user;
   const { postId } = req.params;
-  const connection = await pool.getConnection();
-
   try {
-    // Verificar el JWT y extraer el ID de usuario
-    const token = req.header('Authorization');
-    if (!token) {
-      return res.status(401).json({ mensaje: 'No autorizado' });
-    }
-
     // Eliminar el "like" de la base de datos
-    await pool.query('DELETE FROM likes WHERE id_user = ? AND id_post = ?', [id, postId]);
-
+    await pool.query('DELETE FROM likes WHERE id_user = ? AND id_post = ?', [
+      id,
+      postId,
+    ]);
     return res.status(200).json({ mensaje: 'Like eliminado exitosamente' });
   } catch (error) {
     console.error('Error al eliminar el like:', error);
-    return res.status(500).json({ mensaje: 'Error al eliminar el like' });
-  } finally {
-    if (connection) connection.release();
-  }
-}
-
-
-// Función para verificar si el usuario está autenticado
-function isLoggedIn(req, res, next) {
-  if (!req.session.user) {
-    next(new Error("Not logged-in"));
-  } else {
-    next();
+    return next(error);
   }
 }
 
 // Controlador para la ruta protegida que requiere autenticación
-async function crearEnlace(req, res) {
+async function crearEnlace(req, res, next) {
   try {
     // Validar los datos del enlace (por ejemplo, URL, título, descripción, etc.)
     const schema = Joi.object({
@@ -98,15 +72,16 @@ async function crearEnlace(req, res) {
       titulo: Joi.string().required(),
       descripcion: Joi.string().required(),
     });
-    
+
     const { error } = schema.validate(req.body);
     if (error) {
-      return res.status(400).json({ error: error.details[0].message });
+      return next(error);
     }
 
     // Crear el enlace en la base de datos
     const { url, titulo, descripcion } = req.body;
-    const query = 'INSERT INTO enlaces (url, titulo, descripcion) VALUES (?, ?, ?)';
+    const query =
+      'INSERT INTO enlaces (url, titulo, descripcion) VALUES (?, ?, ?)';
     await pool.query(query, [url, titulo, descripcion]);
 
     // Respuesta exitosa
@@ -114,16 +89,13 @@ async function crearEnlace(req, res) {
   } catch (error) {
     // Manejo de errores
     console.error(error);
-    res.status(500).json({ error: 'Error interno del servidor' });
+    return next(error);
   }
 }
 
 // Controlador para contar los likes de un enlace
-
-async function getLikeCountController(req, res) {
+async function getLikeCountController(req, res, next) {
   const { postId } = req.params;
-  const connection = await pool.getConnection();
-
   try {
     // Consulta SQL para contar los likes de un post específico
     const query = `
@@ -135,28 +107,24 @@ async function getLikeCountController(req, res) {
     `;
 
     // Ejecuta la consulta SQL
-    const [rows] = await connection.query(query, [postId]);
+    const [rows] = await pool.query(query, [postId]);
 
     // Verifica si se encontraron resultados
     if (rows.length === 0) {
-      return res.status(404).json({ mensaje: 'Post no encontrado' });
+      return next(new Error('Post no encontrado'));
     }
 
     // Devuelve el contador de likes en la respuesta JSON
     return res.status(200).json({ likeCount: rows[0].like_count });
   } catch (error) {
     console.error('Error al obtener el contador de likes:', error);
-    return res.status(500).json({ mensaje: 'Error al obtener el contador de likes' });
-  } finally {
-    if (connection) connection.release();
+    return next(error);
   }
 }
 
 //Endpoint para obtener todos los likes:
 
-async function getAllLikesController(req, res) {
-  const connection = await pool.getConnection();
-
+async function getAllLikesController(req, res, next) {
   try {
     // Consulta SQL para obtener todos los likes
     const query = `
@@ -167,22 +135,27 @@ async function getAllLikesController(req, res) {
     `;
 
     // Ejecuta la consulta SQL
-    const [rows] = await connection.query(query);
+    const [rows] = await pool.query(query);
 
     // Devuelve los likes en la respuesta JSON
     return res.status(200).json({ likes: rows });
   } catch (error) {
     console.error('Error al obtener los likes:', error);
-    return res.status(500).json({ mensaje: 'Error al obtener los likes' });
-  } finally {
-    if (connection) connection.release();
+    return next(error);
   }
 }
 
+// FIXME: Esta ruta no funciona.
+// router.post('/crear-enlace', isAuthenticated, crearEnlace);
 
-// Asociar el controlador a la ruta protegida
-router.post('/crear-enlace', isLoggedIn, crearEnlace);
+router.get('/', getPostsController);
+// Endpoint para obtener todos los likes:
+router.get('/likes', getAllLikesController);
+// Endpoint para obtener el contador de likes de un post específico
+router.get('/:postId/likeCount', getLikeCountController);
+// Endpoint para dar like a un enlace:
+router.post('/like/:postId', isAuthenticated, likePostController);
+// Endpoint para eliminar un like de un enlace:
+router.delete('/unlike/:postId', isAuthenticated, unlikePostController);
 
-// Otras rutas y controladores
-
-module.exports = { getPostsController, likePostController, getLikeCountController, unlikePostController, getAllLikesController};
+module.exports = router;

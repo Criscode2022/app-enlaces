@@ -5,13 +5,6 @@
 require('dotenv').config();
 const express = require('express');
 const app = express();
-const {
-  getLikeCountController,
-  getAllLikesController,
-  unlikePostController,
-  getPostsController,
-  likePostController,
-} = require('./controllers/postsController');
 const cors = require('cors');
 
 app.use(cors());
@@ -26,24 +19,7 @@ app.get('/', (req, res) => {
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-//Endpoint para obtener todos los likes:
-app.get('/posts/likes', getAllLikesController);
-
-// Endpoint para obtener el contador de likes de un post específico
-app.get('/posts/:postId/likeCount', getLikeCountController);
-
-//Endpoint para dar like a un enlace:
-
-app.post('/posts/like/:postId', isAuthenticated, likePostController);
-
-//Endpoint para eliminar un like de un enlace:
-
-app.delete('/posts/unlike/:postId', isAuthenticated, unlikePostController);
-
-//Endpoint para acceder a todos los enlances publicados:
-app.use('/posts', getPostsController);
-
-
+app.use('/posts', require('./controllers/postsController'));
 app.use('/users', require('./controllers/usersController').router);
 app.use('/update', require('./controllers/updatesUsers'));
 
