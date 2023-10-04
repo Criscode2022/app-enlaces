@@ -1,6 +1,6 @@
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import { registerService } from './../services/userServices';
+import { registerService } from '../services/userServices';
 
 async function handleSubmit(e) {
   e.preventDefault();
@@ -16,7 +16,7 @@ async function handleSubmit(e) {
   }
 }
 
-const LoginForm = ({ type = "login" }) => {
+const RegisterForm = () => {
   return (
     <form onSubmit={handleSubmit}>
       <TextField required={true} label="Usuario" name="username" />
@@ -28,4 +28,4 @@ const LoginForm = ({ type = "login" }) => {
   );
 };
 
-export default LoginForm;
+export default RegisterForm;
