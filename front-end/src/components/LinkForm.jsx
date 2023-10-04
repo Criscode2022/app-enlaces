@@ -2,92 +2,89 @@ import { useState } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 
-function LinkForm() {
-  const [title, setTitle] = useState("");
-  const [url, setUrl] = useState("");
-  const [description, setDescription] = useState("");
-  const [username, setUsername] = useState("");
+function LinkForm({ id_user }) {
+  const [linkData, setLinkData] = useState({
+    title: "",
+    url: "",
+    description: "",
+  });
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  // Función para manejar el envío del formulario
-  function handleSubmit(event) {
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setLinkData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = { title, url, description, username };
+    const data = { ...linkData, id_user };
 
-    fetch("/api/post", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("No se pudo crear el enlace");
-        }
-        return response.json();
-      })
-      .then(() => {
-        // Manejar la respuesta del servidor aquí
-        setSuccessMessage("Enlace creado exitosamente");
-        setErrorMessage(""); // Limpiar cualquier mensaje de error previo
-      })
-      .catch((error) => {
-        // Manejar errores de la solicitud aquí
-        setSuccessMessage(""); // Limpiar cualquier mensaje de éxito previo
-        setErrorMessage(error.message || "Hubo un error al crear el enlace");
+    // Obtener el token del almacenamiento local (simulado)
+    const token = window.localStorage.getItem("login-token");
+
+    console.log("Datos del formulario:", data); // Verificar los datos del formulario
+    console.log("Token de autenticación:", token); // Verificar el token
+
+    try {
+      const response = await fetch(`http://localhost:3000/users/posts`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          // Adjuntar el token en el encabezado de la solicitud
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(data),
       });
-  }
 
-  // Funciones para manejar cambios en los campos del formulario
-  function handleTitleChange(event) {
-    setTitle(event.target.value);
-  }
+      if (!response.ok) {
+        throw new Error("No se pudo crear el enlace");
+      }
 
-  function handleUrlChange(event) {
-    setUrl(event.target.value);
-  }
+      const responseData = await response.json();
+      // Manejar la respuesta del servidor aquí, si es necesario.
 
-  function handleDescriptionChange(event) {
-    setDescription(event.target.value);
-  }
-
-  function handleUsernameChange(event) {
-    setUsername(event.target.value);
-  }
+      setSuccessMessage("Enlace creado exitosamente");
+      setErrorMessage(""); // Limpiar cualquier mensaje de error previo
+    } catch (error) {
+      // Manejar errores de la solicitud aquí
+      console.error("Error al crear el enlace:", error);
+      setSuccessMessage(""); // Limpiar cualquier mensaje de éxito previo
+      setErrorMessage(error.message || "Hubo un error al crear el enlace");
+    }
+  };
 
   return (
-    <div className="container">
-      {successMessage && <p className="success-message">{successMessage}</p>}
-      {errorMessage && <p className="error-message">{errorMessage}</p>}
+    <div>
       <form onSubmit={handleSubmit}>
         <TextField
           required
           label="Título"
-          value={title}
-          onChange={handleTitleChange}
+          name="title"
+          value={linkData.title}
+          onChange={handleInputChange}
         />
         <TextField
           required
           label="URL"
-          value={url}
-          onChange={handleUrlChange}
+          name="url"
+          value={linkData.url}
+          onChange={handleInputChange}
         />
         <TextField
           required
           label="Descripción"
-          value={description}
-          onChange={handleDescriptionChange}
+          name="description"
+          value={linkData.description}
+          onChange={handleInputChange}
         />
-        <TextField
-          required
-          label="Nombre de Usuario"
-          value={username}
-          onChange={handleUsernameChange}
-        />
-        <Button variant="contained" type="submit">Crear Enlace</Button>
+        <Button type="submit">Crear Enlace</Button>
       </form>
+      {successMessage && <p className="success-message">{successMessage}</p>}
+      {errorMessage && <p className="error-message">{errorMessage}</p>}
     </div>
   );
 }
