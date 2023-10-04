@@ -28,7 +28,7 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/login', async function (req, res, next) {
-    const { value, error } = registerSchema.validate(req.body);
+    const { value, error } = newUserSchema.validate(req.body);
     if (error) {
         return res.status(400).json({ error });
     }
