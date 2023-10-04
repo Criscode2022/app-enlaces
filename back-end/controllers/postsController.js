@@ -5,12 +5,10 @@ const isAuthenticated = require('./usersController').isAuthenticated;
 
 const router = express.Router();
 
-//Endpoint para acceder a todos los enlances publicados:
-
 async function getPostsController(req, res, next) {
   try {
     const [results] = await pool.query(`
-      SELECT post_url, post_title, post_description, name_user, posts.created_at, id_post, users.id_user
+      SELECT post_url, post_title, post_description, name_user, posts.created_at, id_post, users.id_user, post_img
       FROM posts
       JOIN users
       ON posts.id_user = users.id_user
