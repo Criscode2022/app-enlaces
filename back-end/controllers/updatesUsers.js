@@ -22,14 +22,10 @@ const isAuthenticated = expressjwt({
 });
 
 // Ruta para actualizar el usuario.
-router.put('/update', isAuthenticated, async (req, res) => {
+router.put('/update', isAuthenticated, async (req, res, next) => {
   const { value, error } = updateUserSchema.validate(req.body);
-  const connection = await pool.getConnection();
-
   if (error) {
-    return res
-      .status(400)
-      .json({ status: 'error', message: error.details[0].message });
+    return next(error);
   }
 
   const { biography, avatar, newUsername, newPassword, id_user } = value;
@@ -67,11 +63,7 @@ router.put('/update', isAuthenticated, async (req, res) => {
     });
   } catch (error) {
     console.error('Error al actualizar el usuario:', error);
-    res
-      .status(500)
-      .json({ status: 'error', message: 'Error al actualizar el usuario' });
-  } finally {
-    if (connection) connection.release();
+    return next(error);
   }
 });
 

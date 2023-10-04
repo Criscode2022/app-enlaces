@@ -8,22 +8,26 @@ CREATE TABLE users (
   id_user INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   name_user varchar(50) NOT NULL UNIQUE,
   password_user varchar(20) NOT NULL,
+  following_user varchar (300), 
   biography_user tinytext,
   avatar_user BLOB,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
+
 
 -- Crear tabla de Posts --
 
 CREATE TABLE posts (
   id_post INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   id_user INT NOT NULL,
+  post_img varchar(500),
   post_url varchar(300) NOT NULL,
   post_title varchar(30) NOT NULL,
   post_description varchar(200) NOT NULL,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (id_user) REFERENCES users (id_user)
 );
+
 
 create table likes (
 id_like INT auto_increment primary key,
@@ -43,10 +47,10 @@ INSERT INTO users (name_user, password_user, biography_user) values ('Carlos', '
 INSERT INTO users (name_user, password_user, biography_user) values ('Marta', 'sfdsfsdf', 'Profesora universitaria');
 INSERT INTO users (name_user, password_user, biography_user) values ('Julio', 'fsdfdsfsd564', 'Camarero de restaurante');
 
-INSERT INTO posts (post_url, post_title, id_user, post_description) values ('Google.com', 'Google', 1, 'Enlace de Google');
-INSERT INTO posts (post_url, post_title, id_user, post_description) values ('Twiter.com', 'Twitter', 3, 'Enlace de Twitter');
-INSERT INTO posts (post_url, post_title, id_user, post_description) values ('https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', 'Gato', 2, 'Foto de gato');
-INSERT INTO posts (post_url, post_title, id_user, post_description) values ('youtube.com', 'YouTube', 1, 'Enlace de Youtube');
+INSERT INTO posts (post_url, post_title, id_user, post_description, post_img) VALUES ('https://www.youtube.com/watch?v=6Jfk8ic3KVk', 'Curso de React', 1, 'Curso de React realizado por Freecodecamp en español', 'https://design-style-guide.freecodecamp.org/downloads/fcc_primary_small.jpg');
+INSERT INTO posts (post_url, post_title, id_user, post_description, post_img) VALUES ('https://es.wikipedia.org/wiki/Coliseo', 'El Coliseo de Roma', 2, 'Información sobre el Coliseo de Roma en Wikipedia', 'https://media.meer.com/attachments/765ed06d8b78952fec85a1e401b67810871820fd/store/fill/1090/613/203f3e0c3169ef0b84e500deae142122017255340720775ac01f5b15af82/El-Coliseo-al-atardecer-Roma-Italia.jpg');
+INSERT INTO posts (post_url, post_title, id_user, post_description, post_img) VALUES ('https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', 'Gato', 3, 'Foto de gato', 'https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+INSERT INTO posts (post_url, post_title, id_user, post_description, post_img) VALUES ('https://www.infojobs.net/madrid/react-developer/of-i71c9373ee9484b9b992872fe843f79?applicationOrigin=search-new%7Celement%7E49468474526%7Cversion%7Ebackpack_sorted_no_norm&searchId=49468474526&page=1&sortBy=RELEVANCE', 'Oferta de empleo', 4, 'Oferta de empleo de programador con React en Infojobs', 'https://brand.infojobs.net/downloads/ij-logo_reduced/ij-logo_reduced.png');
 
 INSERT INTO likes (id_user, id_post) values (1, 2);
 INSERT INTO likes (id_user, id_post) values (1, 3);
@@ -105,4 +109,8 @@ FROM posts p
 INNER JOIN likes l ON p.id_post = l.id_post
 GROUP BY p.id_post, p.post_title;
 
+
+--  Comprobar a quien sigue un usuario --
+
+SELECT following_user FROM users WHERE id_user = 6;
 
