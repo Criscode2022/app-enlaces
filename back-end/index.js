@@ -12,16 +12,12 @@ const {
   getPostsController,
   likePostController,
 } = require('./controllers/postsController');
-const { expressjwt } = require('express-jwt');
-const jwt = require('jsonwebtoken');
 const cors = require('cors');
 
 app.use(cors());
 
-
 //Middleware para subir archivos
 // app.use("/upload", uploadRoute);
-
 
 app.get('/', (req, res) => {
   res.send('This server is now live!');
@@ -29,13 +25,6 @@ app.get('/', (req, res) => {
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-
-// Authentication middleware. This takes care of verifying the JWT token and
-// storing the token data (user id) in req.auth.
-const isAuthenticated = expressjwt({
-  secret: process.env.JWT_SECRET,
-  algorithms: ['HS256'],
-});
 
 //Endpoint para obtener todos los likes:
 app.get('/posts/likes', getAllLikesController);
@@ -55,7 +44,7 @@ app.delete('/posts/unlike/:postId', isAuthenticated, unlikePostController);
 app.use('/posts', getPostsController);
 
 
-app.use('/users', require('./controllers/usersController'));
+app.use('/users', require('./controllers/usersController').router);
 app.use('/update', require('./controllers/updatesUsers'));
 
 // Middleware de errores, devuelve una respuesta de error adecuada y maneja la situación de manera controlada.
@@ -63,7 +52,7 @@ app.use((error, req, res, next) => {
   console.error(error);
   res.status(error.httpStatus || 500).send({
     status: 'error',
-    message: error.message,
+    error: error.message,
   });
 });
 
@@ -83,4 +72,3 @@ app.use((err, req, res, next) => {
 app.listen(process.env.SERVER_PORT, () => {
   console.log(`Server is running on port ${process.env.SERVER_PORT}`);
 });
-

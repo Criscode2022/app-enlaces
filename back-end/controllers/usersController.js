@@ -31,10 +31,10 @@ const registerSchema = Joi.object({
   // email: Joi.string().email().required(),
 });
 
-router.post('/register', async function (req, res) {
+router.post('/register', async function (req, res, next) {
   const { value, error } = registerSchema.validate(req.body);
   if (error) {
-    return res.status(400).json({ error });
+    return next(error);
   }
   const { username, password } = value;
   try {
@@ -51,7 +51,7 @@ router.post('/register', async function (req, res) {
 router.post('/login', async function (req, res, next) {
   const { value, error } = registerSchema.validate(req.body);
   if (error) {
-    return res.status(400).json({ error });
+    return next(error);
   }
   const { username, password } = value;
   try {
@@ -65,7 +65,7 @@ router.post('/login', async function (req, res, next) {
     );
 
     if (!user) {
-      return res.status(400).json({ error: 'Invalid user or password' });
+      return next(new Error('Invalid user or password'));
     }
 
     // create token
@@ -79,7 +79,7 @@ router.post('/login', async function (req, res, next) {
     res.header('auth-token', token);
     return res.json({ token });
   } catch (ex) {
-    return res.status(500).json({ error: ex.message });
+    return next(ex);
   }
 });
 
@@ -97,11 +97,10 @@ router.post('/verify', isAuthenticated, async (req, res) => {
 // Note that there is no /logout endpoint, because by definition
 // we don't store any data once we return a valid JWT token.
 
-router.post('/unregister', isAuthenticated, async (req, res) => {
+router.post('/unregister', isAuthenticated, async (req, res, next) => {
   const id = req.auth.user;
-  const connection = await pool.getConnection();
   if (!id) {
-    return res.status(401).json({ message: 'No estás autenticado' });
+    return next(new Error('No estás autenticado'));
   }
 
   try {
@@ -110,30 +109,26 @@ router.post('/unregister', isAuthenticated, async (req, res) => {
     return res.send('Successfully unregistered');
   } catch (error) {
     console.error('Error al eliminar el usuario:', error);
-    return res.status(500).send('Error al eliminar el usuario');
-  } finally {
-    if (connection) connection.release();
+    return next(error);
   }
 });
 
-router.put('/follow/:userFollow', isAuthenticated, async (req, res) => {
+router.put('/follow/:userFollow', isAuthenticated, async (req, res, next) => {
   const id = req.auth.user;
   const { userFollow } = req.params;
-  const connection = await pool.getConnection();
 
   try {
-    // Verificar el JWT y extraer el ID de usuario
-    const token = req.header('Authorization');
-
     // Consulta para verificar si el usuario ya está siguiendo al usuario deseado
     const checkQuery = 'SELECT following_user FROM users WHERE id_user = ?';
     const [checkResults] = await pool.query(checkQuery, [id]);
 
     const followingUserList = checkResults[0].following_user || '';
-    const followingUserArray = followingUserList.split(',').map(userId => parseInt(userId));
+    const followingUserArray = followingUserList
+      .split(',')
+      .map((userId) => parseInt(userId));
 
     if (followingUserArray.includes(parseInt(userFollow))) {
-      return res.status(400).json({ error: 'Ya sigues a este usuario' });
+      return next(new Error('Ya sigues a este usuario'));
     }
 
     // Consulta para actualizar la lista de usuarios seguidos
@@ -141,77 +136,86 @@ router.put('/follow/:userFollow', isAuthenticated, async (req, res) => {
 
     await pool.query(updateQuery, [userFollow, id]);
 
-    return res.status(200).json({ message: 'Usuario seguido con éxito: ' + userFollow, siguiendo: checkResults[0].following_user + ',' + userFollow });
+    return res.status(200).json({
+      message: 'Usuario seguido con éxito: ' + userFollow,
+      siguiendo: checkResults[0].following_user + ',' + userFollow,
+    });
   } catch (error) {
     console.error('Error al seguir al usuario:', error);
-    return res.status(500).json({ error: 'Error al seguir al usuario' });
-  } finally {
-    if (connection) connection.release();
+    return next(error);
   }
 });
 
 //Ruta para dejar de seguir a un usuario:
-router.put('/unfollow/:userUnfollow', isAuthenticated, async (req, res) => {
-  const id = req.auth.user;
-  const { userUnfollow } = req.params;
-  const connection = await pool.getConnection();
+router.put(
+  '/unfollow/:userUnfollow',
+  isAuthenticated,
+  async (req, res, next) => {
+    const id = req.auth.user;
+    const { userUnfollow } = req.params;
 
-  try {
-    // Verificar el JWT y extraer el ID de usuario
-    const token = req.header('Authorization');
+    try {
+      // Consulta para verificar si el usuario ya está siguiendo al usuario deseado
+      const checkQuery = 'SELECT following_user FROM users WHERE id_user = ?';
+      const [checkResults] = await pool.query(checkQuery, [id]);
 
-    // Consulta para verificar si el usuario ya está siguiendo al usuario deseado
-    const checkQuery = 'SELECT following_user FROM users WHERE id_user = ?';
-    const [checkResults] = await pool.query(checkQuery, [id]);
+      const followingUserList = checkResults[0].following_user || '';
+      const followingUserArray = followingUserList
+        .split(',')
+        .map((userId) => parseInt(userId));
 
-    const followingUserList = checkResults[0].following_user || '';
-    const followingUserArray = followingUserList.split(',').map(userId => parseInt(userId));
+      if (!followingUserArray.includes(parseInt(userUnfollow))) {
+        return next(new Error('No sigues a este usuario'));
+      }
 
-    if (!followingUserArray.includes(parseInt(userUnfollow))) {
-      return res.status(400).json({ error: 'No sigues a este usuario' });
+      // Consulta para actualizar la lista de usuarios seguidos
+      const updatedFollowingUserList = followingUserArray
+        .filter((userId) => userId !== parseInt(userUnfollow))
+        .join(',');
+
+      const updateQuery =
+        'UPDATE users SET following_user = ? WHERE id_user = ?';
+
+      await pool.query(updateQuery, [updatedFollowingUserList, id]);
+
+      return res.status(200).json({
+        message: 'Usuario dejado de seguir con éxito: ' + userUnfollow,
+        siguiendo: updatedFollowingUserList,
+      });
+    } catch (error) {
+      console.error('Error al dejar de seguir al usuario:', error);
+      return next(error);
     }
-
-    // Consulta para actualizar la lista de usuarios seguidos
-    const updatedFollowingUserList = followingUserArray
-      .filter(userId => userId !== parseInt(userUnfollow))
-      .join(',');
-
-    const updateQuery = 'UPDATE users SET following_user = ? WHERE id_user = ?';
-
-    await pool.query(updateQuery, [updatedFollowingUserList, id]);
-
-    return res.status(200).json({ message: 'Usuario dejado de seguir con éxito: ' + userUnfollow, siguiendo: updatedFollowingUserList });
-  } catch (error) {
-    console.error('Error al dejar de seguir al usuario:', error);
-    return res.status(500).json({ error: 'Error al dejar de seguir al usuario' });
-  } finally {
-    if (connection) connection.release();
   }
-});
-
+);
 
 // Ruta para verificar si un usuario está siguiendo a otro
-router.get('/isFollowing/:userIdToCheck', isAuthenticated, async (req, res) => {
-  const userId = req.auth.user; // ID del usuario autenticado
-  const { userIdToCheck } = req.params;
+router.get(
+  '/isFollowing/:userIdToCheck',
+  isAuthenticated,
+  async (req, res, next) => {
+    const userId = req.auth.user; // ID del usuario autenticado
+    const { userIdToCheck } = req.params;
 
-  try {
-    // Consulta para obtener la lista de usuarios seguidos por el usuario autenticado
-    const query = 'SELECT following_user FROM users WHERE id_user = ?';
-    const [results] = await pool.query(query, [userId]);
+    try {
+      // Consulta para obtener la lista de usuarios seguidos por el usuario autenticado
+      const query = 'SELECT following_user FROM users WHERE id_user = ?';
+      const [results] = await pool.query(query, [userId]);
 
-    const followingUserList = results[0].following_user || '';
-    const followingUserArray = followingUserList.split(',').map(userId => parseInt(userId));
+      const followingUserList = results[0].following_user || '';
+      const followingUserArray = followingUserList
+        .split(',')
+        .map((userId) => parseInt(userId));
 
-    // Verificar si el usuario está siguiendo al usuario que se está comprobando
-    const isFollowing = followingUserArray.includes(parseInt(userIdToCheck));
+      // Verificar si el usuario está siguiendo al usuario que se está comprobando
+      const isFollowing = followingUserArray.includes(parseInt(userIdToCheck));
 
-    return res.status(200).json({ isFollowing });
-  } catch (error) {
-    console.error('Error al verificar el seguimiento del usuario:', error);
-    return res.status(500).json({ error: 'Error al verificar el seguimiento del usuario' });
+      return res.status(200).json({ isFollowing });
+    } catch (error) {
+      console.error('Error al verificar el seguimiento del usuario:', error);
+      return next(error);
+    }
   }
-});
+);
 
-
-module.exports = router;
+module.exports = { router, isAuthenticated };
