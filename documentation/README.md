@@ -21,3 +21,4 @@ Lo siguiente fue crear la estructura inicial de carpetas de React para la parte 
 - POST /users/verify : Verificar usuario autenticado.
 - PUT /users/follow/:userFollow : Seguir a otro usuario.
 - PUT /update/ : Actualizar nombre de usuario, biografía, contraseña o avatar.
+- DELETE /posts/: postId : Eliminar una publicación.
