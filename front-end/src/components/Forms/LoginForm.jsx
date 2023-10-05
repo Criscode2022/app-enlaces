@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import { loginService } from '../../services/userServices'; // Asegúrate de que la ruta sea correcta
+import { loginService } from '../../services/userServices';
 
 const LoginForm = () => {
     const [formData, setFormData] = useState({
@@ -18,8 +18,16 @@ const LoginForm = () => {
         e.preventDefault();
         try {
             const { username, password } = formData;
-            await loginService(username, password);
+            const token = await loginService(username, password);
+
+            // Guarda el token en el Local Storage
+            localStorage.setItem('authToken', token);
+            if (token) {
+                console.log('Login successful');
+            }
+
         } catch (error) {
+            console.error("Error logging in:", error);
             alert("Error logging in: " + error.message);
         }
     };
