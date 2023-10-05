@@ -4,7 +4,9 @@ const RegisterPage = () => {
   return (
     <>
       <h2>Registrarse</h2>
-      <RegisterForm />
+      <div className='container'>
+        <RegisterForm />
+      </div>
     </>
   );
 };

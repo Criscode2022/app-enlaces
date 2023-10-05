@@ -4,7 +4,10 @@ const LogoutPage = () => {
   return (
     <>
       <h2>Cerrar sesión</h2>
-      <LogoutForm />
+
+      <div className="container">
+        <LogoutForm />
+      </div>
     </>
   );
 };

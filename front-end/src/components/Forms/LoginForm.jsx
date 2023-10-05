@@ -2,12 +2,15 @@ import React, { useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { loginService } from '../../services/userServices';
+import { useNavigate } from 'react-router-dom';
 
 const LoginForm = () => {
     const [formData, setFormData] = useState({
         username: '',
         password: '',
     });
+
+    const navigate = useNavigate(); // Obtén la función navigate
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -22,10 +25,12 @@ const LoginForm = () => {
 
             // Guarda el token en el Local Storage
             localStorage.setItem('authToken', token);
+
             if (token) {
                 console.log('Login successful');
+                // Navega a la ruta '/feed' utilizando navigate
+                navigate('/feed');
             }
-
         } catch (error) {
             console.error("Error logging in:", error);
             alert("Error logging in: " + error.message);
