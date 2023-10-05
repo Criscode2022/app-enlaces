@@ -9,7 +9,6 @@ async function likePostController(req, res) {
     const { postId } = req.params;
 
     try {
-        // Insertar el "like" en la base de datos
         await pool.query('INSERT INTO likes (id_user, id_post) VALUES (?, ?)', [
             id,
             postId,

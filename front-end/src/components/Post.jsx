@@ -13,13 +13,22 @@ const Post = (props) => {
 
 
   const handleLike = () => {
-    fetch(`http://localhost:3000/posts/like/${postId}`, {
+    const likeUrl = `http://localhost:3000/posts/like/${postId}`;
+    console.log("Sending like request to:", likeUrl);
+
+    fetch(likeUrl, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
       },
     })
       .then((response) => response.json())
+      .then((data) => {
+        // Handle the response data as needed
+      })
+      .catch((error) => {
+        console.error('Error while liking:', error);
+      });
   }
 
 
