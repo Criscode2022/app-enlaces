@@ -1,6 +1,6 @@
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import { registerService } from '../services/userServices';
+import { registerService } from '../../services/userServices';
 
 async function handleSubmit(e) {
   e.preventDefault();
@@ -15,6 +15,8 @@ async function handleSubmit(e) {
     alert("Error registering user: " + error.message);
   }
 }
+
+
 
 const RegisterForm = () => {
   return (

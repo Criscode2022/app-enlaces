@@ -55,11 +55,11 @@ export default function BasicTabs() {
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
-<ListofPosts></ListofPosts>      </CustomTabPanel>
+        <ListofPosts></ListofPosts>      </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-Posts de la gente que sigues
+        Posts de la gente que sigues
       </CustomTabPanel>
-      
+
     </Box>
   );
 }

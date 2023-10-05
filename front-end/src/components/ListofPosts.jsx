@@ -22,13 +22,13 @@ const ListofPosts = () => {
 
   return (
     <>
-    <h2>Enlaces</h2>
+      <h2>Enlaces</h2>
 
-    <div id='postsContainer'>
-      {postsData.map((post) => (
-        <Post key={post.id_post} title={post.post_title} content={post.post_description} url={post.post_url} imageUrl={post.post_img} postId={post.id_post} userId={post.id_user} userName={post.name_user} />
-      ))}
-    </div>
+      <div id='postsContainer'>
+        {postsData.map((post) => (
+          <Post key={post.id_post} title={post.post_title} content={post.post_description} url={post.post_url} imageUrl={post.post_img} postId={post.id_post} userId={post.id_user} userName={post.name_user} />
+        ))}
+      </div>
     </>
   );
 }

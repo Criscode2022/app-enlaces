@@ -1,10 +1,10 @@
-import RegisterForm from '../components/RegisterForm'
+import RegisterForm from '../components/Forms/RegisterForm'
 
 const RegisterPage = () => {
   return (
     <>
       <h2>Registrarse</h2>
-      <RegisterForm type="register" />
+      <RegisterForm />
     </>
   );
 };

@@ -1,4 +1,4 @@
-import LogoutForm from "../components/LogoutForm";
+import LogoutForm from "../components/Forms/LogoutForm";
 
 const LogoutPage = () => {
   return (

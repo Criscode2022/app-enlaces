@@ -15,7 +15,7 @@ export const registerService = async (username, password) => {
 
   // Si hay un error lo mostramos. Dado que esta parte no esta correctamente implementada en el backend, vamos a simular el error.
   if (json.error) {
-    alert("Ha habido un error al loguear el usuario");
+    throw new Error("Ha habido un error al registrar el usuario");
   }
 };
 

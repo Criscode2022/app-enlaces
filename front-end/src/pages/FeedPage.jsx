@@ -1,5 +1,4 @@
 import React from 'react'
-import ListofPosts from '../components/ListofPosts'
 import Tabs from '../layout/Tabs'
 
 
