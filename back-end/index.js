@@ -9,12 +9,15 @@ const { expressjwt } = require('express-jwt');
 // Importamos las rutas.
 const routes = require('./routes');
 
+//Importamos los controladores
+
+const { getPostsController } = require('./controllers/posts/postsController');
+
 // Importamos los controladores.
 const {
     getLikeCountController,
     getAllLikesController,
     unlikePostController,
-    getPostsController,
     likePostController,
 } = require('./controllers/posts/postsController');
 
@@ -36,10 +39,6 @@ const isAuthenticated = expressjwt({
     secret: process.env.JWT_SECRET,
     algorithms: ['HS256'],
 });
-
-//  Endpoint para acceder a todos los enlances publicados: tiene que devolver info todos los post. A mayores, tiene que devolver el número de likes que tiene cada post,
-// el nombre del usuario que lo publicó, si el usuario ha dado like o no al post, si el usuario es dueño del post o no.
-app.use('/posts', getPostsController);
 
 // Endpoint para dar like a un enlace:
 app.post('/posts/like/:postId', isAuthenticated, likePostController);
