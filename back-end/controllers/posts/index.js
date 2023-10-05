@@ -1,3 +1,4 @@
 const getPostsController = require('./getPostsController');
+const likePostController = require('./likePostController');
 
-module.exports = { getPostsController };
+module.exports = { getPostsController, likePostController };

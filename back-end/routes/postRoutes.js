@@ -3,10 +3,14 @@ const routes = express.Router();
 
 // Importamos las funciones controladoras finales.
 
-const { getPostsController } = require('../controllers/posts');
+const {
+    getPostsController,
+    likePostController,
+} = require('../controllers/posts');
 
 // Aquí irían el resto de enpoints de posts.
 
 routes.get('/posts', getPostsController);
+routes.post('/posts/like/:id', likePostController);
 
 module.exports = routes;

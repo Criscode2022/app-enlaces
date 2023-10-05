@@ -41,7 +41,7 @@ const isAuthenticated = expressjwt({
 });
 
 // Endpoint para dar like a un enlace:
-app.post('/posts/like/:postId', isAuthenticated, likePostController);
+// app.post('/posts/like/:postId', isAuthenticated, likePostController);
 
 // Endpoint para eliminar un like de un enlace:
 app.delete('/posts/like/:postId', isAuthenticated, unlikePostController);

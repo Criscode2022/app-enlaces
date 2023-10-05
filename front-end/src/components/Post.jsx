@@ -21,10 +21,10 @@ const Post = (props) => {
     const checkFollowing = () => {
       // Realizar una solicitud GET a la API para verificar si el usuario sigue a la persona
       const endpoint = `http://localhost:3000/users/isFollowing/${userId}`;
-    
+
       // Obtener el token del localStorage
       const token = localStorage.getItem('login-token');
-    
+
       fetch(endpoint, {
         method: 'GET',
         headers: {
@@ -47,22 +47,22 @@ const Post = (props) => {
           console.error('Error al verificar el seguimiento del usuario:', error);
         });
     };
-    
+
     // Obtener el token del localStorage
     const token = localStorage.getItem('login-token');
-    
+
     // Llama a la función checkFollowing para obtener el estado inicial de seguimiento
     checkFollowing();
-    
+
     // Decodificar el token para obtener el ID del usuario autenticado
     try {
       const decodedToken = jwt_decode(token);
-      const userId = decodedToken.user; 
+      const userId = decodedToken.user;
       setAuthenticatedUserId(userId);
     } catch (error) {
       console.error('Error al decodificar el token:', error);
     }
-    
+
     fetch(`http://localhost:3000/posts/likes`, {
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -80,7 +80,7 @@ const Post = (props) => {
         const userLikedPost = data.likes.some((like) => {
           return like.id_user === authenticatedUserId && like.id_post === postId;
         });
-    
+
         // Actualizar el estado de userLiked
         setUserLiked(userLikedPost);
         console.log('Likes API Data:', data);
@@ -89,7 +89,7 @@ const Post = (props) => {
       .catch((error) => {
         console.error('Error al obtener la lista de likes:', error);
       });
-    
+
     fetch(`http://localhost:3000/posts/${postId}/likeCount`, {
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -155,7 +155,7 @@ const Post = (props) => {
     const token = localStorage.getItem('login-token');
 
     fetch(endpoint, {
-      method: 'PUT', 
+      method: 'PUT',
       headers: {
         'Authorization': `Bearer ${token}`,
       },
@@ -176,15 +176,15 @@ const Post = (props) => {
       });
   };
 
-  
+
 
   console.log('Post ID:', postId);
   console.log('Authenticated User ID:', authenticatedUserId);
 
   return (
-    <Card sx={{ maxWidth: 345, margin: '20px', padding: '50px', boxShadow:'0 0 10px black' }}>
+    <Card sx={{ maxWidth: 345, margin: '20px', padding: '50px', boxShadow: '0 0 10px black' }}>
       <div style={{ display: 'flex', alignItems: 'center', padding: '10px' }}>
-        <Typography variant="h6" component="div" style={{ flexGrow: 1, border: '1px solid black', padding: '5px', width: '100%', borderRadius:'5px', display: 'flex', justifyContent: 'space-between' }}>
+        <Typography variant="h6" component="div" style={{ flexGrow: 1, border: '1px solid black', padding: '5px', width: '100%', borderRadius: '5px', display: 'flex', justifyContent: 'space-between' }}>
           {userName}
           <Button variant="contained" style={{ backgroundColor: isFollowing ? '#f00' : '#007bff', color: 'white' }} onClick={handleFollow}>
             {isFollowing ? 'Dejar de seguir' : 'Seguir'}
