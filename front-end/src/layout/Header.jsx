@@ -23,9 +23,7 @@ const Header = () => {
         <Link to="/register">
           <Button variant="contained">Registrarse</Button>
         </Link>
-        <Link to="/feed">
-          <Button variant="contained">Feed</Button>
-        </Link>
+
         <Link to="/linkform">
           <Button variant="contained">Crear enlace</Button>
         </Link>

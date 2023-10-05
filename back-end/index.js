@@ -20,12 +20,15 @@ const {
     unlikePostController,
     likePostController,
 } = require('./controllers/posts/postsController');
+const authenticateToken = require('./utils/authenticateToken');
 
 // Creamos el servidor.
 const app = express();
 
 // Middleware que evita problemas de conexión con el cliente.
 app.use(cors());
+
+app.use('/posts', authenticateToken);
 
 // Middleware que permite recibir datos en formato JSON.
 app.use(express.json());
