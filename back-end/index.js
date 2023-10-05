@@ -47,7 +47,7 @@ app.post('/posts/like/:postId', isAuthenticated, likePostController);
 // Endpoint para eliminar un like de un enlace:
 app.delete('/posts/like/:postId', isAuthenticated, unlikePostController);
 
-// app.use('/users', require('./controllers/usersController'));
+app.use('/users', require('./controllers/usersController'));
 app.use('/update', require('./controllers/updatesUsers'));
 
 // Middleware de error.
