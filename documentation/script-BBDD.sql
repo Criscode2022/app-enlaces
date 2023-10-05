@@ -7,7 +7,7 @@ USE enlaces;
 CREATE TABLE users (
   id_user INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   name_user varchar(50) NOT NULL UNIQUE,
-  password_user varchar(20) NOT NULL,
+  password_user varchar(200) NOT NULL,
   following_user varchar (300), 
   biography_user tinytext,
   avatar_user BLOB,
