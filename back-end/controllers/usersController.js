@@ -28,41 +28,6 @@ router.get('/', async (req, res) => {
     }
 });
 
-router.post('/login', async function (req, res, next) {
-    const { value, error } = newUserSchema.validate(req.body);
-    if (error) {
-        return res.status(400).json({ error });
-    }
-    const { username, password } = value;
-    try {
-        // query() returns [rows, columns]. We only want the first (and only) row, so that's:
-        //     const user = result[0][0];
-        //  or just:
-        //      const [[user]] = result;
-        const [[user]] = await pool.query(
-            'SELECT id_user, name_user, password_user FROM users WHERE name_user = ? AND password_user = ?',
-            [username, password]
-        );
-
-        if (!user) {
-            return res.status(400).json({ error: 'Invalid user or password' });
-        }
-
-        // create token
-        const token = jwt.sign(
-            {
-                user: user.id_user,
-            },
-            process.env.JWT_SECRET
-        );
-
-        res.header('auth-token', token);
-        return res.json({ token });
-    } catch (ex) {
-        return res.status(500).json({ error: ex.message });
-    }
-});
-
 // Authentication middleware. This takes care of verifying the JWT token and
 // storing the token data (user id) in req.auth.
 const isAuthenticated = expressjwt({
