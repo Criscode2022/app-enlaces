@@ -11,6 +11,6 @@ const {
 // Aquí irían el resto de enpoints de posts.
 
 routes.get('/posts', getPostsController);
-routes.post('/posts/like/:id', likePostController);
+routes.post('/posts/like/:postId', likePostController);
 
 module.exports = routes;

@@ -7,14 +7,8 @@ const Joi = require('joi');
 async function likePostController(req, res) {
     const id = req.auth.user;
     const { postId } = req.params;
-    const connection = await pool.getConnection();
 
     try {
-        // Verificar el JWT y extraer el ID de usuario
-        const token = req.header('Authorization');
-        if (!token) {
-            return res.status(401).json({ mensaje: 'No autorizado' });
-        }
         // Insertar el "like" en la base de datos
         await pool.query('INSERT INTO likes (id_user, id_post) VALUES (?, ?)', [
             id,
