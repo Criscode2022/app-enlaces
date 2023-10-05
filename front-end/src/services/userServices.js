@@ -35,8 +35,9 @@ export const loginService = async (username, password) => {
   const json = await response.json();
 
   // Si hay un error lo mostramos. Dado que esta parte no esta correctamente implementada en el backend, vamos a simular el error.
-  if (json.error) {
-    alert("Ha habido un error al loguear el usuario");
+
+  if (json.status !== "ok") {
+    throw new Error("Ha habido un error al loguear el usuario");
   }
 
   // Retornamos el token.
