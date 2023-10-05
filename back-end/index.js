@@ -16,7 +16,7 @@ const {
     unlikePostController,
     getPostsController,
     likePostController,
-} = require('./controllers/postsController');
+} = require('./controllers/posts/postsController');
 
 // Creamos el servidor.
 const app = express();

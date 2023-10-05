@@ -5,7 +5,6 @@ import AboutPage from "./pages/AboutPage";
 import LoginPage from "./pages/LoginPage";
 import LogoutPage from "./pages/LogoutPage";
 import RegisterPage from "./pages/RegisterPage";
-import HomePage from "./pages/HomePage";
 import Error404Page from "./pages/Error404Page";
 import AvatarPage from "./pages/AvatarPage";
 import FeedPage from "./pages/FeedPage";
