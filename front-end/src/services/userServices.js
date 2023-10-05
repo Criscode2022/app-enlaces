@@ -14,8 +14,8 @@ export const registerService = async (username, password) => {
   const json = await response.json();
 
   // Si hay un error lo mostramos
-  if (json.status !== "ok") {
-    throw new Error("Ha habido un error al registrar el usuario");
+  if (json.status === "error") {
+    throw new Error(json.message);
   }
 };
 
@@ -36,8 +36,8 @@ export const loginService = async (username, password) => {
 
   // Si hay un error lo mostramos.
 
-  if (json.status !== "ok") {
-    throw new Error("Ha habido un error al loguear el usuario");
+  if (json.status === "error") {
+    throw new Error(json.message);
   }
 
   // Retornamos el token.
