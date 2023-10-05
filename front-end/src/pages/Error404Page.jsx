@@ -12,7 +12,6 @@ const Error404Page = () => {
 
     React.useEffect(() => {
         const intervalId = setInterval(() => {
-            console.log('intervalo');
             setCounter((prevCounter) => prevCounter - 1);
         }, 1000);
 

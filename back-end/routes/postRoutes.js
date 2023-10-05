@@ -1,6 +1,8 @@
 const express = require('express');
+const deletePostController = require('../controllers/posts/deletePostController');
 const routes = express.Router();
 
-// Aquí irían el resto de enpoints de posts.
+routes.delete('/posts/:postId', deletePostController);
 
 module.exports = routes;
+
