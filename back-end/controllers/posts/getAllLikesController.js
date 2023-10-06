@@ -7,6 +7,8 @@ const Joi = require('joi');
 //Endpoint para obtener todos los likes:
 
 async function getAllLikesController(req, res) {
+    const connection = await pool.getConnection();
+
     try {
         // Consulta SQL para obtener todos los likes
         const query = `
