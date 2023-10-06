@@ -5,7 +5,6 @@ const router = express.Router();
 const pool = require('../db/db');
 const Joi = require('joi');
 const jwt = require('jsonwebtoken');
-const { expressjwt } = require('express-jwt');
 const newUserSchema = require('../schemas/users/newUserSchema');
 
 router.get('/', async (req, res) => {
