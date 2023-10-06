@@ -1,8 +1,14 @@
 import { useState } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import jwt_decode from "jwt-decode";
 
-function NewPostForm({ id_user }) {
+function NewPostForm() {
+
+  // Obtener el token del Local Storage
+  const token = window.localStorage.getItem("authToken");
+  const decodedToken = jwt_decode(token);
+  const userId = decodedToken.userId;
 
   const [postData, setpostData] = useState({
     url: "",
@@ -22,10 +28,9 @@ function NewPostForm({ id_user }) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = { ...postData, id_user };
+    const data = { ...postData, userId };
 
-    // Obtener el token del almacenamiento local (simulado)
-    const token = window.localStorage.getItem("authToken");
+
 
     console.log("Datos del formulario:", data); // Verificar los datos del formulario
     console.log("Token de autenticación:", token); // Verificar el token
