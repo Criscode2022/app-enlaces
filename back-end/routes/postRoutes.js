@@ -20,6 +20,7 @@ routes.post('/posts/like/:postId', likePostController);
 routes.get('/posts/likes', getAllLikesController);
 routes.delete('/posts/unlike/:postId', unlikePostController);
 routes.post('/posts/newPost', createPost);
+routes.delete('/posts/:postId', deletePostController);
 
 module.exports = routes;
 
