@@ -28,9 +28,6 @@ app.use(express.json());
 // Middleware que indica a Express donde están las rutas.
 app.use(routes);
 
-app.use('/users', require('./controllers/usersController'));
-app.use('/update', require('./controllers/updatesUsers'));
-
 // Middleware de error.
 app.use((err, req, res, next) => {
     console.error(err);

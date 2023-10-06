@@ -11,8 +11,6 @@ const {
     likePostController,
 } = require('../controllers/posts');
 
-const router = require('../controllers/usersController');
-
 // Aquí irían el resto de enpoints de posts.
 
 routes.get('/posts', getPostsController);
