@@ -1,4 +1,5 @@
 const pool = require('../../db/db');
+const generateError = require('../../utils/generateError');
 
 async function deletePostController (req, res, next) {
     const id = req.auth.user;
@@ -12,10 +13,10 @@ async function deletePostController (req, res, next) {
         `, [postId]);
 
         if (!post) {
-            return next(createError(404, 'No existe esa publicación.'));
+            return next(generateError(404, 'No existe esa publicación.'));
         }
         if (post.id_user !== id) {
-            return next(createError(403, 'No puedes borrar la publicación de otra persona.'));
+            return next(generateError(403, 'No puedes borrar la publicación de otra persona.'));
         }
         await pool.query(`
             DELETE FROM posts
