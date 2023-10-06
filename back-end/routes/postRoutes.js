@@ -5,14 +5,17 @@ const routes = express.Router();
 
 const {
     getPostsController,
+    unlikePostController,
     getAllLikesController,
     likePostController,
 } = require('../controllers/posts');
+const router = require('../controllers/usersController');
 
 // Aquí irían el resto de enpoints de posts.
 
 routes.get('/posts', getPostsController);
 routes.post('/posts/like/:postId', likePostController);
 routes.get('/posts/likes', getAllLikesController);
+routes.delete('/posts/unlike/:postId', unlikePostController);
 
 module.exports = routes;
