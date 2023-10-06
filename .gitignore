@@ -3,3 +3,8 @@ back-end/controllers/posts/postsController copy.js
 back-end/controllers/usersController.js
 back-end/controllers/usersController.js
 .env
+node_modules
+DS_Store
+back-end/controllers/posts/postsController.js
+back-end/controllers/posts/usersController.js
+front-end/node_modules
