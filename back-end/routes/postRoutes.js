@@ -5,6 +5,7 @@ const routes = express.Router();
 
 const {
     getPostsController,
+    getAllLikesController,
     likePostController,
 } = require('../controllers/posts');
 
@@ -12,5 +13,6 @@ const {
 
 routes.get('/posts', getPostsController);
 routes.post('/posts/like/:postId', likePostController);
+routes.get('/posts/likes', getAllLikesController);
 
 module.exports = routes;
