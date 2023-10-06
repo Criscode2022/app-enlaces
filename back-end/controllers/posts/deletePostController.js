@@ -11,6 +11,7 @@ async function deletePostController (req, res, next) {
             FROM posts
             WHERE id_post = ?
         `, [postId]);
+        console.log(post.id_user, id);
 
         if (!post) {
             return next(generateError(404, 'No existe esa publicación.'));
