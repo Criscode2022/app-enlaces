@@ -1,5 +1,5 @@
 import "./App.css";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import Header from "./layout/Header";
 import AboutPage from "./pages/AboutPage";
 import LoginPage from "./pages/LoginPage";
@@ -10,13 +10,19 @@ import AvatarPage from "./pages/AvatarPage";
 import FeedPage from "./pages/FeedPage";
 import NewPostPage from "./pages/NewPostPage";
 
+const token = localStorage.getItem("authToken");
+
 function App() {
   return (
     <>
       <Header />
       <main>
         <Routes>
-          <Route path="/" element={<LoginPage />} />
+          {token ? (
+            <Route path="/" element={<Navigate to="/feed" />} />
+          ) : (
+            <Route path="/" element={<Navigate to="/login" />} />
+          )}
           <Route path="/about" element={<AboutPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/logout" element={<LogoutPage />} />
