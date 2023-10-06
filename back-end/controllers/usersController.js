@@ -1,4 +1,4 @@
-//DEPRECATED
+//DEPRECATED = NO USAR
 
 const express = require('express');
 const router = express.Router();
