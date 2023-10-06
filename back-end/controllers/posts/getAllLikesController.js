@@ -7,8 +7,6 @@ const Joi = require('joi');
 //Endpoint para obtener todos los likes:
 
 async function getAllLikesController(req, res) {
-    const connection = await pool.getConnection();
-
     try {
         // Consulta SQL para obtener todos los likes
         const query = `
@@ -26,8 +24,6 @@ async function getAllLikesController(req, res) {
     } catch (error) {
         console.error('Error al obtener los likes:', error);
         return res.status(500).json({ mensaje: 'Error al obtener los likes' });
-    } finally {
-        if (connection) connection.release();
     }
 }
 
