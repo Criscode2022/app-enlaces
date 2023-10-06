@@ -2,18 +2,19 @@ import { useState } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 
-function LinkForm({ id_user }) {
-  const [linkData, setLinkData] = useState({
-    title: "",
+function NewPostForm({ id_user }) {
+
+  const [postData, setpostData] = useState({
     url: "",
-    description: "",
+    titulo: "",
+    descripcion: "",
   });
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    setLinkData((prevData) => ({
+    setpostData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
@@ -21,16 +22,16 @@ function LinkForm({ id_user }) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = { ...linkData, id_user };
+    const data = { ...postData, id_user };
 
     // Obtener el token del almacenamiento local (simulado)
-    const token = window.localStorage.getItem("login-token");
+    const token = window.localStorage.getItem("authToken");
 
     console.log("Datos del formulario:", data); // Verificar los datos del formulario
     console.log("Token de autenticación:", token); // Verificar el token
 
     try {
-      const response = await fetch(`http://localhost:3000/users/posts`, {
+      const response = await fetch(`http://localhost:3000/posts/newPost`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -63,22 +64,22 @@ function LinkForm({ id_user }) {
         <TextField
           required
           label="Título"
-          name="title"
-          value={linkData.title}
+          name="titulo"
+          value={postData.title}
           onChange={handleInputChange}
         />
         <TextField
           required
           label="URL"
           name="url"
-          value={linkData.url}
+          value={postData.url}
           onChange={handleInputChange}
         />
         <TextField
           required
           label="Descripción"
-          name="description"
-          value={linkData.description}
+          name="descripcion"
+          value={postData.description}
           onChange={handleInputChange}
         />
         <Button type="submit">Crear Enlace</Button>
@@ -89,4 +90,4 @@ function LinkForm({ id_user }) {
   );
 }
 
-export default LinkForm;
+export default NewPostForm;

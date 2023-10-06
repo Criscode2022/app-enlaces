@@ -4,7 +4,7 @@ const express = require('express');
 const router = express.Router();
 const Joi = require('joi');
 
-async function likePostController(req, res) {
+async function likePostController(req, res, next) {
     const id = req.auth.user;
     const { postId } = req.params;
 
@@ -16,8 +16,7 @@ async function likePostController(req, res) {
 
         return res.status(201).json({ mensaje: 'Like agregado exitosamente' });
     } catch (error) {
-        console.error('Error al agregar el like:', error);
-        return res.status(500).json({ mensaje: 'Error al agregar el like' });
+        next(error);
     }
 }
 

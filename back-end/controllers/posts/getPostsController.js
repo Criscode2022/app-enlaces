@@ -5,7 +5,6 @@ const router = express.Router();
 const Joi = require('joi');
 
 async function getPostsController(req, res, next) {
-    const connection = await pool.getConnection();
     try {
         const [results] = await pool.query(`
           SELECT p.post_url, p.post_img, p.post_title, p.post_description, u.name_user, p.id_post, u.id_user, COUNT(l.id_like) AS like_count
@@ -23,8 +22,6 @@ async function getPostsController(req, res, next) {
         });
     } catch (error) {
         next(error);
-    } finally {
-        if (connection) connection.release();
     }
 }
 module.exports = getPostsController;

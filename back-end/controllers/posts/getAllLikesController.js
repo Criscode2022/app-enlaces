@@ -6,7 +6,7 @@ const Joi = require('joi');
 
 //Endpoint para obtener todos los likes:
 
-async function getAllLikesController(req, res) {
+async function getAllLikesController(req, res, next) {
     const connection = await pool.getConnection();
 
     try {
@@ -24,8 +24,7 @@ async function getAllLikesController(req, res) {
         // Devuelve los likes en la respuesta JSON
         return res.status(200).json({ likes: rows });
     } catch (error) {
-        console.error('Error al obtener los likes:', error);
-        return res.status(500).json({ mensaje: 'Error al obtener los likes' });
+        next(error);
     }
 }
 

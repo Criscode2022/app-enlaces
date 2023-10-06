@@ -9,8 +9,6 @@ const Joi = require('joi');
 async function unlikePostController(req, res) {
     const id = req.auth.user;
     const { postId } = req.params;
-    const connection = await pool.getConnection();
-
     try {
         // Verificar el JWT y extraer el ID de usuario
         const token = req.header('Authorization');
@@ -26,10 +24,7 @@ async function unlikePostController(req, res) {
 
         return res.status(200).json({ mensaje: 'Like eliminado exitosamente' });
     } catch (error) {
-        console.error('Error al eliminar el like:', error);
-        return res.status(500).json({ mensaje: 'Error al eliminar el like' });
-    } finally {
-        if (connection) connection.release();
+        next(error);
     }
 }
 

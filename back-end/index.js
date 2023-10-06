@@ -4,22 +4,12 @@ require('dotenv').config();
 // Importamos las dependencias.
 const express = require('express');
 const cors = require('cors');
-const { expressjwt } = require('express-jwt');
 
 // Importamos las rutas.
 const routes = require('./routes');
 
 //Importamos los controladores
 
-const { getPostsController } = require('./controllers/posts/postsController');
-
-// Importamos los controladores.
-const {
-    getLikeCountController,
-    getAllLikesController,
-    unlikePostController,
-    likePostController,
-} = require('./controllers/posts/postsController');
 const authenticateToken = require('./utils/authenticateToken');
 
 // Creamos el servidor.
@@ -28,6 +18,8 @@ const app = express();
 // Middleware que evita problemas de conexión con el cliente.
 app.use(cors());
 
+//Middleware para proteger las rutas '/posts' con JWT
+
 app.use('/posts', authenticateToken);
 
 // Middleware que permite recibir datos en formato JSON.
@@ -35,19 +27,6 @@ app.use(express.json());
 
 // Middleware que indica a Express donde están las rutas.
 app.use(routes);
-
-// Authentication middleware. This takes care of verifying the JWT token and
-// storing the token data (user id) in req.auth.
-const isAuthenticated = expressjwt({
-    secret: process.env.JWT_SECRET,
-    algorithms: ['HS256'],
-});
-
-// Endpoint para dar like a un enlace:
-// app.post('/posts/like/:postId', isAuthenticated, likePostController);
-
-// Endpoint para eliminar un like de un enlace:
-// app.delete('/posts/like/:postId', isAuthenticated, unlikePostController);
 
 app.use('/users', require('./controllers/usersController'));
 app.use('/update', require('./controllers/updatesUsers'));

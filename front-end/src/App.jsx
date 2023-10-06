@@ -8,7 +8,7 @@ import RegisterPage from "./pages/RegisterPage";
 import Error404Page from "./pages/Error404Page";
 import AvatarPage from "./pages/AvatarPage";
 import FeedPage from "./pages/FeedPage";
-import ShareLink from "./pages/ShareLink";
+import NewPostPage from "./pages/NewPostPage";
 
 function App() {
   return (
@@ -22,7 +22,7 @@ function App() {
           <Route path="/logout" element={<LogoutPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/avatar" element={<AvatarPage />} />
-          <Route path="/linkform" element={<ShareLink />} />
+          <Route path="/linkform" element={<NewPostPage />} />
           <Route path="/*" element={<Error404Page />} />
           <Route path="/feed" element={<FeedPage />} />
         </Routes>
