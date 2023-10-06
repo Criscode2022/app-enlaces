@@ -14,11 +14,13 @@ export const AuthProvider = ({ children }) => {
         const fetchUser = async () => {
             try {
                 setLoading(true);
-                
+
             } catch (err) {
-                
+                console.error(err);
+
             } finally {
                 setLoading(false);
             }
         }
     }, []);
+}
