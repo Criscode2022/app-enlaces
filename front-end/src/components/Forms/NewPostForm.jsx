@@ -4,20 +4,14 @@ import Button from "@mui/material/Button";
 import jwt_decode from "jwt-decode";
 
 function NewPostForm() {
-
   // Obtener el token del Local Storage
   const token = window.localStorage.getItem("authToken");
-  const decodedToken = jwt_decode(token);
-  const userId = decodedToken.userId;
 
   const [postData, setpostData] = useState({
     url: "",
     titulo: "",
     descripcion: "",
   });
-  const [successMessage, setSuccessMessage] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setpostData((prevData) => ({
@@ -28,14 +22,11 @@ function NewPostForm() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = { ...postData, userId };
-
-
-
-    console.log("Datos del formulario:", data); // Verificar los datos del formulario
-    console.log("Token de autenticación:", token); // Verificar el token
 
     try {
+      console.log("Datos del formulario a enviar:", postData); // Verificar los datos del formulario que estás enviando
+      console.log("Token de autenticación:", token); // Verificar el token
+
       const response = await fetch(`http://localhost:3000/posts/newPost`, {
         method: "POST",
         headers: {
@@ -43,23 +34,22 @@ function NewPostForm() {
           // Adjuntar el token en el encabezado de la solicitud
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(postData), // Envía el objeto postData sin el userId
       });
 
       if (!response.ok) {
-        throw new Error("No se pudo crear el enlace");
+        const errorData = await response.json();
+        throw new Error(errorData.error || "No se pudo crear el enlace");
       }
 
       const responseData = await response.json();
       // Manejar la respuesta del servidor aquí, si es necesario.
 
-      setSuccessMessage("Enlace creado exitosamente");
-      setErrorMessage(""); // Limpiar cualquier mensaje de error previo
+      console.log("Respuesta del servidor:", responseData); // Verificar la respuesta del servidor
+
+      alert("Enlace creado exitosamente");
     } catch (error) {
-      // Manejar errores de la solicitud aquí
       console.error("Error al crear el enlace:", error);
-      setSuccessMessage(""); // Limpiar cualquier mensaje de éxito previo
-      setErrorMessage(error.message || "Hubo un error al crear el enlace");
     }
   };
 
@@ -70,7 +60,7 @@ function NewPostForm() {
           required
           label="Título"
           name="titulo"
-          value={postData.title}
+          value={postData.titulo}
           onChange={handleInputChange}
         />
         <TextField
@@ -84,15 +74,14 @@ function NewPostForm() {
           required
           label="Descripción"
           name="descripcion"
-          value={postData.description}
+          value={postData.descripcion}
           onChange={handleInputChange}
         />
         <Button type="submit">Crear Enlace</Button>
       </form>
-      {successMessage && <p className="success-message">{successMessage}</p>}
-      {errorMessage && <p className="error-message">{errorMessage}</p>}
     </div>
   );
 }
 
 export default NewPostForm;
+

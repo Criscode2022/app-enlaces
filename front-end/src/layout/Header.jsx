@@ -24,7 +24,7 @@ const Header = () => {
           <Button variant="contained">Registrarse</Button>
         </Link>
 
-        <Link to="/linkform">
+        <Link to="/newPost">
           <Button variant="contained">Crear enlace</Button>
         </Link>
 

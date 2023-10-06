@@ -22,7 +22,7 @@ function App() {
           <Route path="/logout" element={<LogoutPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/avatar" element={<AvatarPage />} />
-          <Route path="/linkform" element={<NewPostPage />} />
+          <Route path="/newPost" element={<NewPostPage />} />
           <Route path="/*" element={<Error404Page />} />
           <Route path="/feed" element={<FeedPage />} />
         </Routes>
