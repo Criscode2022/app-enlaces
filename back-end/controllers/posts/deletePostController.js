@@ -11,12 +11,11 @@ async function deletePostController (req, res, next) {
             FROM posts
             WHERE id_post = ?
         `, [postId]);
-        console.log(post.id_user, id);
 
         if (!post) {
             return next(generateError(404, 'No existe esa publicación.'));
         }
-        if (post.id_user !== id) {
+        if (post[0].id_user !== id) {
             return next(generateError(403, 'No puedes borrar la publicación de otra persona.'));
         }
         await pool.query(`
