@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { loginService } from '../../services/userServices';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 
 const LoginForm = () => {
@@ -28,6 +28,10 @@ const LoginForm = () => {
             alert("Error logging in: " + error.message);
         }
     };
+
+    if (auth.token) {
+        return <Navigate to="/feed" />
+    }
 
     return (
         <form onSubmit={handleSubmit}>
