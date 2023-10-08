@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { loginService } from '../../services/userServices';
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../context/AuthContext';
 
 const LoginForm = () => {
     const [formData, setFormData] = useState({
@@ -11,7 +12,7 @@ const LoginForm = () => {
     });
 
     const navigate = useNavigate(); // Obtén la función navigate
-
+    const auth = useContext(AuthContext);
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
@@ -21,16 +22,7 @@ const LoginForm = () => {
         e.preventDefault();
         try {
             const { username, password } = formData;
-            const token = await loginService(username, password);
-
-            // Guarda el token en el Local Storage
-            localStorage.setItem('authToken', token);
-
-            if (token) {
-                console.log('Login successful');
-                // Navega a la ruta '/feed' utilizando navigate
-                navigate('/feed');
-            }
+            await auth.login(username, password);
         } catch (error) {
             console.error("Error logging in:", error);
             alert("Error logging in: " + error.message);
@@ -54,7 +46,7 @@ const LoginForm = () => {
                 value={formData.password}
                 onChange={handleChange}
             />
-            <Button variant="contained" type="submit">
+            <Button disabled={auth.loading} variant="contained" type="submit">
                 Iniciar Sesión
             </Button>
         </form>
