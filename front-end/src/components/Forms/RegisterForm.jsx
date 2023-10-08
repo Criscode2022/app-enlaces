@@ -1,15 +1,16 @@
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import { registerService } from '../../services/userServices';
+import { AuthContext } from '../../context/AuthContext';
+import { useContext } from 'react';
 
-async function handleSubmit(e) {
+async function handleSubmit(e, auth) {
   e.preventDefault();
   const data = new FormData(e.target);
   const result = {};
   data.forEach((k, v) => (result[v] = k));
 
   try {
-    await registerService(result.username, result.password);
+    await auth.register(result.username, result.password);
     alert("Successfully registered");
   } catch (error) {
     alert("Error registering user: " + error.message);
@@ -19,11 +20,12 @@ async function handleSubmit(e) {
 
 
 const RegisterForm = () => {
+  const auth = useContext(AuthContext);
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={(e) => handleSubmit(e, auth)}>
       <TextField required={true} label="Usuario" name="username" />
       <TextField required={true} label="Contraseña" type="password" name="password" />
-      <Button variant="contained" type="submit">
+      <Button disabled={auth.loading} variant="contained" type="submit">
         Enviar
       </Button>
     </form>
