@@ -23,6 +23,7 @@ app.use(cors());
 app.use('/posts', authenticateToken);
 
 app.use('/users/follow', authenticateToken);
+app.use('/users/unfollow', authenticateToken);
 
 // Middleware que permite recibir datos en formato JSON.
 app.use(express.json());
