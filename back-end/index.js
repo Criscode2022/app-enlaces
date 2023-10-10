@@ -31,6 +31,14 @@ app.use(express.json());
 // Middleware que indica a Express donde están las rutas.
 app.use(routes);
 
+// Middleware de ruta no encontrada.
+app.use((req, res) => {
+    res.status(404).send({
+        status: 'error',
+        message: 'Not found',
+    });
+});
+
 // Middleware de error.
 app.use((err, req, res, next) => {
     console.error(err);
@@ -38,14 +46,6 @@ app.use((err, req, res, next) => {
     res.status(err.httpStatus || 500).send({
         status: 'error',
         message: err.message,
-    });
-});
-
-// Middleware de ruta no encontrada.
-app.use((req, res) => {
-    res.status(404).send({
-        status: 'error',
-        message: 'Not found',
     });
 });
 

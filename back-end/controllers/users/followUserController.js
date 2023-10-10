@@ -1,13 +1,13 @@
 const pool = require('../../db/db');
-const jwt = require('jsonwebtoken');
-const express = require('express');
-const router = express.Router();
-const Joi = require('joi');
+
+const generateError = require('../../utils/generateError');
 
 async function followUserController(req, res, next) {
-    const id = req.auth.user;
-    const { userFollow } = req.params;
     try {
+        const id = req.auth.user;
+
+        const { userFollow } = req.params;
+
         // Consulta para verificar si el usuario ya está siguiendo al usuario deseado
         const checkQuery = 'SELECT following_user FROM users WHERE id_user = ?';
         const [checkResults] = await pool.query(checkQuery, [id]);
@@ -18,7 +18,7 @@ async function followUserController(req, res, next) {
             .map((userId) => parseInt(userId));
 
         if (followingUserArray.includes(parseInt(userFollow))) {
-            return res.status(400).json({ error: 'Ya sigues a este usuario' });
+            generateError('Ya sigues a este usuario', 400);
         }
 
         // Consulta para actualizar la lista de usuarios seguidos
@@ -26,12 +26,12 @@ async function followUserController(req, res, next) {
 
         await pool.query(updateQuery, [userFollow, id]);
 
-        return res.status(200).json({
+        res.json({
             message: 'Usuario seguido con éxito: ' + userFollow,
             siguiendo: checkResults[0].following_user + ',' + userFollow,
         });
-    } catch (error) {
-        return next(error);
+    } catch (err) {
+        next(err);
     }
 }
 
