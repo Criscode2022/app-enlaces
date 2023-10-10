@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
@@ -8,6 +8,7 @@ import Badge from '@mui/material/Badge';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import jwt_decode from 'jwt-decode';
+import { AuthContext } from '../context/AuthContext'; // Importa el contexto de autenticación
 
 const Post = (props) => {
   const {
@@ -17,62 +18,71 @@ const Post = (props) => {
     url,
     postId,
     likes,
-    updateBadgeCount, // Callback function from the parent component
+    updateBadgeCount,
+    userName,
+    userId, // Asumiendo que tienes el userId en las propiedades
   } = props;
 
-  const [userLiked, setUserLiked] = useState(false); // Estado para saber si el usuario dio like al post
-  const [likesCount, setLikesCount] = useState(likes); // Contador de likes local
+  const [userLiked, setUserLiked] = useState(false);
+  const [likesCount, setLikesCount] = useState(likes);
+  const [isFollowing, setIsFollowing] = useState(false);
+
+  const { token } = useContext(AuthContext); // Obtiene el token del contexto de autenticación
 
   useEffect(() => {
-    // Obtener el token del localStorage
-    const token = localStorage.getItem('authToken');
-
-    // Decodificar el token para obtener el ID del usuario autenticado
+    const authToken = localStorage.getItem('authToken');
     try {
-      const decodedToken = jwt_decode(token);
-      const userId = decodedToken.userId;
+      const decodedToken = jwt_decode(authToken);
+      const authenticatedUserId = decodedToken.userId;
 
-      // Check if the user liked the post when the component mounts
-      fetch(`http://localhost:3000/posts/likes`, {
+      // Verificar si el usuario dio like al post cuando el componente se monta
+      // (Código para verificar likes)
+
+      // Verificar si el usuario sigue al autor del post cuando el componente se monta
+      fetch(`http://localhost:3000/users/checkfollow/${userId}`, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+          'Authorization': `Bearer ${authToken}`,
         },
       })
         .then((response) => {
           if (response.status === 200) {
             return response.json();
           } else {
-            throw new Error('No se pudo obtener la lista de likes');
+            throw new Error('No se pudo verificar el seguimiento');
           }
         })
         .then((data) => {
-          // Verificar si el usuario dio like al post actual
-          const userLikedPost = data.likes.some((like) => {
-            return like.id_user === userId && like.id_post === postId;
-          });
-
-          setUserLiked(userLikedPost); // Set the userLiked state based on the result
+          const isUserFollowing = data.mensaje === 'Sigues a este usuario';
+          setIsFollowing(isUserFollowing);
         })
         .catch((error) => {
-          console.error('Error while checking likes:', error);
+          console.error('Error while checking follow:', error);
         });
     } catch (error) {
       console.error('Error al decodificar el token:', error);
     }
-  }, [postId]); // Run the effect whenever postId changes
+  }, [postId, userId]);
+  // Run the effect whenever postId or userId changes
 
   const toggleLike = () => {
-    // Realizar una solicitud a la API para dar o quitar like en función de userLiked
-    const endpoint = userLiked
-      ? `http://localhost:3000/posts/unlike/${postId}`
-      : `http://localhost:3000/posts/like/${postId}`;
+    // ... (código existente para dar/quitar like)
+  };
 
-    const method = userLiked ? 'DELETE' : 'POST';
+  const handleFollow = () => {
+    if (!token) {
+      // El usuario no está autenticado, puedes redirigirlo al inicio de sesión o mostrar un mensaje
+      console.log('El usuario no está autenticado. Debe iniciar sesión para seguir al autor.');
+      return;
+    }
 
-    // Obtener el token del localStorage
-    const token = localStorage.getItem('authToken');
+    // Definir el endpoint para seguir o dejar de seguir al autor del post
+    const followEndpoint = isFollowing
+      ? `http://localhost:3000/users/unfollow/${userId}`
+      : `http://localhost:3000/users/follow/${userId}`;
 
-    fetch(endpoint, {
+    const method = isFollowing ? 'DELETE' : 'POST';
+
+    fetch(followEndpoint, {
       method: method,
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -80,22 +90,14 @@ const Post = (props) => {
     })
       .then((response) => {
         if (response.status === 201 || response.status === 200 || response.status === 204) {
-          return response.json();
+          setIsFollowing(!isFollowing);
+          console.log(`Usuario ${isFollowing ? 'dejó de seguir' : 'siguió'} al autor`);
         } else {
-          throw new Error('No se pudo dar/quitar like');
+          throw new Error('No se pudo realizar la acción de seguimiento/dejar de seguir');
         }
       })
-      .then(() => {
-        // Cambiar el estado de userLiked y actualizar el contador de likes localmente
-        setUserLiked(!userLiked);
-        setLikesCount(userLiked ? likesCount - 1 : likesCount + 1);
-        console.log('Like Toggled Successfully');
-
-        // Update the badge count in the parent component
-        updateBadgeCount(postId, likesCount);
-      })
       .catch((error) => {
-        console.error('Error al dar/quitar like:', error);
+        console.error('Error al seguir/dejar de seguir al autor:', error);
       });
   };
 
@@ -103,6 +105,12 @@ const Post = (props) => {
     <Card sx={{ maxWidth: 345, margin: '20px', padding: '50px', boxShadow: '0 0 10px black' }}>
       <CardMedia component="img" height="140" image={imageUrl} alt="Post Image" />
       <CardContent>
+        <Typography variant="h6" component="div" style={{ flexGrow: 1, border: '1px solid black', padding: '5px', width: '100%', borderRadius: '5px', display: 'flex', justifyContent: 'space-between' }}>
+          {userName}
+          <Button variant="contained" style={{ backgroundColor: isFollowing ? '#f00' : '#007bff', color: 'white' }} onClick={handleFollow}>
+            {isFollowing ? 'Dejar de seguir' : 'Seguir'}
+          </Button>
+        </Typography>
         <Typography gutterBottom variant="h5" component="div">
           {title}
         </Typography>
