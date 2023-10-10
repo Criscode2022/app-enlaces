@@ -15,41 +15,42 @@ const generateError = require('../../utils/generateError');
 
 // Función controladora final para actualizar el usuario.
 
-const updateUser = async (req, res, next) => {
+const updateUserController = async (req, res, next) => {
+    const id = req.auth.user;
     try {
         //Insertamos los datos que quiere actualizar
         // Actualizar la biografía si se proporciona.
         if (biography) {
             const newBiography =
                 'UPDATE users SET biography_user = ? WHERE id_user = ?';
-            await pool.query(newBiography, [biography, id_user]);
+            await pool.query(newBiography, [biography, id]);
         }
 
         // Actualizar el avatar si se proporciona.
         if (avatar) {
             const newAvatar =
                 'UPDATE users SET avatar_user = ? WHERE id_user = ?';
-            await pool.query(newAvatar, [avatar, id_user]);
+            await pool.query(newAvatar, [avatar, id]);
         }
 
         // Actualizar el nombre de usuario si se proporciona.
         if (userName) {
             const newUserName =
                 'UPDATE users SET name_user = ? WHERE id_user = ?';
-            await pool.query(newUserName, [newUsername, id_user]);
+            await pool.query(newUserName, [newUsername, id]);
         }
 
         // Actualizar la contraseña si se proporciona.
         if (password) {
             const newPassword =
                 'UPDATE users SET password_user = ? WHERE id_user = ?';
-            await pool.query(newPassword, [password, id_user]);
+            await pool.query(newPassword, [password, id]);
         }
         // Validamos los datos que envía el usuario.
         await validateSchema(updateUserSchema, req.body);
 
         //Obtenemos los datos que nos interesan
-        const { biography, avatar, newUsername, password, id_user } = req.body;
+        const { biography, avatar, newUsername, password } = req.body;
 
         // Comprobamos si existe un usuario con el mismo nombre.
         const [users] = await pool.query(

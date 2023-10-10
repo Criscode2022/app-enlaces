@@ -2,7 +2,7 @@
 
 const Joi = require('joi');
 
-const updateUsersSchema = Joi.object({
+const updateUserSchema = Joi.object({
     biography: Joi.string().max(200),
     avatar: Joi.string().uri(),
     newUsername: Joi.string().min(3).max(30),
