@@ -30,10 +30,8 @@ const Post = (props) => {
   const { token } = useContext(AuthContext); // Obtiene el token del contexto de autenticación
 
   useEffect(() => {
-    const authToken = localStorage.getItem('authToken');
     try {
-      const decodedToken = jwt_decode(authToken);
-      const authenticatedUserId = decodedToken.userId;
+      const decodedToken = jwt_decode(token);
 
       // Verificar si el usuario dio like al post cuando el componente se monta
       // (Código para verificar likes)
@@ -41,7 +39,7 @@ const Post = (props) => {
       // Verificar si el usuario sigue al autor del post cuando el componente se monta
       fetch(`http://localhost:3000/users/checkfollow/${userId}`, {
         headers: {
-          'Authorization': `Bearer ${authToken}`,
+          'Authorization': `Bearer ${token}`,
         },
       })
         .then((response) => {
@@ -61,11 +59,44 @@ const Post = (props) => {
     } catch (error) {
       console.error('Error al decodificar el token:', error);
     }
-  }, [postId, userId]);
-  // Run the effect whenever postId or userId changes
+  }, [postId, userId, token]);
 
   const toggleLike = () => {
-    // ... (código existente para dar/quitar like)
+    // Realizar una solicitud a la API para dar o quitar like en función de userLiked
+    const endpoint = userLiked
+      ? `http://localhost:3000/posts/unlike/${postId}`
+      : `http://localhost:3000/posts/like/${postId}`;
+
+    const method = userLiked ? 'DELETE' : 'POST';
+
+    // Obtener el token del localStorage
+    const token = localStorage.getItem('authToken');
+
+    fetch(endpoint, {
+      method: method,
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    })
+      .then((response) => {
+        if (response.status === 201 || response.status === 200 || response.status === 204) {
+          return response.json();
+        } else {
+          throw new Error('No se pudo dar/quitar like');
+        }
+      })
+      .then(() => {
+        // Cambiar el estado de userLiked y actualizar el contador de likes localmente
+        setUserLiked(!userLiked);
+        setLikesCount(userLiked ? likesCount - 1 : likesCount + 1);
+        console.log('Like Toggled Successfully');
+
+        // Update the badge count in the parent component
+        updateBadgeCount(postId, likesCount);
+      })
+      .catch((error) => {
+        console.error('Error al dar/quitar like:', error);
+      });
   };
 
   const handleFollow = () => {
