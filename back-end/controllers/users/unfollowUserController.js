@@ -1,43 +1,31 @@
 const pool = require('../../db/db');
-const jwt = require('jsonwebtoken');
-const express = require('express');
-const router = express.Router();
-const Joi = require('joi');
+const generateError = require('../../utils/generateError');
 
 async function unfollowUserController(req, res, next) {
-    const id = req.auth.user;
-    const { userUnfollow } = req.params;
-
     try {
-        // Consulta para verificar si el usuario ya está siguiendo al usuario deseado
-        const checkQuery = 'SELECT following_user FROM users WHERE id_user = ?';
-        const [checkResults] = await pool.query(checkQuery, [id]);
+        const id = req.auth.user;
+        const { userUnfollow } = req.params;
 
-        const followingUserList = checkResults[0].following_user || '';
-        const followingUserArray = followingUserList
-            .split(',')
-            .map((userId) => parseInt(userId));
+        // Verificar si existe un "follow" antes de eliminarlo
+        const existingFollow = await pool.query(
+            'SELECT id_follow FROM follows WHERE id_user = ? AND id_user_following = ?',
+            [id, userUnfollow]
+        );
 
-        if (!followingUserArray.includes(parseInt(userUnfollow))) {
-            return res.status(400).json({ error: 'No sigues a este usuario' });
+        if (existingFollow[0].length === 0) {
+            // Si no existe un "follow" para eliminar, responder con un mensaje de error 404
+            generateError('No existe un seguimiento para eliminar', 404);
         }
 
-        // Consulta para actualizar la lista de usuarios seguidos
-        const updatedFollowingUserList = followingUserArray
-            .filter((userId) => userId !== parseInt(userUnfollow))
-            .join(',');
+        // Eliminar el "follow" si existe
+        await pool.query(
+            'DELETE FROM follows WHERE id_user = ? AND id_user_following = ?',
+            [id, userUnfollow]
+        );
 
-        const updateQuery =
-            'UPDATE users SET following_user = ? WHERE id_user = ?';
-
-        await pool.query(updateQuery, [updatedFollowingUserList, id]);
-
-        return res.status(200).json({
-            message: 'Usuario dejado de seguir con éxito: ' + userUnfollow,
-            siguiendo: updatedFollowingUserList,
-        });
-    } catch (error) {
-        return next(error);
+        res.json({ mensaje: 'Seguimiento eliminado exitosamente' });
+    } catch (err) {
+        next(err);
     }
 }
 
