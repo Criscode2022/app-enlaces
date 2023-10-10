@@ -20,7 +20,7 @@ La aplicación no contempla usuarios anónimos: todos deben registrarse para pod
 ## Entidades:
 
 users:
-- id_user 
+- id_user **PK**
 - name_user 
 - password_
 - following_user 
@@ -29,8 +29,8 @@ users:
 - created_at 
 
 posts:
-- id_post 
-- id_user 
+- id_post **PK**
+- id_user **FK**
 - post_img 
 - post_url 
 - post_title 
@@ -38,9 +38,14 @@ posts:
 - created_at 
 
 likes:
-- id_like
-- id_user
-- id_post
+- id_like **PK**
+- id_user **FK** 
+- id_post **FK**
+
+follows:
+- id_follow **PK**
+- id_user **FK**
+- id_user_following **FK**
 
 
 ## Lista de endpoints:
