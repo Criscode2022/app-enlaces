@@ -2,23 +2,58 @@
 
 
 ## Descripción:
+
+
 Esta aplicación ofrece al usuario el acceso, previo registro siempre, a una plataforma en la que se comparten enlaces de interés. El usuario puede publicar sus propios enlaces y seguir los de los demás, señalando cuáles les han gustado con un botón de like.
 La aplicación no contempla usuarios anónimos: todos deben registrarse para poder acceder a la plataforma. El registro consta de 3 campos: una imagen de avatar (opcional), un nombre de usuario y una contraseña (obligatorios). Estos campos podrán ser modificados previamente. El usuario podrá acceder a todo el listado de enlaces publicados. Para publicar sus propios enlaces, interacturará con una 'pop-up' en la que llenará un formulario con los campos de la URL del enlace, un título y una breve descripción de su publicación.
 
+
 ## Pasos para arrancar el proyecto:
-La primera tarea fue implementar la estructura del servidor y la conexión a la base de datos como punto de partida. Posteriormente, se fueron añadiendo los middlewares correspondientes (parseo de body de las peticiones, gestión de errores, etc), así como la gestión de los distintos endpoints de la aplicación con los controllers de las peticiones.
-Lo siguiente fue crear la estructura inicial de carpetas de React para la parte Front-end. Se implementaron las rutas de usuario, los componentes a utilizar de manera modular, un Header de base en el Layout y las distintas páginas de destino.
+
+- Crear una base de datos vacía en una instancia de MySQL local.
+- Guardar el archivo '.env.example' como '.env' y cubrir los datos necesarios.
+- Ejecutar el script SQL ('./script-BBDD.sql') en la base de datos vacía para inicializarla.
+- Ejecutar el comando 'npm i' en consola para instalar las dependencias necesarias.
+- Arrancar el servidor.
+
+
+## Entidades:
+
+users:
+- id_user 
+- name_user 
+- password_
+- following_user 
+- biography_user 
+- avatar_user 
+- created_at 
+
+posts:
+- id_post 
+- id_user 
+- post_img 
+- post_url 
+- post_title 
+- post_description 
+- created_at 
+
+likes:
+- id_like
+- id_user
+- id_post
+
 
 ## Lista de endpoints:
-- GET / : Página inicial del servidor.
-- GET /users : Muestra el listado de usuarios registrados.
-- GET /posts : Mostrar el listado de enlaces publicados.
-- GET /posts/:postId/likeCount : Obtener contador de likes de un post específico.
-- POST /posts/like/:postId : Dar like a una publicación.
-- POST /users/register : Registrar nuevo usuario.
-- POST /users/login : Iniciar sesión de usuario.
-- POST /users/unregister : Eliminar usuario de la base de datos.
-- POST /users/verify : Verificar usuario autenticado.
-- PUT /users/follow/:userFollow : Seguir a otro usuario.
-- PUT /update/ : Actualizar nombre de usuario, biografía, contraseña o avatar.
-- DELETE /posts/: postId : Eliminar una publicación.
+
+Rutas de publicaciones (todas requieren autenticación):
+- GET /posts => Obtener todos los enlaces publicados.
+- GET /posts/likes => Obtener todos los enlaces con like.
+- POST /posts/like/:postId => Dar like a una publicación.
+- POST /posts/newPost => Crear nueva publicación.
+- DELETE /posts/unlike/:postId => Eliminar el like de una publicación.
+- DELETE /posts/:postId => Eliminar publicación.
+  
+Rutas de usuario:
+- POST /users/register => Registro de usuario.
+- POST /users/login => Logueo de usuario.
+- PUT  /users/follow/:userFollow => Seguir a un usuario (requiere autenticación).

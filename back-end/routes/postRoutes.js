@@ -13,7 +13,6 @@ const {
 } = require('../controllers/posts');
 
 // Aquí irían el resto de enpoints de posts.
-routes.delete('/posts/:postId', deletePostController);
 
 routes.get('/posts', getPostsController);
 routes.post('/posts/like/:postId', likePostController);
