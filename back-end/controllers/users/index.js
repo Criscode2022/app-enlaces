@@ -4,6 +4,7 @@ const followUserController = require('./followUserController');
 const unfollowUserController = require('./unfollowUserController');
 const checkFollowController = require('./checkFollowController');
 const getFollowingUsersController = require('./getFollowingUsersController');
+const getUserByIdController = require('./getUserByIdController');
 
 module.exports = {
     newUserController,
@@ -12,4 +13,5 @@ module.exports = {
     checkFollowController,
     followUserController,
     unfollowUserController,
+    getUserByIdController
 };
