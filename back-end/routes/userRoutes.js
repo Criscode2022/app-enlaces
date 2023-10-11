@@ -5,6 +5,7 @@ const routes = express.Router();
 const {
     checkFollowController,
     newUserController,
+    getFollowingUsersController,
     followUserController,
     loginUserController,
     unfollowUserController,
@@ -23,6 +24,10 @@ routes.post('/users/login', loginUserController);
 // Follow de usuario.
 
 routes.post('/users/follow/:userFollow', followUserController);
+
+//Ver usuarios que sigue el usuario logueado.
+
+routes.get('/users/following', getFollowingUsersController);
 
 // Unfollow de usuario.
 
