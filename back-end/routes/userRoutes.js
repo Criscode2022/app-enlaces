@@ -20,7 +20,7 @@ const {
 routes.get('/users/checkfollow/:userFollow', checkFollowController);
 
 //Obtener información de un usuario por parámetro id:
-routes.get('/users/:userId', getUserByIdController);
+routes.get('/users/:userId', authenticateToken, getUserByIdController);
 
 // Registro de usuario.
 routes.post('/users/register', newUserController);
