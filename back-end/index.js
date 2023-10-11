@@ -9,7 +9,6 @@ const cors = require('cors');
 const routes = require('./routes');
 
 //Importamos los controladores
-
 const authenticateToken = require('./utils/authenticateToken');
 
 // Creamos el servidor.
@@ -21,7 +20,6 @@ app.use(cors());
 //Middleware para proteger las rutas '/posts' con JWT
 
 app.use('/posts', authenticateToken);
-
 app.use('/users/follow', authenticateToken);
 app.use('/users/unfollow', authenticateToken);
 app.use('/users/update', authenticateToken);

@@ -80,5 +80,4 @@ const updateUserController = async (req, res, next) => {
         next(err);
     }
 };
-
 module.exports = updateUserController;

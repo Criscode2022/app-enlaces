@@ -1,7 +1,6 @@
 // Define un esquema de validación para la actualización de usuario.
 
 const Joi = require('joi');
-
 const updateUserSchema = Joi.object({
     biography: Joi.string().max(200),
     avatar: Joi.string().uri(),
@@ -10,5 +9,4 @@ const updateUserSchema = Joi.object({
         .pattern(new RegExp('^[a-zA-Z0-9]{3,20}$'))
         .required(),
 });
-
 module.exports = updateUserSchema;
