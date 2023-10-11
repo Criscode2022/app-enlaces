@@ -2,6 +2,8 @@ import { useState } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import jwt_decode from "jwt-decode";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function NewPostForm() {
   // Obtener el token del Local Storage
@@ -47,7 +49,9 @@ function NewPostForm() {
 
       console.log("Respuesta del servidor:", responseData); // Verificar la respuesta del servidor
 
-      alert("Enlace creado exitosamente");
+      toast.success("Enlace creado correctamente", {
+        position: toast.POSITION.TOP_CENTER
+      })
     } catch (error) {
       console.error("Error al crear el enlace:", error);
     }
@@ -79,6 +83,9 @@ function NewPostForm() {
         />
         <Button type="submit">Crear Enlace</Button>
       </form>
+
+      <ToastContainer />
+
     </div>
   );
 }
