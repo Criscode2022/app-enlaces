@@ -1,6 +1,9 @@
 const express = require('express');
 const routes = express.Router();
 
+// Importamos las funciones controladoras intermedias.
+const authenticateToken = require('../middlewares/authenticateToken');
+
 // Importamos las funciones controladoras finales.
 const {
     checkFollowController,
@@ -11,10 +14,6 @@ const {
     unfollowUserController,
 } = require('../controllers/users');
 
-//Check follow de usuario.
-
-routes.get('/users/checkfollow/:userFollow', checkFollowController);
-
 // Registro de usuario.
 routes.post('/users/register', newUserController);
 
@@ -22,15 +21,27 @@ routes.post('/users/register', newUserController);
 routes.post('/users/login', loginUserController);
 
 // Follow de usuario.
-
-routes.post('/users/follow/:userFollow', followUserController);
-
-//Ver usuarios que sigue el usuario logueado.
-
-routes.get('/users/following', getFollowingUsersController);
+routes.post(
+    '/users/follow/:userFollow',
+    authenticateToken,
+    followUserController
+);
 
 // Unfollow de usuario.
+routes.delete(
+    '/users/unfollow/:userUnfollow',
+    authenticateToken,
+    unfollowUserController
+);
 
-routes.delete('/users/unfollow/:userUnfollow', unfollowUserController);
+// Ver usuarios que sigue el usuario logueado.
+routes.get('/users/following', authenticateToken, getFollowingUsersController);
+
+// Check follow de usuario.
+routes.get(
+    '/users/checkfollow/:userFollow',
+    authenticateToken,
+    checkFollowController
+);
 
 module.exports = routes;

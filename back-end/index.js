@@ -8,24 +8,11 @@ const cors = require('cors');
 // Importamos las rutas.
 const routes = require('./routes');
 
-//Importamos los controladores
-
-const authenticateToken = require('./utils/authenticateToken');
-
 // Creamos el servidor.
 const app = express();
 
 // Middleware que evita problemas de conexión con el cliente.
 app.use(cors());
-
-//Middleware para proteger las rutas '/posts' con JWT
-
-app.use('/posts', authenticateToken);
-
-app.use('/users/follow', authenticateToken);
-app.use('/users/following', authenticateToken);
-app.use('/users/unfollow', authenticateToken);
-app.use('/users/checkfollow', authenticateToken);
 
 // Middleware que permite recibir datos en formato JSON.
 app.use(express.json());
