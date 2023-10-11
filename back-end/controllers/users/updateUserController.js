@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 const pool = require('../../db/db');
 
 // Importamos el esquema de Joi.
-const updateUserSchema = require('../../schemas/users_updates/updatesUserSchema');
+const updateUserSchema = require('../../schemas/users/updateUserSchema');
 
 // Importamos la función que se encargará de validar el esquema.
 const validateSchema = require('../../utils/validateSchema');
@@ -15,7 +15,10 @@ const generateError = require('../../utils/generateError');
 
 // Función controladora final para actualizar el usuario.
 
+// Función controladora final para actualizar el usuario.
 const updateUserController = async (req, res, next) => {
+    //Obtenemos los datos que nos interesan
+    const { biography, avatar, newUsername, newPassword } = req.body;
     const id = req.auth.user;
     try {
         //Insertamos los datos que quiere actualizar
@@ -34,41 +37,38 @@ const updateUserController = async (req, res, next) => {
         }
 
         // Actualizar el nombre de usuario si se proporciona.
-        if (userName) {
-            const newUserName =
+        if (newUsername) {
+            const newUsername =
                 'UPDATE users SET name_user = ? WHERE id_user = ?';
-            await pool.query(newUserName, [newUsername, id]);
+            await pool.query(newUsername, [newUsername, id]);
         }
 
         // Actualizar la contraseña si se proporciona.
-        if (password) {
+        if (newPassword) {
             const newPassword =
                 'UPDATE users SET password_user = ? WHERE id_user = ?';
-            await pool.query(newPassword, [password, id]);
+            await pool.query(newPassword, [newPassword, id]);
         }
         // Validamos los datos que envía el usuario.
         await validateSchema(updateUserSchema, req.body);
 
-        //Obtenemos los datos que nos interesan
-        const { biography, avatar, newUsername, password } = req.body;
-
         // Comprobamos si existe un usuario con el mismo nombre.
         const [users] = await pool.query(
             'SELECT id_user FROM users WHERE name_user = ?',
-            [username]
+            [newUsername]
         );
 
         // Si existe, lanzamos un error.
         if (users.length > 0) {
             generateError('Ya existe un usuario con ese nombre', 409);
         }
-        // Encriptamos la contraseña 
-        const hashedPassword = await bcrypt.hash(password, 10);
+        // Encriptamos la contraseña
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
 
         // Insertamos el usuario.
         await pool.query(
             'INSERT INTO users (name_user, password_user) VALUES (?, ?)',
-            [username, hashedPassword]
+            [newUsername, hashedPassword]
         );
 
         //Enviamos una respuesta al cliente.
@@ -76,7 +76,7 @@ const updateUserController = async (req, res, next) => {
             status: 'ok',
             message: 'Usuario actualizado correctamente',
         });
-    } catch (error) {
+    } catch (err) {
         next(err);
     }
 };
