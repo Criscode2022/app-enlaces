@@ -8,7 +8,6 @@ CREATE TABLE users (
   id_user INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   name_user varchar(50) NOT NULL UNIQUE,
   password_user varchar(200) NOT NULL,
-  following_user varchar (300), 
   biography_user tinytext,
   avatar_user varchar(100),
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
@@ -46,7 +45,8 @@ CREATE TABLE follows (
   id_user_following INT NOT NULL,
   FOREIGN KEY (id_user) REFERENCES users (id_user),
   FOREIGN KEY (id_user_following) REFERENCES users (id_user),
-  UNIQUE KEY unique_user_following (id_user, id_user_following)
+  UNIQUE KEY unique_user_following (id_user, id_user_following),
+  CHECK (id_user <> id_user_following)
 );
 
 
@@ -121,10 +121,14 @@ INNER JOIN likes l ON p.id_post = l.id_post
 GROUP BY p.id_post, p.post_title;
 
 
---  Comprobar a quien sigue un usuario --
-
-SELECT following_user FROM users WHERE id_user = 6;
+--  Ver todos los follows --
 
 select * from follows;
 
-SELECT id_follow FROM follows WHERE id_user = 6 AND id_user_following = 3;
+-- Ver a quién sigue un usuario --
+
+select id_user_following from follows
+where id_user = 5;
+
+
+
