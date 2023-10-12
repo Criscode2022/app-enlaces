@@ -1,12 +1,16 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Logo from "../assets/Logo.png";
-import PersonIcon from "@mui/icons-material/Person";
 import Button from "@mui/material/Button";
-import LogoutButton from './../components/Forms/LogoutForm';
+import LogoutButton from "../components/Forms/LogoutForm";
+import { AuthContext } from "../context/AuthContext";
+import PersonIcon from "@mui/icons-material/Person";
+
 
 const Header = () => {
+  const { isAuthenticated } = useContext(AuthContext);
+
   return (
     <StyledHeader>
       <Link to="/">
@@ -16,27 +20,25 @@ const Header = () => {
       </Link>
 
       <nav>
+        {!isAuthenticated ? (
+          <>
+            <Link to="/login">
+              <Button variant="contained">Iniciar sesión</Button>
+            </Link>
+            <Link to="/register">
+              <Button variant="contained">Registrarse</Button>
+            </Link>
+          </>
+        ) : (
+          <Link to="/newPost">
+            <Button variant="contained">Crear enlace</Button>
+          </Link>
+        )}
 
-        <Link to="/login">
-          <Button variant="contained">Iniciar sesión</Button>
-        </Link>
-        <Link to="/register">
-          <Button variant="contained">Registrarse</Button>
-        </Link>
-
-        <Link to="/newPost">
-          <Button variant="contained">Crear enlace</Button>
-        </Link>
-
-        <LogoutButton></LogoutButton>
-
+        <LogoutButton />
       </nav>
 
       <ul>
-
-
-
-
         <li>
           <Icon>
             <CustomPersonIcon className="large-icon" />
@@ -46,6 +48,7 @@ const Header = () => {
     </StyledHeader>
   );
 };
+
 
 const StyledHeader = styled.header`
   padding: 0;
