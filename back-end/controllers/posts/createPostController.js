@@ -16,6 +16,7 @@ async function createPost(req, res, next) {
             url: Joi.string().uri().required(),
             titulo: Joi.string().required(),
             descripcion: Joi.string().required(),
+            image: Joi.string().required(),
         });
 
         const { error } = schema.validate(req.body);
@@ -24,10 +25,10 @@ async function createPost(req, res, next) {
         }
 
         // Crear el enlace en la base de datos
-        const { url, titulo, descripcion } = req.body;
+        const { url, titulo, descripcion, image } = req.body;
         const query =
-            'INSERT INTO posts (id_user, post_url, post_title, post_description) VALUES (?, ?, ?, ?)';
-        await pool.query(query, [id, url, titulo, descripcion]);
+            'INSERT INTO posts (id_user, post_url, post_title, post_description, post_img) VALUES (?, ?, ?, ?, ?)';
+        await pool.query(query, [id, url, titulo, descripcion, image]);
 
         // Respuesta exitosa
         res.status(201).json({ message: 'Enlace creado con éxito' });

@@ -15,9 +15,6 @@ const {
     getUserByIdController,
 } = require('../controllers/users');
 
-//Obtener información de un usuario por parámetro id:
-routes.get('/users/:userId', authenticateToken, getUserByIdController);
-
 // Registro de usuario.
 routes.post('/users/register', newUserController);
 
@@ -47,5 +44,8 @@ routes.get(
     authenticateToken,
     checkFollowController
 );
+
+//Obtener información de un usuario por parámetro id:
+routes.get('/users/:userId', authenticateToken, getUserByIdController);
 
 module.exports = routes;
