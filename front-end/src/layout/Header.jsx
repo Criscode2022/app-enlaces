@@ -86,10 +86,8 @@ const StyledHeader = styled.header`
   nav {
 
     display:flex;
-    justify-content: space-around;
-    width: 60%;
-    max-width: 100%;
-    margin-left:30%;
+
+    width: 100%;
 
 
 

@@ -58,7 +58,7 @@ function NewPostForm() {
   };
 
   return (
-    <div>
+    <>
       <form onSubmit={handleSubmit}>
         <TextField
           required
@@ -81,12 +81,12 @@ function NewPostForm() {
           value={postData.descripcion}
           onChange={handleInputChange}
         />
-        <Button type="submit">Crear Enlace</Button>
+        <Button type="submit" variant="contained">Crear Enlace</Button>
       </form>
 
       <ToastContainer />
 
-    </div>
+    </>
   );
 }
 
