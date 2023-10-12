@@ -1,7 +1,6 @@
 import { useState } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import jwt_decode from "jwt-decode";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -13,6 +12,7 @@ function NewPostForm() {
     url: "",
     titulo: "",
     descripcion: "",
+    image: "",
   });
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -79,6 +79,13 @@ function NewPostForm() {
           label="Descripción"
           name="descripcion"
           value={postData.descripcion}
+          onChange={handleInputChange}
+        />
+        <TextField
+          required
+          label="Url de la imagen"
+          name="image"
+          value={postData.image}
           onChange={handleInputChange}
         />
         <Button type="submit">Crear Enlace</Button>
