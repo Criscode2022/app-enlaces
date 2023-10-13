@@ -9,11 +9,15 @@ import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlin
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import jwt_decode from 'jwt-decode';
 import { AuthContext } from '../context/AuthContext';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const Post = (props) => {
   const {
     imageUrl,
     title,
+    onDelete,
     userName,
     content,
     url,
@@ -85,7 +89,7 @@ const Post = (props) => {
     } catch (error) {
       console.error('Error al decodificar el token:', error);
     }
-  }, [postId]); // Run the effect whenever postId changes
+  }, [postId, token, userId]); // Run the effect whenever postId changes
 
   const toggleLike = () => {
     // Realizar una solicitud a la API para dar o quitar like en función de userLiked
@@ -161,16 +165,22 @@ const Post = (props) => {
   const handleDelete = () => {
     if (window.confirm('Are you sure you want to delete this post?')) {
       // Make a DELETE request to your API endpoint here
-      fetch(`http://localhost:3000/posts/${postId}`, {
+      fetch(`http://localhost:3000/posts/delete/${postId}`, {
         method: 'DELETE',
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+          Authorization: `Bearer ${token}`,
         },
       })
         .then((response) => {
-          if (response.status === 204) {
-            // Remove the post from the UI
-            // You can implement this part in the parent component
+          console.log('Response status:', response.status); // Log the response status
+
+          if (response.status === 200) {
+            // The post was deleted successfully, call the onDelete function
+            onDelete(postId);
+            console.log('Post deleted successfully');
+            toast.success("Enlace eliminado correctamente", {
+              position: toast.POSITION.TOP_CENTER
+            })
           } else {
             console.error('Failed to delete the post');
           }
@@ -181,37 +191,42 @@ const Post = (props) => {
     }
   };
 
+
+
   return (
-    <Card sx={{ maxWidth: 345, margin: '20px', padding: '50px', boxShadow: '0 0 10px black' }}>
-      <CardMedia component="img" height="140" image={imageUrl} alt="Post Image" />
-      <CardContent>
-        <Typography variant="h6" component="div" style={{ flexGrow: 1, border: '1px solid black', padding: '5px', width: '100%', borderRadius: '5px', display: 'flex', justifyContent: 'space-between' }}>
-          {userName}
-          <Button variant="contained" style={{ backgroundColor: isFollowing ? '#f00' : '#007bff', color: 'white' }} onClick={handleFollow}>
-            {isFollowing ? 'Dejar de seguir' : 'Seguir'}
+    <>
+      <Card sx={{ maxWidth: 345, margin: '20px', padding: '50px', boxShadow: '0 0 10px black' }}>
+        <CardMedia component="img" height="140" image={imageUrl} alt="Post Image" />
+        <CardContent>
+          <Typography variant="h6" component="div" style={{ flexGrow: 1, border: '1px solid black', padding: '5px', width: '100%', borderRadius: '5px', display: 'flex', justifyContent: 'space-between' }}>
+            {userName}
+            <Button variant="contained" style={{ backgroundColor: isFollowing ? '#f00' : '#007bff', color: 'white' }} onClick={handleFollow}>
+              {isFollowing ? 'Dejar de seguir' : 'Seguir'}
+            </Button>
+          </Typography>
+          <Typography gutterBottom variant="h5" component="div">
+            {title}
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            {content}
+          </Typography>
+          <Button variant="contained" href={url} target="_blank" fullWidth>
+            Visitar
           </Button>
-        </Typography>
-        <Typography gutterBottom variant="h5" component="div">
-          {title}
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          {content}
-        </Typography>
-        <Button variant="contained" href={url} target="_blank" fullWidth>
-          Visitar
-        </Button>
-        <Badge badgeContent={likesCount} color="primary">
-          <Button onClick={toggleLike} variant="outlined" style={{ color: userLiked ? 'red' : 'black' }}>
-            {userLiked ? <FavoriteIcon /> : <FavoriteBorderOutlinedIcon />}
-          </Button>
-        </Badge>
-        {isLoggedUserPost && (
-          <Button variant="contained" style={{ backgroundColor: 'red', color: 'white' }} onClick={handleDelete}>
-            Delete
-          </Button>
-        )}
-      </CardContent>
-    </Card>
+          <Badge badgeContent={likesCount} color="primary">
+            <Button onClick={toggleLike} variant="outlined" style={{ color: userLiked ? 'red' : 'black' }}>
+              {userLiked ? <FavoriteIcon /> : <FavoriteBorderOutlinedIcon />}
+            </Button>
+          </Badge>
+          {isLoggedUserPost && (
+            <Button variant="contained" style={{ backgroundColor: 'red', color: 'white' }} onClick={handleDelete}>
+              <DeleteIcon></DeleteIcon> </Button>
+          )}
+        </CardContent>
+      </Card>
+      <ToastContainer />
+
+    </>
   );
 }
 

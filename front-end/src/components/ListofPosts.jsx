@@ -43,6 +43,11 @@ const ListofPosts = () => {
     }));
   };
 
+  const handleDeletePost = (postId) => {
+    // Remove the deleted post from the postsData state
+    setPostsData(postsData.filter((post) => post.id_post !== postId));
+  };
+
   return (
     <>
       <h2>Enlaces</h2>
@@ -57,6 +62,7 @@ const ListofPosts = () => {
             imageUrl={post.post_img}
             postId={post.id_post}
             userId={post.id_user}
+            onDelete={handleDeletePost}
             userName={post.name_user}
             likes={post.like_count}
             updateBadgeCount={updateBadgeCount} // Pass the callback function
