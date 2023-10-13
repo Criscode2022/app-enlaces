@@ -24,7 +24,7 @@ CREATE TABLE posts (
   post_title varchar(30) NOT NULL,
   post_description varchar(200) NOT NULL,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (id_user) REFERENCES users (id_user)
+  FOREIGN KEY (id_user) REFERENCES users (id_user) ON DELETE CASCADE
 );
 
 
@@ -33,7 +33,7 @@ id_like INT auto_increment primary key,
 id_user INT NOT NULL,
 id_post INT NOT NULL,
 FOREIGN KEY (id_user) REFERENCES users (id_user),
-FOREIGN KEY (id_post) REFERENCES posts (id_post),
+FOREIGN KEY (id_post) REFERENCES posts (id_post) ON DELETE CASCADE,
 UNIQUE KEY unique_user_post (id_user, id_post)
 
 );
@@ -75,7 +75,7 @@ INSERT INTO likes (id_user, id_post) values (3, 3);
 
 -- Ver todos los usuarios --
 
-select * from users;
+select * from users where id_user = 6;
 
 -- Ver todos los posts --
 
@@ -129,6 +129,4 @@ select * from follows;
 
 select id_user_following from follows
 where id_user = 5;
-
-
 
