@@ -22,6 +22,6 @@ routes.post('/posts/like/:postId', authenticateToken, likePostController);
 routes.get('/posts/likes', authenticateToken, getAllLikesController);
 routes.delete('/posts/unlike/:postId', authenticateToken, unlikePostController);
 routes.post('/posts/newPost', authenticateToken, createPost);
-routes.delete('/posts/:postId', authenticateToken, deletePostController);
+routes.delete('/posts/delete/:postId', authenticateToken, deletePostController);
 
 module.exports = routes;

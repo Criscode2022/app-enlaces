@@ -1,9 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Post from './Post';
+import { AuthContext } from '../context/AuthContext';
 
 const ListofPosts = () => {
   const [postsData, setPostsData] = useState([]);
   const [badgeCounts, setBadgeCounts] = useState({}); // Track badge counts by postId
+  const userIdLogged = useContext(AuthContext).userId;
+  console.log('userIdLogged', userIdLogged);
 
   useEffect(() => {
     // Realizar la solicitud HTTP para obtener los datos de localhost:3000/posts
@@ -57,6 +60,7 @@ const ListofPosts = () => {
             userName={post.name_user}
             likes={post.like_count}
             updateBadgeCount={updateBadgeCount} // Pass the callback function
+            isLoggedUserPost={post.id_user === userIdLogged}
           />
         ))}
       </div>

@@ -21,6 +21,7 @@ const Post = (props) => {
     userId,
     likes,
     updateBadgeCount, // Callback function from the parent component
+    isLoggedUserPost
   } = props;
 
   const [userLiked, setUserLiked] = useState(false); // Estado para saber si el usuario dio like al post
@@ -157,6 +158,29 @@ const Post = (props) => {
       });
   };
 
+  const handleDelete = () => {
+    if (window.confirm('Are you sure you want to delete this post?')) {
+      // Make a DELETE request to your API endpoint here
+      fetch(`http://localhost:3000/posts/${postId}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+        },
+      })
+        .then((response) => {
+          if (response.status === 204) {
+            // Remove the post from the UI
+            // You can implement this part in the parent component
+          } else {
+            console.error('Failed to delete the post');
+          }
+        })
+        .catch((error) => {
+          console.error('Error while deleting the post:', error);
+        });
+    }
+  };
+
   return (
     <Card sx={{ maxWidth: 345, margin: '20px', padding: '50px', boxShadow: '0 0 10px black' }}>
       <CardMedia component="img" height="140" image={imageUrl} alt="Post Image" />
@@ -181,9 +205,14 @@ const Post = (props) => {
             {userLiked ? <FavoriteIcon /> : <FavoriteBorderOutlinedIcon />}
           </Button>
         </Badge>
+        {isLoggedUserPost && (
+          <Button variant="contained" style={{ backgroundColor: 'red', color: 'white' }} onClick={handleDelete}>
+            Delete
+          </Button>
+        )}
       </CardContent>
     </Card>
   );
-};
+}
 
 export default Post;
