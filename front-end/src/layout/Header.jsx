@@ -6,6 +6,8 @@ import Button from "@mui/material/Button";
 import LogoutButton from "../components/Forms/LogoutForm";
 import { AuthContext } from "../context/AuthContext";
 import PersonIcon from "@mui/icons-material/Person";
+import AddIcon from '@mui/icons-material/Add';
+import IconButton from '@mui/material/IconButton';
 
 
 const Header = () => {
@@ -31,10 +33,9 @@ const Header = () => {
           </>
         ) : (
           <Link to="/newPost">
-            <Button variant="contained">Crear enlace</Button>
+            <IconButton id="add"><AddIcon /></IconButton>
           </Link>
         )}
-
         <LogoutButton />
       </nav>
 
@@ -62,6 +63,18 @@ const StyledHeader = styled.header`
     max-width: 300px;
     margin: 0;
   }
+
+  #add {
+    position:fixed;
+    right: 20px;
+    bottom: 20px;
+    background-color: blue;
+    color: white;
+    width: 70px;
+    height: 70px;
+    font-weight: bold;
+  }
+
 
   ul {
     display: flex;
