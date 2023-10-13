@@ -16,7 +16,7 @@ async function createPost(req, res, next) {
             url: Joi.string().uri().required(),
             titulo: Joi.string().required(),
             descripcion: Joi.string().required(),
-            image: Joi.string().required(),
+            image: Joi.string(),
         });
 
         const { error } = schema.validate(req.body);

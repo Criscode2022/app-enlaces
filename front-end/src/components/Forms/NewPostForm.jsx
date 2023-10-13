@@ -82,7 +82,6 @@ function NewPostForm() {
           onChange={handleInputChange}
         />
         <TextField
-          required
           label="Imagen del enlace"
           name="image"
           value={postData.image}
