@@ -81,6 +81,13 @@ function NewPostForm() {
           value={postData.descripcion}
           onChange={handleInputChange}
         />
+        <TextField
+          required
+          label="Imagen del enlace"
+          name="image"
+          value={postData.image}
+          onChange={handleInputChange}
+        />
         <Button type="submit" variant="contained">Crear Enlace</Button>
       </form>
 
