@@ -36,18 +36,19 @@ const updateUserController = async (req, res, next) => {
             await pool.query(newAvatar, [avatar, id]);
         }
 
-        // Actualizar el nombre de usuario si se proporciona.
         if (newUsername) {
-            const newUsername =
+            // Actualiza el nombre de usuario utilizando placeholders.
+            const newUsernameQuery =
                 'UPDATE users SET name_user = ? WHERE id_user = ?';
-            await pool.query(newUsername, [newUsername, id]);
+            await pool.query(newUsernameQuery, [newUsername, id]);
         }
 
         // Actualizar la contraseña si se proporciona.
         if (newPassword) {
-            const newPassword =
+            // Actualiza la contraseña utilizando placeholders.
+            const newPasswordQuery =
                 'UPDATE users SET password_user = ? WHERE id_user = ?';
-            await pool.query(newPassword, [newPassword, id]);
+            await pool.query(newPasswordQuery, [hashedPassword, id]);
         }
         // Validamos los datos que envía el usuario.
         await validateSchema(updateUserSchema, req.body);
