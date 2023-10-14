@@ -2,6 +2,7 @@
   color: white;
   background-color: rgb(162, 92, 228);
 }
+
 body {
   margin: 0;
 }
@@ -27,12 +28,14 @@ h2 {
   margin: 20px;
   font-size: 2.5rem;
   text-shadow: 0 0 10px black;
+  text-align: center;
 }
 
 #postsContainer {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   flex-wrap: wrap;
+  gap: 10px;
 }
 
 .container {
@@ -40,9 +43,26 @@ h2 {
   justify-content: center;
 }
 
-h2 {
-  text-align: center;
-  margin: 20px;
+.post {
+  width: 345px;
+  padding: 10px;
+}
+
+.post-author {
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.post-like-button.liked {
+  color: red;
+}
+
+.post-delete-button,
+.post-follow-button.unfollow {
+  background-color: red !important;
 }
 
 @media (max-width: 800px) {
