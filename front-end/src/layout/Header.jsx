@@ -8,10 +8,20 @@ import { AuthContext } from "../context/AuthContext";
 import PersonIcon from "@mui/icons-material/Person";
 import AddIcon from '@mui/icons-material/Add';
 import IconButton from '@mui/material/IconButton';
+import jwt_decode from "jwt-decode";
 
+import { useEffect, useState } from "react";
 
 const Header = () => {
-  const { isAuthenticated } = useContext(AuthContext);
+  const { token, isAuthenticated } = useContext(AuthContext);
+  const [userName, setUserName] = useState(null);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      const decodedToken = jwt_decode(token);
+      setUserName(decodedToken.userName);
+    }
+  }, [token, isAuthenticated]);
 
   return (
     <StyledHeader>
@@ -40,6 +50,8 @@ const Header = () => {
       </nav>
 
       <ul>
+        <li>          {isAuthenticated && <h3>¡Hola, {userName}!</h3>}
+        </li>
         <li>
           <Icon>
             <CustomPersonIcon className="large-icon" />
@@ -86,6 +98,12 @@ const StyledHeader = styled.header`
     right: 0;
   }
 
+  li:first-child {
+    position: relative;
+    top: 25px;
+    left:40px;
+  } 
+
   button {
     margin: 20px;
   }
@@ -114,6 +132,15 @@ const StyledHeader = styled.header`
     font-weight: bold;
     text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
   }
+
+  @media (max-width: 768px) {
+
+    li:first-child {
+display:none;
+
+  }
+
+
 `;
 
 const Icon = styled.div`

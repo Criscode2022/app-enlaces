@@ -11,6 +11,7 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(false);
     const [isAuthenticated, setIsAuthenticated] = useState(!!token);
     const [userId, setUserId] = useState(null);
+    const [userName, setUserName] = useState(null);
 
     useEffect(() => {
         setIsAuthenticated(!!token);
@@ -20,6 +21,7 @@ export const AuthProvider = ({ children }) => {
         try {
             const decodedToken = jwt_decode(token);
             const userIdLogged = decodedToken.userId;
+
             setUserId(userIdLogged);
         } catch (error) {
             console.error("Error al decodificar el token:", error);
@@ -40,6 +42,7 @@ export const AuthProvider = ({ children }) => {
             localStorage.setItem(TOKEN_KEY, token);
             setToken(token);
             setIsAuthenticated(true);
+            setUserName(username); // Set the user name on login
         } finally {
             setLoading(false);
         }
@@ -49,6 +52,7 @@ export const AuthProvider = ({ children }) => {
         localStorage.removeItem(TOKEN_KEY);
         setToken(null);
         setIsAuthenticated(false);
+        setUserName(null); // Clear the user name on logout
         setUserId(null); // Clear the user ID on logout
     };
 
@@ -62,7 +66,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ loading, token, isAuthenticated, userId, login, logout, register }}>
+        <AuthContext.Provider value={{ loading, token, isAuthenticated, userId, login, logout, register, userName }}>
             {children}
         </AuthContext.Provider>
     );

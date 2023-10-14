@@ -7,12 +7,13 @@ const ListofPosts = () => {
   const [badgeCounts, setBadgeCounts] = useState({}); // Track badge counts by postId
   const userIdLogged = useContext(AuthContext).userId;
   console.log('userIdLogged', userIdLogged);
+  const { token } = useContext(AuthContext);
 
   useEffect(() => {
     // Realizar la solicitud HTTP para obtener los datos de localhost:3000/posts
     fetch('http://localhost:3000/posts', {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+        Authorization: `Bearer ${token}`,
       },
     })
       .then((response) => response.json())

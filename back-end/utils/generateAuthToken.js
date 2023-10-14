@@ -5,10 +5,11 @@ const jwt = require('jsonwebtoken');
 const secretKey = process.env.JWT_SECRET;
 
 // Función para generar un token de autenticación.
-const generateAuthToken = (userId) => {
+const generateAuthToken = (userId, userName) => {
     // Define la información que deseas incluir en el token.
     const payload = {
         userId: userId,
+        userName: userName,
     };
 
     // Genera el token utilizando jwt.sign().

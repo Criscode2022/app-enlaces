@@ -65,7 +65,7 @@ h2 {
   background-color: red !important;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 768px) {
   form {
     width: 80%;
   }
