@@ -49,7 +49,7 @@ const loginUserController = async (req, res, next) => {
         }
 
         // Generamos un token de autenticación para el usuario.
-        const authToken = generateAuthToken(user.id_user);
+        const authToken = generateAuthToken(user.id_user, user.name_user);
 
         // Enviamos una respuesta al cliente con el token.
         res.json({
