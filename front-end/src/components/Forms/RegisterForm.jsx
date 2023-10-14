@@ -4,6 +4,7 @@ import { AuthContext } from '../../context/AuthContext';
 import { useContext } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Aside from '../aside/Aside';
 
 
 async function handleSubmit(e, auth) {
@@ -27,7 +28,7 @@ async function handleSubmit(e, auth) {
 const RegisterForm = () => {
   const auth = useContext(AuthContext);
   return (
-    <>
+    <div className='form-text'>
       <form onSubmit={(e) => handleSubmit(e, auth)}>
         <TextField required={true} label="Usuario" name="username" />
         <TextField required={true} label="Contraseña" type="password" name="password" />
@@ -36,8 +37,8 @@ const RegisterForm = () => {
         </Button>
       </form>
       <ToastContainer />
-
-    </>
+      <Aside />
+    </div>
   );
 };
 

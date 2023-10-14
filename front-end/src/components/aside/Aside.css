@@ -1,0 +1,15 @@
+.aside-text {
+    padding: 1rem;
+    border: 1px solid white;
+    font-family: sans-serif;
+    border-radius: 1rem;
+    background-color: blueviolet;
+}
+
+h3 {
+    text-align: center;
+}
+
+p {
+    font-size: 0.85rem;
+}
