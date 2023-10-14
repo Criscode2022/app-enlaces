@@ -27,6 +27,7 @@ h2 {
   margin: 20px;
   font-size: 2.5rem;
   text-shadow: 0 0 10px black;
+  text-align: center;
 }
 
 #postsContainer {
@@ -40,10 +41,6 @@ h2 {
   justify-content: center;
 }
 
-h2 {
-  text-align: center;
-  margin: 20px;
-}
 
 @media (max-width: 800px) {
   form {
