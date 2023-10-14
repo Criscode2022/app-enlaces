@@ -49,11 +49,11 @@ export default function BasicTabs() {
 
   return (
     <Box sx={{ width: '100%' }}>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+      <Box sx={{ borderBottom: 1, borderColor: 'divider', backgroundColor: 'rgb(187, 138, 224)' }}>
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-          <Tab sx={{ color: 'white' }} label="Todos" {...a11yProps(0)} />
-          <Tab sx={{ color: 'white' }} label="Siguiendo" {...a11yProps(1)} />
-          <Tab sx={{ color: 'white' }} label="Mis enlaces" {...a11yProps(2)} />
+          <Tab sx={{ color: 'white', fontWeight: 'bold' }} label="Todos" {...a11yProps(0)} />
+          <Tab sx={{ color: 'white', fontWeight: 'bold' }} label="Siguiendo" {...a11yProps(1)} />
+          <Tab sx={{ color: 'white', fontWeight: 'bold' }} label="Mis enlaces" {...a11yProps(2)} />
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>

@@ -217,7 +217,7 @@ const Post = (props) => {
             Visitar
           </Button>
           <Badge badgeContent={likesCount} color="primary">
-            <Button onClick={toggleLike} variant="outlined" className={`post-like-button${userLiked ? " liked" : ""}`}>
+            <Button sx={{ margin: '0 10px 0 10px', }} onClick={toggleLike} variant="outlined" className={`post-like-button${userLiked ? " liked" : ""}`}>
               {userLiked ? <FavoriteIcon /> : <FavoriteBorderOutlinedIcon />}
             </Button>
           </Badge>
@@ -227,7 +227,7 @@ const Post = (props) => {
             </Button>
           )}
         </CardActions>
-      </Card>
+      </Card >
       <ToastContainer />
     </>
   );

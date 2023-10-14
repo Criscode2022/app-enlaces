@@ -33,7 +33,7 @@ const Header = () => {
           </>
         ) : (
           <Link to="/newPost">
-            <IconButton id="add"><AddIcon /></IconButton>
+            <IconButton style={{ zIndex: '50' }} id="add"><AddIcon /></IconButton>
           </Link>
         )}
         <LogoutButton />
@@ -46,7 +46,7 @@ const Header = () => {
           </Icon>
         </li>
       </ul>
-    </StyledHeader>
+    </StyledHeader >
   );
 };
 
