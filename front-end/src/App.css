@@ -2,6 +2,7 @@
   color: white;
   background-color: rgb(162, 92, 228);
 }
+
 body {
   margin: 0;
 }
@@ -41,6 +42,28 @@ h2 {
   justify-content: center;
 }
 
+.post {
+  width: 345px;
+  margin: 20px;
+  padding: 10px;
+}
+
+.post-author {
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.post-like-button.liked {
+  color: red;
+}
+
+.post-delete-button,
+.post-follow-button.unfollow {
+  background-color: red !important;
+}
 
 @media (max-width: 800px) {
   form {
