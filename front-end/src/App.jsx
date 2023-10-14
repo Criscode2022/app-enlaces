@@ -11,6 +11,8 @@ import FeedPage from "./pages/FeedPage";
 import NewPostPage from "./pages/NewPostPage";
 import { AuthContext } from "./context/AuthContext";
 import { useContext } from "react";
+import 'animate.css';
+
 
 function App() {
   const { isAuthenticated } = useContext(AuthContext);

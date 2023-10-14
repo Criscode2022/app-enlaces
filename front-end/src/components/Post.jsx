@@ -195,7 +195,7 @@ const Post = (props) => {
 
 
   return (
-    <>
+    <div className='animate__animated animate__zoomIn'>
       <Card className="post">
         <CardMedia component="img" height="140" image={imageUrl} alt="Post Image" />
         <CardContent>
@@ -229,7 +229,7 @@ const Post = (props) => {
         </CardActions>
       </Card >
       <ToastContainer />
-    </>
+    </div>
   );
 }
 
