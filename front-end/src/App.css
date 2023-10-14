@@ -33,8 +33,9 @@ h2 {
 
 #postsContainer {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   flex-wrap: wrap;
+  gap: 10px;
 }
 
 .container {
@@ -44,7 +45,6 @@ h2 {
 
 .post {
   width: 345px;
-  margin: 20px;
   padding: 10px;
 }
 
