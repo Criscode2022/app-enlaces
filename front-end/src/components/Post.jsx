@@ -12,6 +12,7 @@ import { AuthContext } from '../context/AuthContext';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { CardActions } from '@mui/material';
 
 const Post = (props) => {
   const {
@@ -195,12 +196,12 @@ const Post = (props) => {
 
   return (
     <>
-      <Card sx={{ maxWidth: 345, margin: '20px', padding: '50px', boxShadow: '0 0 10px black' }}>
+      <Card className="post">
         <CardMedia component="img" height="140" image={imageUrl} alt="Post Image" />
         <CardContent>
-          <Typography variant="h6" component="div" style={{ flexGrow: 1, border: '1px solid black', padding: '5px', width: '100%', borderRadius: '5px', display: 'flex', justifyContent: 'space-between' }}>
+          <Typography gutterBottom variant="h6" component="div" className="post-author">
             {userName}
-            <Button variant="contained" style={{ backgroundColor: isFollowing ? '#f00' : '#007bff', color: 'white' }} onClick={handleFollow}>
+            <Button variant="contained" className={`post-follow-button${isFollowing ? " unfollow" : ""}`} onClick={handleFollow}>
               {isFollowing ? 'Dejar de seguir' : 'Seguir'}
             </Button>
           </Typography>
@@ -210,22 +211,24 @@ const Post = (props) => {
           <Typography variant="body2" color="text.secondary">
             {content}
           </Typography>
+        </CardContent>
+        <CardActions>
           <Button variant="contained" href={url} target="_blank" fullWidth>
             Visitar
           </Button>
           <Badge badgeContent={likesCount} color="primary">
-            <Button onClick={toggleLike} variant="outlined" style={{ color: userLiked ? 'red' : 'black' }}>
+            <Button onClick={toggleLike} variant="outlined" className={`post-like-button${userLiked ? " liked" : ""}`}>
               {userLiked ? <FavoriteIcon /> : <FavoriteBorderOutlinedIcon />}
             </Button>
           </Badge>
           {isLoggedUserPost && (
-            <Button variant="contained" style={{ backgroundColor: 'red', color: 'white' }} onClick={handleDelete}>
-              <DeleteIcon></DeleteIcon> </Button>
+            <Button variant="contained" class="post-delete-button" onClick={handleDelete}>
+              <DeleteIcon></DeleteIcon>
+            </Button>
           )}
-        </CardContent>
+        </CardActions>
       </Card>
       <ToastContainer />
-
     </>
   );
 }
