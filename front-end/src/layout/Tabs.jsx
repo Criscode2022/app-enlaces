@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import ListofPosts from '../components/ListofPosts';
 import ListofPostsFollowing from '../components/ListofPostsFollowing';
-
+import ListofPersonalPosts from '../components/ListofPersonalPosts';
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -53,12 +53,16 @@ export default function BasicTabs() {
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
           <Tab sx={{ color: 'white' }} label="Todos" {...a11yProps(0)} />
           <Tab sx={{ color: 'white' }} label="Siguiendo" {...a11yProps(1)} />
+          <Tab sx={{ color: 'white' }} label="Mis enlaces" {...a11yProps(2)} />
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
         <ListofPosts></ListofPosts>      </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
         <ListofPostsFollowing></ListofPostsFollowing>
+      </CustomTabPanel>
+      <CustomTabPanel value={value} index={2}>
+        <ListofPersonalPosts></ListofPersonalPosts>
       </CustomTabPanel>
 
     </Box>
