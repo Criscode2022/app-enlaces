@@ -1,6 +1,5 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { Link } from "react-router-dom";
-import styled from "styled-components";
 import Logo from "../assets/Logo.png";
 import Button from "@mui/material/Button";
 import LogoutButton from "../components/Forms/LogoutForm";

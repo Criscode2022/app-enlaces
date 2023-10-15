@@ -7,7 +7,6 @@ import Button from '@mui/material/Button';
 import Badge from '@mui/material/Badge';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import jwt_decode from 'jwt-decode';
 import { AuthContext } from '../context/AuthContext';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -89,7 +88,7 @@ const Post = (props) => {
     } catch (error) {
       console.error('Error al decodificar el token:', error);
     }
-  }, [postId, token, userId]); // Run the effect whenever postId changes
+  }, [postId, token, userId, userIdLogged]); // Run the effect whenever postId changes
 
   const toggleLike = () => {
     // Realizar una solicitud a la API para dar o quitar like en función de userLiked
