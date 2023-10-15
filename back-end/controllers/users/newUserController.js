@@ -13,6 +13,9 @@ const validateSchema = require('../../utils/validateSchema');
 // Importamos la función que se encargará de generar un error.
 const generateError = require('../../utils/generateError');
 
+// Importamos la función que se encargará de generar un token de autenticación.
+const generateAuthToken = require('../../utils/generateAuthToken');
+
 // Función controladora final que crea un nuevo usuario.
 const newUserController = async (req, res, next) => {
     try {
@@ -37,15 +40,22 @@ const newUserController = async (req, res, next) => {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         // Insertamos el usuario.
-        await pool.query(
+        const [result] = await pool.query(
             'INSERT INTO users (name_user, password_user) VALUES (?, ?)',
             [username, hashedPassword]
         );
+
+        const id = result.insertId;
+        // Generamos un token de autenticación para el usuario.
+        const token = generateAuthToken(id, username);
 
         // Enviamos una respuesta al cliente.
         res.json({
             status: 'ok',
             message: 'Usuario creado correctamente',
+            id,
+            username,
+            token,
         });
     } catch (err) {
         next(err);
