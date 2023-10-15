@@ -21,8 +21,6 @@ export const AuthProvider = ({ children }) => {
         try {
             const decodedToken = jwt_decode(token);
             const userIdLogged = decodedToken.userId;
-
-
             setUserId(userIdLogged);
             setUserName(decodedToken.userName);
 

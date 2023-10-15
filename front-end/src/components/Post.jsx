@@ -34,7 +34,7 @@ const Post = (props) => {
   const [isFollowing, setIsFollowing] = useState(false);
 
   const { token } = useContext(AuthContext);
-  const { userIdLogged } = useContext(AuthContext);
+  const { userId: userIdLogged } = useContext(AuthContext);
 
   useEffect(() => {
 
