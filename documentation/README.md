@@ -50,6 +50,8 @@ follows:
 
 ## Lista de endpoints:
 
+Colección de Postman: https://www.postman.com/galactic-zodiac-661739/workspace/hack-a-boss-workspace/request/26642606-6ffd55aa-07ea-489a-b0e9-9a5ff182d449
+
 Rutas de publicaciones (todas requieren autenticación):
 - GET /posts => Obtener todos los enlaces publicados.
 - GET /posts/likes => Obtener todos los enlaces con like.
