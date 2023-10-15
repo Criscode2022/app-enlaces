@@ -1,6 +1,10 @@
-import { createContext, useState, useEffect } from "react";
-import { loginService, registerService } from "../services/userServices";
-import jwt_decode from "jwt-decode";
+import { createContext, useState, useEffect } from 'react';
+import {
+    loginService,
+    registerService,
+    updateUserService,
+} from '../services/userServices';
+import jwt_decode from 'jwt-decode';
 
 export const AuthContext = createContext(null);
 
@@ -65,8 +69,31 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
+    const update = async (fieldsToUpdate) => {
+        try {
+            setLoading(true);
+            const { token: newToken, username } = await updateUserService(token, fieldsToUpdate);
+            setToken(newToken);
+            setUserName(username);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
-        <AuthContext.Provider value={{ loading, token, isAuthenticated, userId, login, logout, register, userName }}>
+        <AuthContext.Provider
+            value={{
+                loading,
+                token,
+                isAuthenticated,
+                userId,
+                login,
+                logout,
+                register,
+                update,
+                userName,
+            }}
+        >
             {children}
         </AuthContext.Provider>
     );
