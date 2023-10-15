@@ -46,12 +46,13 @@ const updateUserController = async (req, res, next) => {
         await pool.query('UPDATE users SET ? WHERE id_user = ?', [params, id]);
 
         // Generamos un token de autenticación para el usuario.
-        const authToken = generateAuthToken(id, username);
-        //Enviamos una respuesta al cliente.
+        const token = generateAuthToken(id, username);
+        // Enviamos una respuesta al cliente con los datos y el nuevo token.
         res.json({
             status: 'ok',
             message: 'Usuario actualizado correctamente',
-            token: authToken,
+            token,
+            username,
         });
     } catch (err) {
         next(err);
