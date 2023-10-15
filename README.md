@@ -5,7 +5,7 @@
 
 
 Esta aplicación ofrece al usuario el acceso, previo registro siempre, a una plataforma en la que se comparten enlaces de interés. El usuario puede publicar sus propios enlaces y seguir los de los demás, señalando cuáles les han gustado con un botón de like.
-La aplicación no contempla usuarios anónimos: todos deben registrarse para poder acceder a la plataforma. El registro consta de 3 campos: una imagen de avatar (opcional), un nombre de usuario y una contraseña (obligatorios). Estos campos podrán ser modificados previamente. El usuario podrá acceder a todo el listado de enlaces publicados. Para publicar sus propios enlaces, interacturará con una 'pop-up' en la que llenará un formulario con los campos de la URL del enlace, un título y una breve descripción de su publicación.
+La aplicación no contempla usuarios anónimos: todos deben registrarse para poder acceder a la plataforma. El registro consta de 3 campos: una imagen de avatar (opcional), un nombre de usuario y una contraseña (obligatorios). Estos campos podrán ser modificados previamente. El usuario podrá acceder a todo el listado de enlaces publicados. Para publicar sus propios enlaces, interacturará con un formulario de creación de post en el que llenará los campos de la URL del enlace, un título y una breve descripción de su publicación y una imagen (opcional).
 
 
 ## Pasos para arrancar el proyecto:
