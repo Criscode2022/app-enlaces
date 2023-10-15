@@ -50,7 +50,7 @@ follows:
 
 ## Lista de endpoints:
 
-Colección de Postman: https://mail.google.com/mail/u/0?ui=2&ik=945f82c0bd&attid=0.1&permmsgid=msg-f:1779852485942019225&th=18b34e67e92b8499&view=att&disp=safe&realattid=f_lnrvvxyd0
+Colección de Postman: https://www.postman.com/galactic-zodiac-661739/workspace/hack-a-boss-workspace/request/26642606-6ffd55aa-07ea-489a-b0e9-9a5ff182d449
 
 Rutas de publicaciones (todas requieren autenticación):
 - GET /posts => Obtener todos los enlaces publicados.
