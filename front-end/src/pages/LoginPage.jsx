@@ -1,15 +1,17 @@
 import LoginForm from '../components/Forms/LoginForm'
+import Aside from './../components/aside/Aside';
 
 const LoginPage = () => {
 
 
   return (
     <>
-      <h2>Iniciar sesión</h2>
 
       <div className='container'>
         <LoginForm />
+        <Aside></Aside>
       </div>
+
     </>
   );
 };

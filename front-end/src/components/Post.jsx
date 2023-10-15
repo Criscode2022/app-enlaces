@@ -34,13 +34,12 @@ const Post = (props) => {
   const [isFollowing, setIsFollowing] = useState(false);
 
   const { token } = useContext(AuthContext);
+  const { userIdLogged } = useContext(AuthContext);
 
   useEffect(() => {
 
     // Decodificar el token para obtener el ID del usuario autenticado
     try {
-      const decodedToken = jwt_decode(token);
-      const userIdLogged = decodedToken.userId;
 
       // Verificar si el usuario sigue al autor del post cuando el componente se monta
       fetch(`http://localhost:3000/users/checkfollow/${userId}`, {

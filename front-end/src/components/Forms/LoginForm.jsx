@@ -35,28 +35,30 @@ const LoginForm = () => {
     }
 
     return (
-        <div className='form-text'>
-        <form onSubmit={handleSubmit}>
-            <TextField
-                required
-                label="Usuario"
-                name="username"
-                value={formData.username}
-                onChange={handleChange}
-            />
-            <TextField
-                required
-                label="Contraseña"
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-            />
-            <Button disabled={auth.loading} variant="contained" type="submit">
-                Iniciar Sesión
-            </Button>
-        </form>
-        <Aside />
+        <div className='flex'>
+
+            <h2>Iniciar sesión</h2>
+            <form onSubmit={handleSubmit}>
+                <TextField
+                    required
+                    label="Usuario"
+                    name="username"
+                    value={formData.username}
+                    onChange={handleChange}
+                />
+                <TextField
+                    required
+                    label="Contraseña"
+                    type="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                />
+                <Button disabled={auth.loading} variant="contained" type="submit">
+                    Iniciar Sesión
+                </Button>
+            </form>
+
         </div>
     );
 };

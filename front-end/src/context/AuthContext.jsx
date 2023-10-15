@@ -17,12 +17,15 @@ export const AuthProvider = ({ children }) => {
         setIsAuthenticated(!!token);
     }, [token]);
 
-    const getUserId = () => {
+    const decode = () => {
         try {
             const decodedToken = jwt_decode(token);
             const userIdLogged = decodedToken.userId;
 
+
             setUserId(userIdLogged);
+            setUserName(decodedToken.userName);
+
         } catch (error) {
             console.error("Error al decodificar el token:", error);
         }
@@ -30,7 +33,7 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         if (token) {
-            getUserId(); // Call getUserId when the token is set or changes
+            decode(); // Call getUserId when the token is set or changes
         }
     }, [token]);
 
@@ -42,7 +45,6 @@ export const AuthProvider = ({ children }) => {
             localStorage.setItem(TOKEN_KEY, token);
             setToken(token);
             setIsAuthenticated(true);
-            setUserName(username); // Set the user name on login
         } finally {
             setLoading(false);
         }

@@ -8,20 +8,10 @@ import { AuthContext } from "../context/AuthContext";
 import PersonIcon from "@mui/icons-material/Person";
 import AddIcon from '@mui/icons-material/Add';
 import IconButton from '@mui/material/IconButton';
-import jwt_decode from "jwt-decode";
-
-import { useEffect, useState } from "react";
 
 const Header = () => {
-  const { token, isAuthenticated } = useContext(AuthContext);
-  const [userName, setUserName] = useState(null);
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      const decodedToken = jwt_decode(token);
-      setUserName(decodedToken.userName);
-    }
-  }, [token, isAuthenticated]);
+  const { isAuthenticated } = useContext(AuthContext);
+  const { userName } = useContext(AuthContext);
 
   return (
     <StyledHeader>
