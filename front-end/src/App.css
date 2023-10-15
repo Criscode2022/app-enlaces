@@ -34,6 +34,7 @@ h2 {
 #postsContainer {
   display: flex;
   justify-content: center;
+  align-items: stretch;
   flex-wrap: wrap;
   gap: 30px;
 }
@@ -54,6 +55,12 @@ h2 {
 .post {
   width: 345px;
   padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.post-content {
+  flex: 1;
 }
 
 .post-author {
