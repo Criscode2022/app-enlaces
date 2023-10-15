@@ -1,9 +1,9 @@
 import "../../App.css";
 import { useContext, useState } from "react";
 import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import { Navigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
+import Button from "@mui/material/Button";
+
 
 function UpdateForm() {
   const [formData, setFormData] = useState({
@@ -14,8 +14,6 @@ function UpdateForm() {
   });
 
   const { token } = useContext(AuthContext);
-
-  const auth = useContext(AuthContext);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -54,47 +52,39 @@ function UpdateForm() {
 
   return (
     <form onSubmit={handleSubmit}>
-      <div>
-        <label htmlFor="username">Nombre:</label>
-        <input
-          type="text"
-          onChange={handleChange}
-          id="username"
-          name="username"
-          value={formData.username}
-        />
-      </div>
-      <div>
-        <label htmlFor="biography">Biografía:</label>
-        <input
-          type="text"
-          onChange={handleChange}
-          id="biography"
-          name="biography"
-          value={formData.biography}
-        />
-      </div>
-      <div>
-        <label htmlFor="avatar">Avatar:</label>
-        <input
-          type="text"
-          onChange={handleChange}
-          id="avatar"
-          name="avatar"
-          value={formData.avatar}
-        />
-      </div>
-      <div>
-        <label htmlFor="newPassword">Nueva Contraseña:</label>
-        <input
-          type="password"
-          onChange={handleChange}
-          id="newPassword"
-          name="newPassword"
-          value={formData.newPassword}
-        />
-      </div>
-      <button type="submit">Guardar Cambios</button>
+      <TextField
+        type="text"
+        label="Nombre de usuario"
+        onChange={handleChange}
+        id="username"
+        name="username"
+        value={formData.username}
+      />
+      <TextField
+        type="text"
+        label="Biografía"
+        onChange={handleChange}
+        id="biography"
+        name="biography"
+        value={formData.biography}
+      />
+      <TextField
+        type="text"
+        label="URL de avatar"
+        onChange={handleChange}
+        id="avatar"
+        name="avatar"
+        value={formData.avatar}
+      />
+      <TextField
+        type="password"
+        label="Nueva contraseña"
+        onChange={handleChange}
+        id="newPassword"
+        name="newPassword"
+        value={formData.newPassword}
+      />
+      <Button type="submit" variant="contained">Crear Enlace</Button>
     </form>
   );
 }

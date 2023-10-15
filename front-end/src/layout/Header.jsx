@@ -44,7 +44,9 @@ const Header = () => {
           {isAuthenticated && <h3>¡Hola, {userName}!</h3>}
         </li>
         <li>
-          <PersonIcon id="user-icon" />
+          <Link to="/update">
+            <PersonIcon id="user-icon" />
+          </Link>
         </li>
       </ul>
     </header>

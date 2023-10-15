@@ -7,6 +7,7 @@ import LogoutPage from "./pages/LogoutPage";
 import RegisterPage from "./pages/RegisterPage";
 import Error404Page from "./pages/Error404Page";
 import AvatarPage from "./pages/AvatarPage";
+import UpdatePage from "./pages/UpdatePage";
 import FeedPage from "./pages/FeedPage";
 import NewPostPage from "./pages/NewPostPage";
 import { ToastContainer } from 'react-toastify';
@@ -27,6 +28,7 @@ function App() {
             path="/"
             element={isAuthenticated ? <Navigate to="/feed" /> : <Navigate to="/login" />}
           />
+          <Route path="/update" element={<UpdatePage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/logout" element={<LogoutPage />} />
