@@ -2,8 +2,6 @@ const pool = require('../../db/db');
 
 async function getAllLikesController(req, res, next) {
     try {
-        const connection = await pool.getConnection();
-
         // Consulta SQL para obtener todos los likes
         const query = `
             SELECT l.id_like, l.id_user, l.id_post, u.name_user, p.post_title
@@ -13,7 +11,7 @@ async function getAllLikesController(req, res, next) {
         `;
 
         // Ejecuta la consulta SQL
-        const [rows] = await connection.query(query);
+        const [rows] = await pool.query(query);
 
         // Devuelve los likes en la respuesta JSON
         res.json({ likes: rows });
