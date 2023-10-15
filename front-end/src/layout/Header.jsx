@@ -14,7 +14,7 @@ const Header = () => {
   const { userName } = useContext(AuthContext);
 
   return (
-    <StyledHeader>
+    <header className="header">
       <Link to="/">
         <h1>
           <img src={Logo} alt="Logo" />
@@ -33,114 +33,22 @@ const Header = () => {
           </>
         ) : (
           <Link to="/newPost">
-            <IconButton style={{ zIndex: '50' }} id="add"><AddIcon /></IconButton>
+            <IconButton id="add-button"><AddIcon /></IconButton>
           </Link>
         )}
         <LogoutButton />
       </nav>
 
       <ul>
-        <li>          {isAuthenticated && <h3>¡Hola, {userName}!</h3>}
+        <li>
+          {isAuthenticated && <h3>¡Hola, {userName}!</h3>}
         </li>
         <li>
-          <Icon>
-            <CustomPersonIcon className="large-icon" />
-          </Icon>
+          <PersonIcon id="user-icon" />
         </li>
       </ul>
-    </StyledHeader >
+    </header>
   );
 };
-
-
-const StyledHeader = styled.header`
-  padding: 0;
-  border-bottom: 2px solid black;
-  background-color: #290025;
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-
-  img {
-    max-width: 300px;
-    margin: 0;
-  }
-
-  #add {
-    position:fixed;
-    right: 20px;
-    bottom: 20px;
-    background-color: blue;
-    color: white;
-    width: 70px;
-    height: 70px;
-    font-weight: bold;
-  }
-
-
-  ul {
-    display: flex;
-    gap: 1.5rem;
-    justify-content: center;
-    list-style: none;
-    position: absolute;
-    top: 0;
-    right: 0;
-  }
-
-  li:first-child {
-    position: relative;
-    top: 25px;
-    left:40px;
-  } 
-
-  button {
-    margin: 20px;
-  }
-
-  a {
-    text-decoration: none;
-    color: white;
-  }
-
-  a.active {
-    font-weight: bold;
-  }
-
-  nav {
-
-    display:flex;
-
-    width: 100%;
-
-
-
-  }
-
-  h1 {
-    text-align: center;
-    font-weight: bold;
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
-  }
-
-  @media (max-width: 768px) {
-
-    li:first-child {
-display:none;
-
-  }
-
-
-`;
-
-const Icon = styled.div`
-  margin: 20px;
-`;
-
-const CustomPersonIcon = styled(PersonIcon)`
-  &.large-icon {
-    font-size: 50px;
-  }
-`;
 
 export default Header;
