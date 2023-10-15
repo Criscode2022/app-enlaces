@@ -11,24 +11,26 @@ const routes = require('./routes');
 //Importamos los controladores
 const authenticateToken = require('./utils/authenticateToken');
 
+
 // Creamos el servidor.
 const app = express();
 
 // Middleware que evita problemas de conexión con el cliente.
 app.use(cors());
 
-//Middleware para proteger las rutas '/posts' con JWT
-
-app.use('/posts', authenticateToken);
-app.use('/users/follow', authenticateToken);
-app.use('/users/unfollow', authenticateToken);
-app.use('/users/update', authenticateToken);
-
 // Middleware que permite recibir datos en formato JSON.
 app.use(express.json());
 
 // Middleware que indica a Express donde están las rutas.
 app.use(routes);
+
+// Middleware de ruta no encontrada.
+app.use((req, res) => {
+    res.status(404).send({
+        status: 'error',
+        message: 'Not found',
+    });
+});
 
 // Middleware de error.
 app.use((err, req, res, next) => {
@@ -37,14 +39,6 @@ app.use((err, req, res, next) => {
     res.status(err.httpStatus || 500).send({
         status: 'error',
         message: err.message,
-    });
-});
-
-// Middleware de ruta no encontrada.
-app.use((req, res) => {
-    res.status(404).send({
-        status: 'error',
-        message: 'Not found',
     });
 });
 

@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 const LogoutButton = () => {
   // Verifica si el token de autenticación está presente en el almacenamiento local
-  const auth =  useContext(AuthContext);
+  const auth = useContext(AuthContext);
   const navigate = useNavigate();
 
   async function handleLogout() {

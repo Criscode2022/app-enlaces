@@ -8,9 +8,8 @@ CREATE TABLE users (
   id_user INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   name_user varchar(50) NOT NULL UNIQUE,
   password_user varchar(200) NOT NULL,
-  following_user varchar (300), 
   biography_user tinytext,
-  avatar_user BLOB,
+  avatar_user varchar(100),
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -20,12 +19,12 @@ CREATE TABLE users (
 CREATE TABLE posts (
   id_post INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   id_user INT NOT NULL,
-  post_img varchar(500),
+  post_img varchar(300),
   post_url varchar(300) NOT NULL,
   post_title varchar(30) NOT NULL,
   post_description varchar(200) NOT NULL,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (id_user) REFERENCES users (id_user)
+  FOREIGN KEY (id_user) REFERENCES users (id_user) ON DELETE CASCADE
 );
 
 
@@ -34,10 +33,22 @@ id_like INT auto_increment primary key,
 id_user INT NOT NULL,
 id_post INT NOT NULL,
 FOREIGN KEY (id_user) REFERENCES users (id_user),
-FOREIGN KEY (id_post) REFERENCES posts (id_post),
+FOREIGN KEY (id_post) REFERENCES posts (id_post) ON DELETE CASCADE,
 UNIQUE KEY unique_user_post (id_user, id_post)
 
 );
+
+
+CREATE TABLE follows (
+  id_follow INT AUTO_INCREMENT PRIMARY KEY,
+  id_user INT NOT NULL,
+  id_user_following INT NOT NULL,
+  FOREIGN KEY (id_user) REFERENCES users (id_user),
+  FOREIGN KEY (id_user_following) REFERENCES users (id_user),
+  UNIQUE KEY unique_user_following (id_user, id_user_following),
+  CHECK (id_user <> id_user_following)
+);
+
 
 -- Inserts --
 
@@ -64,7 +75,7 @@ INSERT INTO likes (id_user, id_post) values (3, 3);
 
 -- Ver todos los usuarios --
 
-select * from users;
+select * from users where id_user = 6;
 
 -- Ver todos los posts --
 
@@ -110,7 +121,12 @@ INNER JOIN likes l ON p.id_post = l.id_post
 GROUP BY p.id_post, p.post_title;
 
 
---  Comprobar a quien sigue un usuario --
+--  Ver todos los follows --
 
-SELECT following_user FROM users WHERE id_user = 6;
+select * from follows;
+
+-- Ver a quién sigue un usuario --
+
+select id_user_following from follows
+where id_user = 5;
 

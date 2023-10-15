@@ -20,7 +20,7 @@ La aplicación no contempla usuarios anónimos: todos deben registrarse para pod
 ## Entidades:
 
 users:
-- id_user 
+- id_user **PK**
 - name_user 
 - password_
 - following_user 
@@ -29,8 +29,8 @@ users:
 - created_at 
 
 posts:
-- id_post 
-- id_user 
+- id_post **PK**
+- id_user **FK**
 - post_img 
 - post_url 
 - post_title 
@@ -38,9 +38,14 @@ posts:
 - created_at 
 
 likes:
-- id_like
-- id_user
-- id_post
+- id_like **PK**
+- id_user **FK** 
+- id_post **FK**
+
+follows:
+- id_follow **PK**
+- id_user **FK**
+- id_user_following **FK**
 
 
 ## Lista de endpoints:
@@ -54,6 +59,9 @@ Rutas de publicaciones (todas requieren autenticación):
 - DELETE /posts/:postId => Eliminar publicación.
   
 Rutas de usuario:
+- GET /users/checkfollow/:userFollow => Comprobar si se sigue a un usuario.
+- GET /users/following => Obtener usuarios que se siguen.
 - POST /users/register => Registro de usuario.
 - POST /users/login => Logueo de usuario.
-- PUT  /users/follow/:userFollow => Seguir a un usuario (requiere autenticación).
+- POST /users/follow/:userFollow => Seguir a un usuario (requiere autenticación).
+- PUT /users/update => actualizar perfil de usuario.

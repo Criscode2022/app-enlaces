@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
@@ -7,35 +7,64 @@ import Button from '@mui/material/Button';
 import Badge from '@mui/material/Badge';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import jwt_decode from 'jwt-decode';
+import { AuthContext } from '../context/AuthContext';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { CardActions } from '@mui/material';
 
 const Post = (props) => {
   const {
     imageUrl,
     title,
+    onDelete,
+    userName,
     content,
     url,
     postId,
+    userId,
     likes,
     updateBadgeCount, // Callback function from the parent component
+    isLoggedUserPost
   } = props;
 
   const [userLiked, setUserLiked] = useState(false); // Estado para saber si el usuario dio like al post
   const [likesCount, setLikesCount] = useState(likes); // Contador de likes local
+  const [isFollowing, setIsFollowing] = useState(false);
+
+  const { token } = useContext(AuthContext);
+  const { userId: userIdLogged } = useContext(AuthContext);
 
   useEffect(() => {
-    // Obtener el token del localStorage
-    const token = localStorage.getItem('authToken');
 
     // Decodificar el token para obtener el ID del usuario autenticado
     try {
-      const decodedToken = jwt_decode(token);
-      const userId = decodedToken.userId;
+
+      // Verificar si el usuario sigue al autor del post cuando el componente se monta
+      fetch(`http://localhost:3000/users/checkfollow/${userId}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      })
+        .then((response) => {
+          if (response.status === 200) {
+            return response.json();
+          } else {
+            throw new Error('No se pudo verificar el seguimiento');
+          }
+        })
+        .then((data) => {
+          const isUserFollowing = data.mensaje === 'Sigues a este usuario';
+          setIsFollowing(isUserFollowing);
+        })
+        .catch((error) => {
+          console.error('Error while checking follow:', error);
+        });
 
       // Check if the user liked the post when the component mounts
       fetch(`http://localhost:3000/posts/likes`, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+          'Authorization': `Bearer ${token}`,
         },
       })
         .then((response) => {
@@ -48,7 +77,7 @@ const Post = (props) => {
         .then((data) => {
           // Verificar si el usuario dio like al post actual
           const userLikedPost = data.likes.some((like) => {
-            return like.id_user === userId && like.id_post === postId;
+            return like.id_user === userIdLogged && like.id_post === postId;
           });
 
           setUserLiked(userLikedPost); // Set the userLiked state based on the result
@@ -59,7 +88,7 @@ const Post = (props) => {
     } catch (error) {
       console.error('Error al decodificar el token:', error);
     }
-  }, [postId]); // Run the effect whenever postId changes
+  }, [postId, token, userId, userIdLogged]); // Run the effect whenever postId changes
 
   const toggleLike = () => {
     // Realizar una solicitud a la API para dar o quitar like en función de userLiked
@@ -99,27 +128,104 @@ const Post = (props) => {
       });
   };
 
+  const handleFollow = () => {
+    if (!token) {
+      // El usuario no está autenticado, puedes redirigirlo al inicio de sesión o mostrar un mensaje
+      console.log('El usuario no está autenticado. Debe iniciar sesión para seguir al autor.');
+      return;
+    }
+
+    // Definir el endpoint para seguir o dejar de seguir al autor del post
+    const followEndpoint = isFollowing
+      ? `http://localhost:3000/users/unfollow/${userId}`
+      : `http://localhost:3000/users/follow/${userId}`;
+
+    const method = isFollowing ? 'DELETE' : 'POST';
+
+    fetch(followEndpoint, {
+      method: method,
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    })
+      .then((response) => {
+        if (response.status === 201 || response.status === 200 || response.status === 204) {
+          setIsFollowing(!isFollowing);
+          console.log(`Usuario ${isFollowing ? 'dejó de seguir' : 'siguió'} al autor`);
+        } else {
+          throw new Error('No se pudo realizar la acción de seguimiento/dejar de seguir');
+        }
+      })
+      .catch((error) => {
+        console.error('Error al seguir/dejar de seguir al autor:', error);
+      });
+  };
+
+  const handleDelete = () => {
+    if (window.confirm('Are you sure you want to delete this post?')) {
+      // Make a DELETE request to your API endpoint here
+      fetch(`http://localhost:3000/posts/delete/${postId}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((response) => {
+          console.log('Response status:', response.status); // Log the response status
+
+          if (response.status === 200) {
+            // The post was deleted successfully, call the onDelete function
+            onDelete(postId);
+            console.log('Post deleted successfully');
+            toast.success("Enlace eliminado correctamente", {
+              position: toast.POSITION.TOP_CENTER
+            })
+          } else {
+            console.error('Failed to delete the post');
+          }
+        })
+        .catch((error) => {
+          console.error('Error while deleting the post:', error);
+        });
+    }
+  };
+
+
+
   return (
-    <Card sx={{ maxWidth: 345, margin: '20px', padding: '50px', boxShadow: '0 0 10px black' }}>
+    <Card className="post animate__animated animate__zoomIn">
       <CardMedia component="img" height="140" image={imageUrl} alt="Post Image" />
-      <CardContent>
+      <CardContent className="post-content">
+        <Typography gutterBottom variant="h6" component="div" className="post-author">
+          {userName}
+          <Button variant="contained" className={`post-follow-button${isFollowing ? " unfollow" : ""}`} onClick={handleFollow}>
+            {isFollowing ? 'Dejar de seguir' : 'Seguir'}
+          </Button>
+        </Typography>
         <Typography gutterBottom variant="h5" component="div">
           {title}
         </Typography>
         <Typography variant="body2" color="text.secondary">
           {content}
         </Typography>
+      </CardContent>
+      <CardActions className="post-actions">
         <Button variant="contained" href={url} target="_blank" fullWidth>
           Visitar
         </Button>
         <Badge badgeContent={likesCount} color="primary">
-          <Button onClick={toggleLike} variant="outlined" style={{ color: userLiked ? 'red' : 'black' }}>
+          <Button sx={{ margin: '0 10px 0 10px', }} onClick={toggleLike} variant="outlined" className={`post-like-button${userLiked ? " liked" : ""}`}>
             {userLiked ? <FavoriteIcon /> : <FavoriteBorderOutlinedIcon />}
           </Button>
         </Badge>
-      </CardContent>
+        {isLoggedUserPost && (
+          <Button variant="contained" class="post-delete-button" onClick={handleDelete}>
+            <DeleteIcon></DeleteIcon>
+          </Button>
+        )}
+      </CardActions>
     </Card>
   );
-};
+}
 
 export default Post;

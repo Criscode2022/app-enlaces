@@ -9,29 +9,34 @@ import Error404Page from "./pages/Error404Page";
 import AvatarPage from "./pages/AvatarPage";
 import FeedPage from "./pages/FeedPage";
 import NewPostPage from "./pages/NewPostPage";
+import { ToastContainer } from 'react-toastify';
+import { AuthContext } from "./context/AuthContext";
+import { useContext } from "react";
+import 'animate.css';
 
-const token = localStorage.getItem("authToken");
 
 function App() {
+  const { isAuthenticated } = useContext(AuthContext);
+
   return (
     <>
       <Header />
       <main>
         <Routes>
-          {token ? (
-            <Route path="/" element={<Navigate to="/feed" />} />
-          ) : (
-            <Route path="/" element={<Navigate to="/login" />} />
-          )}
+          <Route
+            path="/"
+            element={isAuthenticated ? <Navigate to="/feed" /> : <Navigate to="/login" />}
+          />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/logout" element={<LogoutPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/avatar" element={<AvatarPage />} />
           <Route path="/newPost" element={<NewPostPage />} />
-          <Route path="/*" element={<Error404Page />} />
           <Route path="/feed" element={<FeedPage />} />
+          <Route path="/*" element={<Error404Page />} />
         </Routes>
+        <ToastContainer />
       </main>
     </>
   );

@@ -1,8 +1,8 @@
-import React, { useContext, useState } from 'react';
+import '../../App.css';
+import { useContext, useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import { loginService } from '../../services/userServices';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 
 const LoginForm = () => {
@@ -11,7 +11,6 @@ const LoginForm = () => {
         password: '',
     });
 
-    const navigate = useNavigate(); // Obtén la función navigate
     const auth = useContext(AuthContext);
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -34,26 +33,31 @@ const LoginForm = () => {
     }
 
     return (
-        <form onSubmit={handleSubmit}>
-            <TextField
-                required
-                label="Usuario"
-                name="username"
-                value={formData.username}
-                onChange={handleChange}
-            />
-            <TextField
-                required
-                label="Contraseña"
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-            />
-            <Button disabled={auth.loading} variant="contained" type="submit">
-                Iniciar Sesión
-            </Button>
-        </form>
+        <div className='flex'>
+
+            <h2>Iniciar sesión</h2>
+            <form onSubmit={handleSubmit}>
+                <TextField
+                    required
+                    label="Usuario"
+                    name="username"
+                    value={formData.username}
+                    onChange={handleChange}
+                />
+                <TextField
+                    required
+                    label="Contraseña"
+                    type="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                />
+                <Button disabled={auth.loading} variant="contained" type="submit">
+                    Iniciar Sesión
+                </Button>
+            </form>
+
+        </div>
     );
 };
 

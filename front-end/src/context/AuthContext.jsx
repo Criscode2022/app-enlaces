@@ -1,19 +1,40 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
 import { loginService, registerService } from "../services/userServices";
+import jwt_decode from "jwt-decode";
 
-
-// Creamos el contexto de autenticación.
 export const AuthContext = createContext(null);
 
-// Clave para almacenar el token.
 const TOKEN_KEY = "authToken";
 
-// Creamos el componente provider.
 export const AuthProvider = ({ children }) => {
     const [token, setToken] = useState(localStorage.getItem(TOKEN_KEY));
     const [loading, setLoading] = useState(false);
+    const [isAuthenticated, setIsAuthenticated] = useState(!!token);
+    const [userId, setUserId] = useState(null);
+    const [userName, setUserName] = useState(null);
 
-    // Función que retorna los datos del usuario.
+    useEffect(() => {
+        setIsAuthenticated(!!token);
+    }, [token]);
+
+    const decode = () => {
+        try {
+            const decodedToken = jwt_decode(token);
+            const userIdLogged = decodedToken.userId;
+            setUserId(userIdLogged);
+            setUserName(decodedToken.userName);
+
+        } catch (error) {
+            console.error("Error al decodificar el token:", error);
+        }
+    };
+
+    useEffect(() => {
+        if (token) {
+            decode(); // Call getUserId when the token is set or changes
+        }
+    }, [token]);
+
     const login = async (username, password) => {
         try {
             setLoading(true);
@@ -21,15 +42,18 @@ export const AuthProvider = ({ children }) => {
             console.log("Logged-in with token: ", token);
             localStorage.setItem(TOKEN_KEY, token);
             setToken(token);
-            // no hay catch, dejamos la excepción propagar
+            setIsAuthenticated(true);
         } finally {
             setLoading(false);
         }
     };
 
     const logout = () => {
-        localStorage.removeItem(TOKEN_KEY, null);
+        localStorage.removeItem(TOKEN_KEY);
         setToken(null);
+        setIsAuthenticated(false);
+        setUserName(null); // Clear the user name on logout
+        setUserId(null); // Clear the user ID on logout
     };
 
     const register = async (username, password) => {
@@ -42,6 +66,8 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ loading, token, login, logout, register }}>{children}</AuthContext.Provider>
+        <AuthContext.Provider value={{ loading, token, isAuthenticated, userId, login, logout, register, userName }}>
+            {children}
+        </AuthContext.Provider>
     );
-}
+};
