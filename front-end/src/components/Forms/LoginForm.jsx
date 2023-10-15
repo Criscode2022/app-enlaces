@@ -1,10 +1,8 @@
-import '../../App.css';
 import React, { useContext, useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
-import Aside from '../../components/aside/Aside';
 
 const LoginForm = () => {
     const [formData, setFormData] = useState({
@@ -12,8 +10,13 @@ const LoginForm = () => {
         password: '',
     });
 
-    const navigate = useNavigate(); // Obtén la función navigate
+    const [errors, setErrors] = useState({
+        username: '',
+        password: '',
+    });
+
     const auth = useContext(AuthContext);
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
@@ -26,12 +29,16 @@ const LoginForm = () => {
             await auth.login(username, password);
         } catch (error) {
             console.error("Error logging in:", error);
-            alert("Error logging in: " + error.message);
+            setErrors({
+                ...errors,
+                username: " ",
+                password: "Usuario o contraseña incorrectos",
+            });
         }
     };
 
     if (auth.token) {
-        return <Navigate to="/feed" />
+        return <Navigate to="/feed" />;
     }
 
     return (
@@ -45,6 +52,8 @@ const LoginForm = () => {
                     name="username"
                     value={formData.username}
                     onChange={handleChange}
+                    error={Boolean(errors.username)}
+                    helperText={errors.username}
                 />
                 <TextField
                     required
@@ -53,12 +62,13 @@ const LoginForm = () => {
                     name="password"
                     value={formData.password}
                     onChange={handleChange}
+                    error={Boolean(errors.password)}
+                    helperText={errors.password}
                 />
                 <Button disabled={auth.loading} variant="contained" type="submit">
                     Iniciar Sesión
                 </Button>
             </form>
-
         </div>
     );
 };
