@@ -21,50 +21,29 @@ const updateUserController = async (req, res, next) => {
     try {
         // Validamos los datos que envía el usuario.
         await validateSchema(updateUserSchema, req.body);
-        //Obtenemos los datos que nos interesan
+        // Obtenemos los datos que nos interesan
         const { biography, avatar, username, newPassword } = req.body;
-        //Obtención ID del usuario
+        // Obtención ID del usuario
         const id = req.auth.user;
 
-        //Insertamos los datos que quiere actualizar
-        // Actualizar la contraseña si se proporciona.
+        const params = { name_user: username };
+
+        // Actualizar la contraseña sólo si se proporciona.
         if (newPassword) {
             // Encriptamos la contraseña.
             const hashedPassword = await bcrypt.hash(newPassword, 10);
-            // Actualiza la contraseña utilizando placeholders.
-            const newPasswordQuery =
-                'UPDATE users SET password_user = ? WHERE id_user = ?';
-            await pool.query(newPasswordQuery, [hashedPassword, id]);
+            params.password_user = hashedPassword;
         }
         // Actualizar la biografía si se proporciona.
         if (biography) {
-            const newBiography =
-                'UPDATE users SET biography_user = ? WHERE id_user = ?';
-            await pool.query(newBiography, [biography, id]);
+            params.biography_user = biography;
         }
-
         // Actualizar el avatar si se proporciona.
         if (avatar) {
-            const newAvatar =
-                'UPDATE users SET avatar_user = ? WHERE id_user = ?';
-            await pool.query(newAvatar, [avatar, id]);
+            params.avatar_user = avatar;
         }
 
-        if (username) {
-            // Actualiza el nombre de usuario utilizando placeholders.
-            const newUsernameQuery =
-                'UPDATE users SET name_user = ? WHERE id_user = ?';
-            await pool.query(newUsernameQuery, [username, id]);
-        }
-        // Comprobamos si existe un usuario con el mismo nombre.
-        const [users] = await pool.query(
-            'SELECT id_user FROM users WHERE name_user = ?',
-            [username]
-        );
-        // Si existe, lanzamos un error.
-        if (users.length === 0) {
-            generateError('Ya existe un usuario con ese nombre', 409);
-        }
+        await pool.query('UPDATE users SET ? WHERE id_user = ?', [params, id]);
 
         // Generamos un token de autenticación para el usuario.
         const authToken = generateAuthToken(id, username);
