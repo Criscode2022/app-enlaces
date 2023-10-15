@@ -8,6 +8,7 @@ import { AuthContext } from "../context/AuthContext";
 import PersonIcon from "@mui/icons-material/Person";
 import AddIcon from '@mui/icons-material/Add';
 import IconButton from '@mui/material/IconButton';
+import "./Header.css";
 
 const Header = () => {
   const { isAuthenticated } = useContext(AuthContext);
