@@ -3,6 +3,9 @@ import { useContext, useState } from "react";
 import TextField from "@mui/material/TextField";
 import { AuthContext } from "../../context/AuthContext";
 import Button from "@mui/material/Button";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from "react-router-dom";
 
 
 function UpdateForm() {
@@ -12,7 +15,8 @@ function UpdateForm() {
     avatar: "",
     newPassword: "",
   });
-
+  const auth = useContext(AuthContext);
+  const navigate = useNavigate();
   const { token } = useContext(AuthContext);
 
   const handleChange = (e) => {
@@ -37,10 +41,14 @@ function UpdateForm() {
       const response = await fetch(url, requestOptions);
 
       if (response.ok) {
-        // Request was successful, handle the response as needed
         console.log("Profile updated successfully");
+        toast.success("Perfil actualizado correctamente", {
+          position: toast.POSITION.TOP_CENTER
+
+        })
+        await auth.logout();
+        navigate("/login");
       } else {
-        // Request failed, handle the error
         console.error("Error updating profile");
         alert("Error updating profile");
       }
