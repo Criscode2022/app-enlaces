@@ -3,10 +3,12 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useContext } from "react";
+import { AuthContext } from "../../context/AuthContext";
 
 function NewPostForm() {
   // Obtener el token del Local Storage
-  const token = window.localStorage.getItem("authToken");
+  const { token } = useContext(AuthContext);
 
   const [postData, setpostData] = useState({
     url: "",
