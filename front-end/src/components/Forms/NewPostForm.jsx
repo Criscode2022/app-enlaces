@@ -7,7 +7,7 @@ import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
 
 function NewPostForm() {
-  // Obtener el token del Local Storage
+  // Obtener el token del AuthContext
   const { token } = useContext(AuthContext);
 
   const [postData, setpostData] = useState({
