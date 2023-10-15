@@ -39,21 +39,22 @@ function NewPostForm() {
         body: JSON.stringify(postData), // Envía el objeto postData sin el userId
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "No se pudo crear el enlace");
-      }
-
       const responseData = await response.json();
-      // Manejar la respuesta del servidor aquí, si es necesario.
 
       console.log("Respuesta del servidor:", responseData); // Verificar la respuesta del servidor
+
+      if (!response.ok) {
+        throw new Error(responseData.error || "No se pudo crear el enlace");
+      }
 
       toast.success("Enlace creado correctamente", {
         position: toast.POSITION.TOP_CENTER
       })
     } catch (error) {
       console.error("Error al crear el enlace:", error);
+      toast.error(error.message, {
+        position: toast.POSITION.TOP_CENTER
+      });
     }
   };
 
