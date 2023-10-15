@@ -1,7 +1,7 @@
 import { useState } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function NewPostForm() {
@@ -59,41 +59,36 @@ function NewPostForm() {
   };
 
   return (
-    <>
-      <form onSubmit={handleSubmit}>
-        <TextField
-          required
-          label="Título"
-          name="titulo"
-          value={postData.titulo}
-          onChange={handleInputChange}
-        />
-        <TextField
-          required
-          label="URL"
-          name="url"
-          value={postData.url}
-          onChange={handleInputChange}
-        />
-        <TextField
-          required
-          label="Descripción"
-          name="descripcion"
-          value={postData.descripcion}
-          onChange={handleInputChange}
-        />
-        <TextField
-          label="Imagen del enlace"
-          name="image"
-          value={postData.image}
-          onChange={handleInputChange}
-        />
-        <Button type="submit" variant="contained">Crear Enlace</Button>
-      </form>
-
-      <ToastContainer />
-
-    </>
+    <form onSubmit={handleSubmit}>
+      <TextField
+        required
+        label="Título"
+        name="titulo"
+        value={postData.titulo}
+        onChange={handleInputChange}
+      />
+      <TextField
+        required
+        label="URL"
+        name="url"
+        value={postData.url}
+        onChange={handleInputChange}
+      />
+      <TextField
+        required
+        label="Descripción"
+        name="descripcion"
+        value={postData.descripcion}
+        onChange={handleInputChange}
+      />
+      <TextField
+        label="Imagen del enlace"
+        name="image"
+        value={postData.image}
+        onChange={handleInputChange}
+      />
+      <Button type="submit" variant="contained">Crear Enlace</Button>
+    </form>
   );
 }
 
