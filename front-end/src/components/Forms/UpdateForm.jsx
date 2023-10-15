@@ -28,25 +28,10 @@ function UpdateForm() {
     e.preventDefault();
 
     try {
-      const url = "http://localhost:3000/users/update";
-      const requestOptions = {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(formData),
-      };
-      const response = await fetch(url, requestOptions);
-      const json = await response.json();
-      if (!response.ok) {
-        throw new Error(json.message);
-      }
+      await auth.update(formData);
       toast.success("Perfil actualizado correctamente", {
         position: toast.POSITION.TOP_CENTER
-      })
-      await auth.logout();
-      navigate("/login");
+      });
     } catch (error) {
       console.error("Error updating profile:", error);
       toast.error(error.message || "Error updating profile", {
