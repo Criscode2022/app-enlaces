@@ -27,7 +27,7 @@ const ListofPosts = () => {
       .catch((error) => {
         console.error('Error al obtener los datos:', error);
       });
-  }, []);
+  }, [token]);
 
   const updateBadgeCount = (postId, count) => {
     setBadgeCounts((prevCounts) => ({
