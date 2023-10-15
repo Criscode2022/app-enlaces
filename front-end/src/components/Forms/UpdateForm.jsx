@@ -37,24 +37,21 @@ function UpdateForm() {
         },
         body: JSON.stringify(formData),
       };
-
       const response = await fetch(url, requestOptions);
-
-      if (response.ok) {
-        console.log("Profile updated successfully");
-        toast.success("Perfil actualizado correctamente", {
-          position: toast.POSITION.TOP_CENTER
-
-        })
-        await auth.logout();
-        navigate("/login");
-      } else {
-        console.error("Error updating profile");
-        alert("Error updating profile");
+      const json = await response.json();
+      if (!response.ok) {
+        throw new Error(json.message);
       }
+      toast.success("Perfil actualizado correctamente", {
+        position: toast.POSITION.TOP_CENTER
+      })
+      await auth.logout();
+      navigate("/login");
     } catch (error) {
       console.error("Error updating profile:", error);
-      alert("Error updating profile: " + error.message);
+      toast.error(error.message || "Error updating profile", {
+        position: toast.POSITION.TOP_CENTER
+      })
     }
   };
 
