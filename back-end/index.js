@@ -8,6 +8,10 @@ const cors = require('cors');
 // Importamos las rutas.
 const routes = require('./routes');
 
+//Importamos los controladores
+const authenticateToken = require('./utils/authenticateToken');
+
+
 // Creamos el servidor.
 const app = express();
 

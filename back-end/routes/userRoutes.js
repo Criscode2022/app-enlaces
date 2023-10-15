@@ -12,6 +12,7 @@ const {
     followUserController,
     loginUserController,
     unfollowUserController,
+    updateUserController,
     getUserByIdController,
 } = require('../controllers/users');
 
@@ -47,5 +48,8 @@ routes.get(
 
 //Obtener información de un usuario por parámetro id:
 routes.get('/users/:userId', authenticateToken, getUserByIdController);
+
+// Actualización de usuario.
+routes.put('/users/update', updateUserController);
 
 module.exports = routes;
