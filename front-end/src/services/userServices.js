@@ -17,6 +17,8 @@ export const registerService = async (username, password) => {
   if (json.status === "error") {
     throw new Error(json.message);
   }
+  // Si no devolvemos el token.
+  return json.token;
 };
 
 // Función que loguea a un usuario.
@@ -35,7 +37,6 @@ export const loginService = async (username, password) => {
   const json = await response.json();
 
   // Si hay un error lo mostramos.
-
   if (json.status === "error") {
     throw new Error(json.message);
   }
@@ -82,5 +83,5 @@ export const updateUserService = async (token, fieldsToUpdate) => {
   }
 
   // Retornamos la respuesta del servidor
-  return json;
+  return json.token;
 };
