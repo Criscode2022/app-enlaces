@@ -5,7 +5,7 @@ const NewPost = () => {
     <>
       <h2> Crear enlace</h2>
 
-      <div className="container">
+      <div className="center">
         <NewPostForm />
       </div >
     </>

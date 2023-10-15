@@ -86,17 +86,6 @@ ul {
   background-color: red !important;
 }
 
-.form-text {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.aside-text {
-  width: 40%;
-}
-
 form {
   width: 80%;
 }
@@ -118,11 +107,22 @@ form {
   margin: 20px;
 }
 
+.center {
+  display: flex;
+  justify-content: center;
+  width: 40%;
+  margin: auto;
+}
+
 @media (max-width: 768px) {
   .container {
-    display:flex;
+    display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+  }
+
+  .center {
+    width: 80%;
   }
 }

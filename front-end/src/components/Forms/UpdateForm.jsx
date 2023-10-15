@@ -84,7 +84,7 @@ function UpdateForm() {
         name="newPassword"
         value={formData.newPassword}
       />
-      <Button type="submit" variant="contained">Crear Enlace</Button>
+      <Button type="submit" variant="contained">Actualizar perfil</Button>
     </form>
   );
 }

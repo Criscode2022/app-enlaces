@@ -8,7 +8,13 @@ const UpdatePage = () => {
     return <Navigate to="/feed" />
   }
   return (
-    <div><UpdateForm></UpdateForm></div>
+
+    <>
+      <h2> Actualizar perfil</h2>
+
+      <div className='center'><UpdateForm></UpdateForm>
+      </div>
+    </>
   )
 }
 

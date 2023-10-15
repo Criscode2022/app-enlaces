@@ -12,6 +12,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { CardActions } from '@mui/material';
+import CardHeader from '@mui/material/CardHeader';
 
 const Post = (props) => {
   const {
@@ -194,14 +195,20 @@ const Post = (props) => {
 
   return (
     <Card className="post animate__animated animate__zoomIn">
-      <CardMedia component="img" height="140" image={imageUrl} alt="Post Image" />
-      <CardContent className="post-content">
-        <Typography gutterBottom variant="h6" component="div" className="post-author">
-          {userName}
-          <Button variant="contained" className={`post-follow-button${isFollowing ? " unfollow" : ""}`} onClick={handleFollow}>
+      <CardHeader
+        title={userName}
+        action={
+          <Button
+            variant="contained"
+            className={`post-follow-button${isFollowing ? " unfollow" : ""}`}
+            onClick={handleFollow}
+          >
             {isFollowing ? 'Dejar de seguir' : 'Seguir'}
           </Button>
-        </Typography>
+        }
+      />
+      <CardMedia component="img" height="140" image={imageUrl} alt="Post Image" />
+      <CardContent className="post-content">
         <Typography gutterBottom variant="h5" component="div">
           {title}
         </Typography>
@@ -214,18 +221,23 @@ const Post = (props) => {
           Visitar
         </Button>
         <Badge badgeContent={likesCount} color="primary">
-          <Button sx={{ margin: '0 10px 0 10px', }} onClick={toggleLike} variant="outlined" className={`post-like-button${userLiked ? " liked" : ""}`}>
+          <Button
+            sx={{ margin: '0 10px 0 10px' }}
+            onClick={toggleLike}
+            variant="outlined"
+            className={`post-like-button${userLiked ? " liked" : ""}`}
+          >
             {userLiked ? <FavoriteIcon /> : <FavoriteBorderOutlinedIcon />}
           </Button>
         </Badge>
         {isLoggedUserPost && (
-          <Button variant="contained" class="post-delete-button" onClick={handleDelete}>
+          <Button variant="contained" className="post-delete-button" onClick={handleDelete}>
             <DeleteIcon></DeleteIcon>
           </Button>
         )}
       </CardActions>
     </Card>
   );
-}
+};
 
 export default Post;
