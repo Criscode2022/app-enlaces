@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import Post from './Post';
 import { AuthContext } from '../context/AuthContext';
 

@@ -7,9 +7,8 @@ import Button from '@mui/material/Button';
 import Badge from '@mui/material/Badge';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import jwt_decode from 'jwt-decode';
 import { AuthContext } from '../context/AuthContext';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { CardActions } from '@mui/material';
@@ -89,7 +88,7 @@ const Post = (props) => {
     } catch (error) {
       console.error('Error al decodificar el token:', error);
     }
-  }, [postId, token, userId]); // Run the effect whenever postId changes
+  }, [postId, token, userId, userIdLogged]); // Run the effect whenever postId changes
 
   const toggleLike = () => {
     // Realizar una solicitud a la API para dar o quitar like en función de userLiked
@@ -194,41 +193,38 @@ const Post = (props) => {
 
 
   return (
-    <div className='animate__animated animate__zoomIn'>
-      <Card className="post">
-        <CardMedia component="img" height="140" image={imageUrl} alt="Post Image" />
-        <CardContent>
-          <Typography gutterBottom variant="h6" component="div" className="post-author">
-            {userName}
-            <Button variant="contained" className={`post-follow-button${isFollowing ? " unfollow" : ""}`} onClick={handleFollow}>
-              {isFollowing ? 'Dejar de seguir' : 'Seguir'}
-            </Button>
-          </Typography>
-          <Typography gutterBottom variant="h5" component="div">
-            {title}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            {content}
-          </Typography>
-        </CardContent>
-        <CardActions>
-          <Button variant="contained" href={url} target="_blank" fullWidth>
-            Visitar
+    <Card className="post animate__animated animate__zoomIn">
+      <CardMedia component="img" height="140" image={imageUrl} alt="Post Image" />
+      <CardContent className="post-content">
+        <Typography gutterBottom variant="h6" component="div" className="post-author">
+          {userName}
+          <Button variant="contained" className={`post-follow-button${isFollowing ? " unfollow" : ""}`} onClick={handleFollow}>
+            {isFollowing ? 'Dejar de seguir' : 'Seguir'}
           </Button>
-          <Badge badgeContent={likesCount} color="primary">
-            <Button sx={{ margin: '0 10px 0 10px', }} onClick={toggleLike} variant="outlined" className={`post-like-button${userLiked ? " liked" : ""}`}>
-              {userLiked ? <FavoriteIcon /> : <FavoriteBorderOutlinedIcon />}
-            </Button>
-          </Badge>
-          {isLoggedUserPost && (
-            <Button variant="contained" class="post-delete-button" onClick={handleDelete}>
-              <DeleteIcon></DeleteIcon>
-            </Button>
-          )}
-        </CardActions>
-      </Card >
-      <ToastContainer />
-    </div>
+        </Typography>
+        <Typography gutterBottom variant="h5" component="div">
+          {title}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          {content}
+        </Typography>
+      </CardContent>
+      <CardActions className="post-actions">
+        <Button variant="contained" href={url} target="_blank" fullWidth>
+          Visitar
+        </Button>
+        <Badge badgeContent={likesCount} color="primary">
+          <Button sx={{ margin: '0 10px 0 10px', }} onClick={toggleLike} variant="outlined" className={`post-like-button${userLiked ? " liked" : ""}`}>
+            {userLiked ? <FavoriteIcon /> : <FavoriteBorderOutlinedIcon />}
+          </Button>
+        </Badge>
+        {isLoggedUserPost && (
+          <Button variant="contained" class="post-delete-button" onClick={handleDelete}>
+            <DeleteIcon></DeleteIcon>
+          </Button>
+        )}
+      </CardActions>
+    </Card>
   );
 }
 

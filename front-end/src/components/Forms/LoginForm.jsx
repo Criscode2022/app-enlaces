@@ -1,10 +1,9 @@
 import '../../App.css';
-import React, { useContext, useState } from 'react';
+import { useContext, useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
-import Aside from '../../components/aside/Aside';
 
 const LoginForm = () => {
     const [formData, setFormData] = useState({
@@ -12,7 +11,6 @@ const LoginForm = () => {
         password: '',
     });
 
-    const navigate = useNavigate(); // Obtén la función navigate
     const auth = useContext(AuthContext);
     const handleChange = (e) => {
         const { name, value } = e.target;

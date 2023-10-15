@@ -9,6 +9,7 @@ import Error404Page from "./pages/Error404Page";
 import AvatarPage from "./pages/AvatarPage";
 import FeedPage from "./pages/FeedPage";
 import NewPostPage from "./pages/NewPostPage";
+import { ToastContainer } from 'react-toastify';
 import { AuthContext } from "./context/AuthContext";
 import { useContext } from "react";
 import 'animate.css';
@@ -35,6 +36,7 @@ function App() {
           <Route path="/feed" element={<FeedPage />} />
           <Route path="/*" element={<Error404Page />} />
         </Routes>
+        <ToastContainer />
       </main>
     </>
   );

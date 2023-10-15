@@ -2,7 +2,7 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { AuthContext } from '../../context/AuthContext';
 import { useContext } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Aside from '../aside/Aside';
 
@@ -36,7 +36,6 @@ const RegisterForm = () => {
           Enviar
         </Button>
       </form>
-      <ToastContainer />
       <Aside />
     </div>
   );
