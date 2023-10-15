@@ -50,6 +50,8 @@ follows:
 
 ## Lista de endpoints:
 
+Colección de Postman: https://mail.google.com/mail/u/0?ui=2&ik=945f82c0bd&attid=0.1&permmsgid=msg-f:1779852485942019225&th=18b34e67e92b8499&view=att&disp=safe&realattid=f_lnrvvxyd0
+
 Rutas de publicaciones (todas requieren autenticación):
 - GET /posts => Obtener todos los enlaces publicados.
 - GET /posts/likes => Obtener todos los enlaces con like.
