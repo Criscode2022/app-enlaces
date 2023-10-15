@@ -59,9 +59,11 @@ Rutas de publicaciones (todas requieren autenticación):
 - DELETE /posts/:postId => Eliminar publicación.
   
 Rutas de usuario:
-- GET /users/checkfollow/:userFollow => Comprobar si se sigue a un usuario.
-- GET /users/following => Obtener usuarios que se siguen.
+- GET /users/checkfollow/:userFollow => Comprobar si se sigue a un usuario (requiere autenticación).
+- GET /users/following => Obtener usuarios que se siguen (requiere autenticación).
+- GET /users/:userId => Obtener la información de un usuario por su id (requiere autenticación).
 - POST /users/register => Registro de usuario.
 - POST /users/login => Logueo de usuario.
 - POST /users/follow/:userFollow => Seguir a un usuario (requiere autenticación).
-- PUT /users/update => actualizar perfil de usuario.
+- PUT /users/update => actualizar perfil de usuario (requiere autenticación).
+- DELETE /users/unfollow/:userUnfollow => Dejar de seguir a un usuario (requiere autenticación).
