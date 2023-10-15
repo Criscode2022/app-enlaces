@@ -50,6 +50,6 @@ routes.get(
 routes.get('/users/:userId', authenticateToken, getUserByIdController);
 
 // Actualización de usuario.
-routes.put('/users/update', updateUserController);
+routes.put('/users/update', authenticateToken, updateUserController);
 
 module.exports = routes;

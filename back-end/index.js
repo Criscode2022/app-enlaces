@@ -9,8 +9,7 @@ const cors = require('cors');
 const routes = require('./routes');
 
 //Importamos los controladores
-const authenticateToken = require('./utils/authenticateToken');
-
+const authenticateToken = require('./middlewares/authenticateToken');
 
 // Creamos el servidor.
 const app = express();
