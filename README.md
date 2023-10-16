@@ -12,7 +12,7 @@ La aplicación no contempla usuarios anónimos: todos deben registrarse para pod
 
 - Crear una base de datos vacía en una instancia de MySQL local.
 - Guardar el archivo '.env.example' como '.env' y cubrir los datos necesarios.
-- Ejecutar el script SQL ('./script-BBDD.sql') en la base de datos vacía para inicializarla.
+- Ejecutar el script SQL ('./documentation/script-BBDD.sql') en la base de datos vacía para inicializarla.
 - Ejecutar el comando 'npm i' en consola para instalar las dependencias necesarias.
 - Arrancar el servidor.
 
