@@ -22,6 +22,13 @@ const newUserController = async (req, res, next) => {
         // Obtenemos los datos que nos interesan del body.
         const { username, password } = req.body;
 
+        if (username.length < 3) {
+            generateError(
+                'El nombre de usuario debe tener al menos 3 caracteres',
+                409
+            );
+        }
+
         // Comprobamos si existe un usuario con el mismo nombre.
         const [users] = await pool.query(
             'SELECT id_user FROM users WHERE name_user = ?',
