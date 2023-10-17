@@ -32,7 +32,6 @@ const LoginForm = () => {
             console.error("Error logging in:", error);
             setErrors({
                 ...errors,
-                username: " ",
                 password: "Usuario o contraseña incorrectos",
             });
         }
@@ -54,7 +53,6 @@ const LoginForm = () => {
                     value={formData.username}
                     onChange={handleChange}
                     error={Boolean(errors.username)}
-                    helperText={errors.username}
                 />
                 <TextField
                     required
