@@ -3,6 +3,7 @@ import Button from '@mui/material/Button';
 import { AuthContext } from '../../context/AuthContext';
 import { useContext } from 'react';
 import { toast } from 'react-toastify';
+import { Navigate } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 
 async function handleSubmit(e, auth) {
@@ -17,7 +18,9 @@ async function handleSubmit(e, auth) {
       position: toast.POSITION.TOP_CENTER
     })
   } catch (error) {
-    alert("Error registering user: " + error.message);
+    toast.error(error.message || "Error registrando usuario", {
+      position: toast.POSITION.TOP_CENTER
+    })
   }
 }
 
@@ -25,6 +28,9 @@ async function handleSubmit(e, auth) {
 
 const RegisterForm = () => {
   const auth = useContext(AuthContext);
+  if (auth.token) {
+    return <Navigate to="/feed" />;
+  }
   return (
     <div className='flex'>
       <h2>Registrarse</h2>

@@ -1,6 +1,10 @@
-import { createContext, useState, useEffect } from "react";
-import { loginService, registerService } from "../services/userServices";
-import jwt_decode from "jwt-decode";
+import { createContext, useState, useEffect } from 'react';
+import {
+    loginService,
+    registerService,
+    updateUserService,
+} from '../services/userServices';
+import jwt_decode from 'jwt-decode';
 
 export const AuthContext = createContext(null);
 
@@ -14,24 +18,22 @@ export const AuthProvider = ({ children }) => {
     const [userName, setUserName] = useState(null);
 
     useEffect(() => {
-        setIsAuthenticated(!!token);
-    }, [token]);
-
-    const decode = () => {
-        try {
-            const decodedToken = jwt_decode(token);
-            const userIdLogged = decodedToken.userId;
-            setUserId(userIdLogged);
-            setUserName(decodedToken.userName);
-
-        } catch (error) {
-            console.error("Error al decodificar el token:", error);
-        }
-    };
-
-    useEffect(() => {
         if (token) {
-            decode(); // Call getUserId when the token is set or changes
+            try {
+                const { userId, userName } = jwt_decode(token);
+                setUserId(userId);
+                setUserName(userName);
+                setIsAuthenticated(true);
+                localStorage.setItem(TOKEN_KEY, token);
+            } catch (ex) {
+                console.error("Error al decodificar el token:", error);
+                setToken(null);
+            }
+        } else {
+            localStorage.removeItem(TOKEN_KEY);
+            setUserName(null); // Clear the user name on logout
+            setUserId(null); // Clear the user ID on logout
+            setIsAuthenticated(false);
         }
     }, [token]);
 
@@ -39,34 +41,50 @@ export const AuthProvider = ({ children }) => {
         try {
             setLoading(true);
             const token = await loginService(username, password);
-            console.log("Logged-in with token: ", token);
-            localStorage.setItem(TOKEN_KEY, token);
             setToken(token);
-            setIsAuthenticated(true);
         } finally {
             setLoading(false);
         }
     };
 
     const logout = () => {
-        localStorage.removeItem(TOKEN_KEY);
         setToken(null);
-        setIsAuthenticated(false);
-        setUserName(null); // Clear the user name on logout
-        setUserId(null); // Clear the user ID on logout
     };
 
     const register = async (username, password) => {
         try {
             setLoading(true);
-            await registerService(username, password);
+            const newToken = await registerService(username, password);
+            setToken(newToken);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const update = async (fieldsToUpdate) => {
+        try {
+            setLoading(true);
+            const newToken = await updateUserService(token, fieldsToUpdate);
+            setToken(newToken);
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <AuthContext.Provider value={{ loading, token, isAuthenticated, userId, login, logout, register, userName }}>
+        <AuthContext.Provider
+            value={{
+                loading,
+                token,
+                isAuthenticated,
+                userId,
+                login,
+                logout,
+                register,
+                update,
+                userName,
+            }}
+        >
             {children}
         </AuthContext.Provider>
     );
