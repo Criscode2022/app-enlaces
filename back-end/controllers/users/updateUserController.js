@@ -18,17 +18,42 @@ const generateAuthToken = require('../../utils/generateAuthToken');
 
 // Función controladora final para actualizar el usuario.
 const updateUserController = async (req, res, next) => {
+    // Obtenemos los datos que nos interesan
+    const { biography, avatar, username, newPassword } = req.body;
+
+    const fields = []; // Declara el array de campos aquí para que esté disponible en todo el bloque de la función
+
+    // Agregar campos a `fields` antes de la validación del esquema
+    if (newPassword) {
+        fields.push('newPassword');
+    }
+    if (biography) {
+        fields.push('biography');
+    }
+    if (avatar) {
+        fields.push('avatar');
+    }
+    if (username) {
+        fields.push('username');
+    }
+
+    // Verifica si no hay campos para actualizar
+    if (fields.length === 0) {
+        return res.status(400).json({
+            error: 'No se proporcionaron campos para actualizar',
+        });
+    }
+
     try {
         // Validamos los datos que envía el usuario.
         await validateSchema(updateUserSchema, req.body);
-        // Obtenemos los datos que nos interesan
-        const { biography, avatar, username, newPassword } = req.body;
+
         // Obtención ID del usuario
         const id = req.auth.user;
 
-        const params = { name_user: username };
+        const params = {};
 
-        // Actualizar la contraseña sólo si se proporciona.
+        // Actualizar la contraseña solo si se proporciona.
         if (newPassword) {
             // Encriptamos la contraseña.
             const hashedPassword = await bcrypt.hash(newPassword, 10);
@@ -41,6 +66,10 @@ const updateUserController = async (req, res, next) => {
         // Actualizar el avatar si se proporciona.
         if (avatar) {
             params.avatar_user = avatar;
+        }
+        // Actualizar el nombre de usuario si se proporciona.
+        if (username) {
+            params.name_user = username;
         }
 
         await pool.query('UPDATE users SET ? WHERE id_user = ?', [params, id]);
@@ -55,7 +84,14 @@ const updateUserController = async (req, res, next) => {
             username,
         });
     } catch (err) {
-        next(err);
+        // Crear un objeto JSON para los campos afectados en el error.
+        const errorResponse = {
+            error: err.message,
+            fields,
+        };
+
+        res.status(400).json(errorResponse);
     }
 };
+
 module.exports = updateUserController;
