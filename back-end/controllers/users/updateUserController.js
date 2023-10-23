@@ -23,27 +23,6 @@ const updateUserController = async (req, res, next) => {
 
     const fields = []; // Declara el array de campos aquí para que esté disponible en todo el bloque de la función
 
-    // Agregar campos a `fields` antes de la validación del esquema
-    if (newPassword) {
-        fields.push('newPassword');
-    }
-    if (biography) {
-        fields.push('biography');
-    }
-    if (avatar) {
-        fields.push('avatar');
-    }
-    if (username) {
-        fields.push('username');
-    }
-
-    // Verifica si no hay campos para actualizar
-    if (fields.length === 0) {
-        return res.status(400).json({
-            error: 'No se proporcionaron campos para actualizar',
-        });
-    }
-
     try {
         // Validamos los datos que envía el usuario.
         await validateSchema(updateUserSchema, req.body);
@@ -90,6 +69,25 @@ const updateUserController = async (req, res, next) => {
             fields,
         };
 
+        const fieldsToCheck = [
+            'avatar',
+            'biography',
+            'username',
+            'newPassword',
+        ];
+
+        fieldsToCheck.forEach((field) => {
+            if (err.message.includes(field)) {
+                fields.push(field);
+            }
+        });
+
+        // Verifica si no hay campos para actualizar
+        if (fields.length === 0) {
+            return res.status(400).json({
+                error: 'No se proporcionaron campos para actualizar',
+            });
+        }
         res.status(400).json(errorResponse);
     }
 };
