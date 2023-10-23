@@ -1,12 +1,9 @@
 import "../../App.css";
-import { useContext, useState } from "react";
+import React, { useContext, useState } from "react";
 import TextField from "@mui/material/TextField";
-import { AuthContext } from "../../context/AuthContext";
 import Button from "@mui/material/Button";
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { AuthContext } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-
 
 function UpdateForm() {
   const [formData, setFormData] = useState({
@@ -15,6 +12,14 @@ function UpdateForm() {
     avatar: "",
     newPassword: "",
   });
+
+  const [errors, setErrors] = useState({
+    username: "",
+    biography: "",
+    avatar: "",
+    newPassword: "",
+  });
+
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
   const { token } = useContext(AuthContext);
@@ -22,6 +27,7 @@ function UpdateForm() {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+    setErrors({ ...errors, [name]: "" }); // Limpiar el mensaje de error del campo actual
   };
 
   const handleSubmit = async (e) => {
@@ -38,20 +44,39 @@ function UpdateForm() {
         body: JSON.stringify(formData),
       };
       const response = await fetch(url, requestOptions);
-      const json = await response.json();
-      if (!response.ok) {
-        throw new Error(json.message);
+      const jsonResponse = await response.json();
+
+      if (response.status === 400) {
+        // Si la respuesta tiene un estado 400 (Bad Request), maneja los errores
+        setErrors({
+          username: jsonResponse.fields.includes("username")
+            ? jsonResponse.error
+            : "",
+          biography: jsonResponse.fields.includes("biography")
+            ? jsonResponse.error
+            : "",
+          avatar: jsonResponse.fields.includes("avatar")
+            ? jsonResponse.error
+            : "",
+          newPassword: jsonResponse.fields.includes("newPassword")
+            ? jsonResponse.error
+            : "",
+        });
+      } else if (!response.ok) {
+        throw new Error(jsonResponse.message);
+      } else {
+        // Limpia los mensajes de error de todos los campos en caso de éxito
+        setErrors({
+          username: "",
+          biography: "",
+          avatar: "",
+          newPassword: "",
+        });
+        await auth.logout();
+        navigate("/login");
       }
-      toast.success("Perfil actualizado correctamente", {
-        position: toast.POSITION.TOP_CENTER
-      })
-      await auth.logout();
-      navigate("/login");
     } catch (error) {
       console.error("Error updating profile:", error);
-      toast.error(error.message || "Error updating profile", {
-        position: toast.POSITION.TOP_CENTER
-      })
     }
   };
 
@@ -64,6 +89,8 @@ function UpdateForm() {
         id="username"
         name="username"
         value={formData.username}
+        helperText={errors.username}
+        error={Boolean(errors.username)}
       />
       <TextField
         type="text"
@@ -72,6 +99,8 @@ function UpdateForm() {
         id="biography"
         name="biography"
         value={formData.biography}
+        helperText={errors.biography}
+        error={Boolean(errors.biography)}
       />
       <TextField
         type="text"
@@ -80,6 +109,8 @@ function UpdateForm() {
         id="avatar"
         name="avatar"
         value={formData.avatar}
+        helperText={errors.avatar}
+        error={Boolean(errors.avatar)}
       />
       <TextField
         type="password"
@@ -88,8 +119,12 @@ function UpdateForm() {
         id="newPassword"
         name="newPassword"
         value={formData.newPassword}
+        helperText={errors.newPassword}
+        error={Boolean(errors.newPassword)}
       />
-      <Button type="submit" variant="contained">Actualizar perfil</Button>
+      <Button type="submit" variant="contained">
+        Actualizar perfil
+      </Button>
     </form>
   );
 }
