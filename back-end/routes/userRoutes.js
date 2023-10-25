@@ -7,6 +7,7 @@ const authenticateToken = require('../middlewares/authenticateToken');
 // Importamos las funciones controladoras finales.
 const {
     checkFollowController,
+    deleteUserController,
     newUserController,
     getFollowingUsersController,
     followUserController,
@@ -28,6 +29,9 @@ routes.post(
     authenticateToken,
     followUserController
 );
+
+//Eliminación de usuario.
+routes.delete('/users/delete', authenticateToken, deleteUserController);
 
 // Unfollow de usuario.
 routes.delete(

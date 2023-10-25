@@ -6,14 +6,16 @@ const updateUserController = require('./updateUserController');
 const checkFollowController = require('./checkFollowController');
 const getFollowingUsersController = require('./getFollowingUsersController');
 const getUserByIdController = require('./getUserByIdController');
+const deleteUserController = require('./deleteUserController');
 
 module.exports = {
-    newUserController,
-    getFollowingUsersController,
-    loginUserController,
     checkFollowController,
+    deleteUserController,
     followUserController,
+    getFollowingUsersController,
+    getUserByIdController,
+    loginUserController,
+    newUserController,
     unfollowUserController,
     updateUserController,
-    getUserByIdController
 };
