@@ -36,30 +36,36 @@ function UpdateForm() {
 
   const handleDeleteUser = async () => {
     try {
-      const url = "http://localhost:3000/users/delete";
-      const requestOptions = {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      };
-      const response = await fetch(url, requestOptions);
-      const jsonResponse = await response.json();
+      // Muestra un cuadro de diálogo de confirmación al usuario
+      const shouldDelete = window.confirm("¿Seguro que quieres eliminar tu perfil y toda su actividad asocidada? Esta acción no puede ser revertida.");
 
-      if (!response.ok) {
-        throw new Error(jsonResponse.message);
-      } else {
-        toast.success("Perfil borrado correctamente", {
-          position: toast.POSITION.TOP_CENTER
-        })
-        navigate("/login");
-        auth.logout();
+      if (shouldDelete) {
+        const url = "http://localhost:3000/users/delete";
+        const requestOptions = {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        };
+        const response = await fetch(url, requestOptions);
+        const jsonResponse = await response.json();
+
+        if (!response.ok) {
+          throw new Error(jsonResponse.message);
+        } else {
+          toast.success("Perfil borrado correctamente", {
+            position: toast.POSITION.TOP_CENTER
+          });
+          navigate("/login");
+          auth.logout();
+        }
       }
     } catch (error) {
       console.error("Error deleting profile:", error);
     }
   };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -170,7 +176,7 @@ function UpdateForm() {
       </form>
 
 
-      <Button variant="contained" color="primary" onClick={handleDeleteUser}>
+      <Button variant="contained" color='error' style={{ width: '50%', marginTop: '100px' }} onClick={handleDeleteUser}>
         Borrar perfil
       </Button>
     </>
