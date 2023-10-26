@@ -29,6 +29,32 @@ function UpdateForm() {
     setErrors({ ...errors, [name]: "" }); // Limpiar el mensaje de error del campo actual
   };
 
+  const handleDeleteUser = async () => {
+    try {
+      const url = "http://localhost:3000/users/delete";
+      const requestOptions = {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const response = await fetch(url, requestOptions);
+      const jsonResponse = await response.json();
+
+      if (!response.ok) {
+        throw new Error(jsonResponse.message);
+      } else {
+        auth.logout();
+        toast.success("Perfil borrado correctamente", {
+          position: toast.POSITION.TOP_CENTER
+        })
+      }
+    } catch (error) {
+      console.error("Error deleting profile:", error);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -90,51 +116,58 @@ function UpdateForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <TextField
-        type="text"
-        label="Nombre de usuario"
-        onChange={handleChange}
-        id="username"
-        name="username"
-        value={formData.username}
-        helperText={errors.username}
-        error={Boolean(errors.username)}
-      />
-      <TextField
-        type="text"
-        label="Biografía"
-        onChange={handleChange}
-        id="biography"
-        name="biography"
-        value={formData.biography}
-        helperText={errors.biography}
-        error={Boolean(errors.biography)}
-      />
-      <TextField
-        type="text"
-        label="URL de avatar"
-        onChange={handleChange}
-        id="avatar"
-        name="avatar"
-        value={formData.avatar}
-        helperText={errors.avatar}
-        error={Boolean(errors.avatar)}
-      />
-      <TextField
-        type="password"
-        label="Nueva contraseña"
-        onChange={handleChange}
-        id="newPassword"
-        name="newPassword"
-        value={formData.newPassword}
-        helperText={errors.newPassword}
-        error={Boolean(errors.newPassword)}
-      />
-      <Button type="submit" variant="contained">
-        Actualizar perfil
+    <>
+      <form onSubmit={handleSubmit}>
+        <TextField
+          type="text"
+          label="Nombre de usuario"
+          onChange={handleChange}
+          id="username"
+          name="username"
+          value={formData.username}
+          helperText={errors.username}
+          error={Boolean(errors.username)}
+        />
+        <TextField
+          type="text"
+          label="Biografía"
+          onChange={handleChange}
+          id="biography"
+          name="biography"
+          value={formData.biography}
+          helperText={errors.biography}
+          error={Boolean(errors.biography)}
+        />
+        <TextField
+          type="text"
+          label="URL de avatar"
+          onChange={handleChange}
+          id="avatar"
+          name="avatar"
+          value={formData.avatar}
+          helperText={errors.avatar}
+          error={Boolean(errors.avatar)}
+        />
+        <TextField
+          type="password"
+          label="Nueva contraseña"
+          onChange={handleChange}
+          id="newPassword"
+          name="newPassword"
+          value={formData.newPassword}
+          helperText={errors.newPassword}
+          error={Boolean(errors.newPassword)}
+        />
+        <Button type="submit" variant="contained">
+          Actualizar perfil
+        </Button>
+      </form>
+
+
+      <Button variant="contained" color="primary" onClick={handleDeleteUser}>
+        Borrar perfil
       </Button>
-    </form>
+    </>
   );
 }
 
