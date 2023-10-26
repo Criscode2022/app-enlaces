@@ -32,7 +32,7 @@ create table likes (
 id_like INT auto_increment primary key,
 id_user INT NOT NULL,
 id_post INT NOT NULL,
-FOREIGN KEY (id_user) REFERENCES users (id_user),
+FOREIGN KEY (id_user) REFERENCES users (id_user) ON DELETE CASCADE,
 FOREIGN KEY (id_post) REFERENCES posts (id_post) ON DELETE CASCADE,
 UNIQUE KEY unique_user_post (id_user, id_post)
 
@@ -127,6 +127,8 @@ select * from follows;
 
 -- Ver a quién sigue un usuario --
 
-select id_user_following from follows
-where id_user = 5;
+select name_user as "Siguiendo"
+from users u
+inner join follows f on u.id_user = f.id_user_following
+where f.id_user = 7;
 
