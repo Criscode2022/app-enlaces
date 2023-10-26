@@ -176,7 +176,7 @@ function UpdateForm() {
       </form>
 
 
-      <Button variant="contained" color='error' style={{ width: '50%', marginTop: '100px' }} onClick={handleDeleteUser}>
+      <Button variant="contained" color='error' style={{ width: '50%', margin: '50px 0 50px 0' }} onClick={handleDeleteUser}>
         Borrar perfil
       </Button>
     </>
