@@ -4,8 +4,13 @@ import Button from "@mui/material/Button";
 import { AuthContext } from "../../context/AuthContext";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from "react-router-dom";
+
+
 
 function UpdateForm() {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     username: "",
     biography: "",
@@ -45,10 +50,11 @@ function UpdateForm() {
       if (!response.ok) {
         throw new Error(jsonResponse.message);
       } else {
-        auth.logout();
         toast.success("Perfil borrado correctamente", {
           position: toast.POSITION.TOP_CENTER
         })
+        navigate("/login");
+        auth.logout();
       }
     } catch (error) {
       console.error("Error deleting profile:", error);
