@@ -21,8 +21,6 @@ const updateUserController = async (req, res, next) => {
     // Obtenemos los datos que nos interesan
     const { biography, avatar, username, newPassword } = req.body;
 
-    const fields = []; // Declara el array de campos aquí para que esté disponible en todo el bloque de la función
-
     try {
         // Validamos los datos que envía el usuario.
         await validateSchema(updateUserSchema, req.body);
@@ -63,32 +61,17 @@ const updateUserController = async (req, res, next) => {
             username,
         });
     } catch (err) {
-        // Crear un objeto JSON para los campos afectados en el error.
-        const errorResponse = {
-            error: err.message,
-            fields,
-        };
-
-        const fieldsToCheck = [
+        const fields = [
             'avatar',
             'biography',
             'username',
             'newPassword',
-        ];
+        ].filter(f => err.message.includes(f));
 
-        fieldsToCheck.forEach((field) => {
-            if (err.message.includes(field)) {
-                fields.push(field);
-            }
+	res.status(400).json({
+            message: err.message,
+            fields,
         });
-
-        // Verifica si no hay campos para actualizar
-        if (fields.length === 0) {
-            return res.status(400).json({
-                error: 'No se proporcionaron campos para actualizar',
-            });
-        }
-        res.status(400).json(errorResponse);
     }
 };
 
