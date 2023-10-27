@@ -91,20 +91,20 @@ function UpdateForm() {
       const response = await fetch(url, requestOptions);
       const jsonResponse = await response.json();
 
-      if (response.status === 400) {
+      if (response.status === 400 && jsonResponse.fields?.length) {
         // Si la respuesta tiene un estado 400 (Bad Request), maneja los errores
         setErrors({
           username: jsonResponse.fields.includes("username")
-            ? jsonResponse.error
+            ? jsonResponse.message
             : "",
           biography: jsonResponse.fields.includes("biography")
-            ? jsonResponse.error
+            ? jsonResponse.message
             : "",
           avatar: jsonResponse.fields.includes("avatar")
-            ? jsonResponse.error
+            ? jsonResponse.message
             : "",
           newPassword: jsonResponse.fields.includes("newPassword")
-            ? jsonResponse.error
+            ? jsonResponse.message
             : "",
         });
       } else if (!response.ok) {
@@ -123,7 +123,9 @@ function UpdateForm() {
         });
       }
     } catch (error) {
-      console.error("Error updating profile:", error);
+      toast.error(error.message, {
+        position: toast.POSITION.TOP_CENTER
+      })
     }
   };
 
