@@ -43,8 +43,8 @@ CREATE TABLE follows (
   id_follow INT AUTO_INCREMENT PRIMARY KEY,
   id_user INT NOT NULL,
   id_user_following INT NOT NULL,
-  FOREIGN KEY (id_user) REFERENCES users (id_user),
-  FOREIGN KEY (id_user_following) REFERENCES users (id_user),
+  FOREIGN KEY (id_user) REFERENCES users (id_user) ON DELETE CASCADE,
+  FOREIGN KEY (id_user_following) REFERENCES users (id_user) ON DELETE CASCADE,
   UNIQUE KEY unique_user_following (id_user, id_user_following),
   CHECK (id_user <> id_user_following)
 );
