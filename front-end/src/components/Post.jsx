@@ -196,20 +196,21 @@ const Post = (props) => {
 
   return (
     <Card className="post animate__animated animate__zoomIn">
-      <Tooltip title={biography} placement="top">
-        <CardHeader
-          title={userName}
-          action={
-            <Button
-              variant="contained"
-              className={`post-follow-button${isFollowing ? " unfollow" : ""}`}
-              onClick={handleFollow}
-            >
-              {isFollowing ? 'Dejar de seguir' : 'Seguir'}
-            </Button>
-          }
-        />
-      </Tooltip>
+      <CardHeader
+        title={userName}
+        subheader={biography}
+        action={
+          <Button
+            variant="contained"
+            className={`post-follow-button${isFollowing ? " unfollow" : ""}`}
+            onClick={handleFollow}
+          >
+            {isFollowing ? 'Dejar de seguir' : 'Seguir'}
+          </Button>
+
+        }
+
+      />
       <CardMedia component="img" height="140" image={imageUrl} alt="Post Image" />
       <CardContent className="post-content">
         <Typography gutterBottom variant="h5" component="div">
