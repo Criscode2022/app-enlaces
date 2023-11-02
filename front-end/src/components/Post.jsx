@@ -11,12 +11,13 @@ import { AuthContext } from '../context/AuthContext';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { CardActions } from '@mui/material';
+import { CardActions, Tooltip } from '@mui/material';
 import CardHeader from '@mui/material/CardHeader';
 
 const Post = (props) => {
   const {
     imageUrl,
+    biography,
     title,
     onDelete,
     userName,
@@ -195,18 +196,20 @@ const Post = (props) => {
 
   return (
     <Card className="post animate__animated animate__zoomIn">
-      <CardHeader
-        title={userName}
-        action={
-          <Button
-            variant="contained"
-            className={`post-follow-button${isFollowing ? " unfollow" : ""}`}
-            onClick={handleFollow}
-          >
-            {isFollowing ? 'Dejar de seguir' : 'Seguir'}
-          </Button>
-        }
-      />
+      <Tooltip title={biography} placement="top">
+        <CardHeader
+          title={userName}
+          action={
+            <Button
+              variant="contained"
+              className={`post-follow-button${isFollowing ? " unfollow" : ""}`}
+              onClick={handleFollow}
+            >
+              {isFollowing ? 'Dejar de seguir' : 'Seguir'}
+            </Button>
+          }
+        />
+      </Tooltip>
       <CardMedia component="img" height="140" image={imageUrl} alt="Post Image" />
       <CardContent className="post-content">
         <Typography gutterBottom variant="h5" component="div">

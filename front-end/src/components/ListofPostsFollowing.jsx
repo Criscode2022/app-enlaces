@@ -82,6 +82,7 @@ const ListofPostsFollowing = () => {
             userId={post.id_user}
             userName={post.name_user}
             likes={post.like_count}
+            biography={post.biography_user}
             updateBadgeCount={updateBadgeCount}
           />
         ))}

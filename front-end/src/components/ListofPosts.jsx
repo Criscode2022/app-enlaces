@@ -66,6 +66,7 @@ const ListofPosts = () => {
             onDelete={handleDeletePost}
             userName={post.name_user}
             likes={post.like_count}
+            biography={post.biography_user}
             updateBadgeCount={updateBadgeCount} // Pass the callback function
             isLoggedUserPost={post.id_user === userIdLogged}
           />
