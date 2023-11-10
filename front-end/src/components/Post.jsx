@@ -27,7 +27,8 @@ const Post = (props) => {
     userId,
     likes,
     updateBadgeCount, // Callback function from the parent component
-    isLoggedUserPost
+    isLoggedUserPost,
+    avatar
   } = props;
 
   const [userLiked, setUserLiked] = useState(false); // Estado para saber si el usuario dio like al post

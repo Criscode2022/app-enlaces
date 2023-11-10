@@ -84,6 +84,7 @@ const ListofPostsFollowing = () => {
             likes={post.like_count}
             biography={post.biography_user}
             updateBadgeCount={updateBadgeCount}
+            avatar={post.avatar_user}
           />
         ))}
       </div>

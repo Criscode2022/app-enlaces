@@ -10,9 +10,11 @@ import { useNavigate } from "react-router-dom";
 
 function UpdateForm() {
   const navigate = useNavigate();
+  const { userName } = useContext(AuthContext);
+
 
   const [formData, setFormData] = useState({
-    username: "",
+    username: userName,
     biography: "",
     avatar: "",
     newPassword: "",
@@ -138,7 +140,7 @@ function UpdateForm() {
           onChange={handleChange}
           id="username"
           name="username"
-          value={formData.username}
+          value={formData.username || userName}
           helperText={errors.username}
           error={Boolean(errors.username)}
         />
