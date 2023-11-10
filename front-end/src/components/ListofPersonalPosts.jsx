@@ -63,6 +63,7 @@ const ListofPosts = () => {
             biography={post.biography_user}
             updateBadgeCount={updateBadgeCount}
             isLoggedUserPost={true} // Solo mostrará los posts del usuario logueado
+            avatar={post.avatar_user}
           />
         ))}
       </div>

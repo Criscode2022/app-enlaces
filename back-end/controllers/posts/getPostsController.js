@@ -7,7 +7,7 @@ const Joi = require('joi');
 async function getPostsController(req, res, next) {
     try {
         const [results] = await pool.query(`
-          SELECT p.post_url, p.post_img, p.post_title, p.post_description, u.biography_user, u.name_user, p.id_post, u.id_user, COUNT(l.id_like) AS like_count
+          SELECT p.post_url, p.post_img, p.post_title, p.post_description, u.avatar_user, u.biography_user, u.name_user, p.id_post, u.id_user, COUNT(l.id_like) AS like_count
           FROM posts p
           LEFT JOIN likes l ON p.id_post = l.id_post
           JOIN users u ON p.id_user = u.id_user

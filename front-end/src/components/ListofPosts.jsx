@@ -67,8 +67,9 @@ const ListofPosts = () => {
             userName={post.name_user}
             likes={post.like_count}
             biography={post.biography_user}
-            updateBadgeCount={updateBadgeCount} // Pass the callback function
+            updateBadgeCount={updateBadgeCount}
             isLoggedUserPost={post.id_user === userIdLogged}
+            avatar={post.avatar_user}
           />
         ))}
       </div>

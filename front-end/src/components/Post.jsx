@@ -1,4 +1,5 @@
 import { useEffect, useState, useContext } from 'react';
+import Avatar from '@mui/material/Avatar';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
@@ -198,6 +199,7 @@ const Post = (props) => {
   return (
     <Card className="post animate__animated animate__zoomIn">
       <CardHeader
+        avatar={<Avatar alt="User Avatar" src={avatar} />} // Reemplaza `avatarSrc` con la URL de la imagen del avatar
         title={userName}
         subheader={biography}
         action={
