@@ -4,6 +4,8 @@ import { AuthContext } from '../../context/AuthContext';
 import { useContext, useState } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { CircularProgress } from '@mui/material';
+
 
 
 
@@ -13,6 +15,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const RegisterForm = () => {
   const auth = useContext(AuthContext);
+  const { loading } = useContext(AuthContext);
 
   const [errors, setErrors] = useState({
     username: '',
@@ -54,6 +57,7 @@ const RegisterForm = () => {
           Enviar
         </Button>
       </form>
+      {loading && <CircularProgress />}
     </div>
   );
 };

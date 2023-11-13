@@ -4,8 +4,11 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { Navigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
+import { CircularProgress } from '@mui/material';
+
 
 const LoginForm = () => {
+    const { loading } = useContext(AuthContext);
     const [formData, setFormData] = useState({
         username: '',
         password: '',
@@ -70,6 +73,8 @@ const LoginForm = () => {
                     Iniciar Sesión
                 </Button>
             </form>
+            {loading && <CircularProgress />}
+
         </div>
     );
 };
