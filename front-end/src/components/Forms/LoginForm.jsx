@@ -73,8 +73,14 @@ const LoginForm = () => {
                     Iniciar Sesión
                 </Button>
             </form>
-            {loading && <CircularProgress />}
-
+            {loading && (
+                <div>
+                    <CircularProgress />
+                    <p style={{ margin: '20px', fontWeight: 'bold' }}>
+                        Nota: la carga inicial puede tardar unos segundos mientras se enciende el servidor
+                    </p>
+                </div>
+            )}
         </div>
     );
 };
