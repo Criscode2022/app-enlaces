@@ -51,7 +51,9 @@ const ListofPosts = () => {
 
   return (
     <>
-      <h2>Enlaces</h2>
+      <h2>Enlaces prueba</h2>
+      
+      Caracolas
 
       <div id='postsContainer'>
         {postsData.map((post) => (
